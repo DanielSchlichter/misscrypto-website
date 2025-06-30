@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
 import CryptoPurchaseCalculator from '../components/CryptoPurchaseCalculator';
 
 interface Exchange {
@@ -76,16 +75,20 @@ const exchanges: Exchange[] = [
 ];
 
 const CryptoKaufenPage = () => {
-  const searchParams = useSearchParams();
   const [selectedCurrency, setSelectedCurrency] = useState<string>('');
   const [activeSection, setActiveSection] = useState<string>('bitpanda-broker');
 
   useEffect(() => {
-    const currency = searchParams.get('currency');
-    if (currency) {
-      setSelectedCurrency(currency);
+    // Für statischen Export - keine URL-Parameter
+    // Client-side URL-Parameter können später hinzugefügt werden
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const currency = urlParams.get('currency');
+      if (currency) {
+        setSelectedCurrency(currency);
+      }
     }
-  }, [searchParams]);
+  }, []);
 
   // Track active section based on scroll position
   useEffect(() => {
@@ -934,7 +937,7 @@ const CryptoKaufenPage = () => {
                   </p>
 
                   <p style={{ marginBottom: '1.5rem' }}>
-                    Die benutzerfreundliche Oberfläche eignet sich für Anfänger und erfahrene Trader. Für Profis gibt es „One Trading" (ehemals Bitpanda Pro) mit erweiterten Funktionen.
+                    Die benutzerfreundliche Oberfläche eignet sich für Anfänger und erfahrene Trader. Für Profis gibt es "One Trading" (ehemals Bitpanda Pro) mit erweiterten Funktionen.
                   </p>
 
                   {/* Security Section */}
@@ -1028,7 +1031,7 @@ const CryptoKaufenPage = () => {
                   </div>
 
                   <p style={{ marginBottom: '1.5rem' }}>
-                    Für Einsteiger besticht die Plattform durch eine benutzerfreundliche Oberfläche. Erfahrene Trader finden im „Pro Mode" erweiterte Tools und Ordertypen.
+                    Für Einsteiger besticht die Plattform durch eine benutzerfreundliche Oberfläche. Erfahrene Trader finden im "Pro Mode" erweiterte Tools und Ordertypen.
                   </p>
 
                   {/* Stats Grid */}

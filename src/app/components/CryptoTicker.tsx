@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import CryptoTickerClient from './CryptoTickerClient';
 
+type TimeRange = '24h' | '7d' | '30d';
+
 interface Coin {
   id: string;
   name: string;

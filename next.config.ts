@@ -12,26 +12,23 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'assets.coingecko.com',
-        port: '',
-        pathname: '/coins/images/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'coin-images.coingecko.com',
       },
     ],
-  },
-  
-  // Performance-Optimierungen
-  experimental: {
-    optimizeCss: true,
   },
   
   // Asset-Optimierung
   assetPrefix: process.env.NODE_ENV === 'production' ? '' : '',
   
-  // Build-Konfiguration - ESLint-Fehler während Build ignorieren
+  // Build-Konfiguration - Deaktiviere Checks für Deployment
   typescript: {
-    ignoreBuildErrors: true, // Für Netlify-Deployment
+    ignoreBuildErrors: true, // TypeScript-Fehler während Build ignorieren
   },
   eslint: {
-    ignoreDuringBuilds: true, // Für Netlify-Deployment
+    ignoreDuringBuilds: true, // ESLint während Build ignorieren
   },
 };
 

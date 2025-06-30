@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
 
+// Für statischen Export erforderlich
+export const dynamic = 'force-static';
+export const revalidate = false;
+
 // Mock-Daten als Fallback
 const mockCoins = [
   {
@@ -14,9 +18,9 @@ const mockCoins = [
       '30d': 15.3
     },
     prices: {
-      '24h': Array.from({length: 24}, () => 107000 + Math.random() * 1000),
-      '7d': Array.from({length: 7}, () => 105000 + Math.random() * 3000),
-      '30d': Array.from({length: 30}, () => 95000 + Math.random() * 15000)
+      '24h': Array.from({length: 24}, (_, i) => 107000 + Math.random() * 1000),
+      '7d': Array.from({length: 7}, (_, i) => 105000 + Math.random() * 3000),
+      '30d': Array.from({length: 30}, (_, i) => 95000 + Math.random() * 15000)
     },
     image: 'https://assets.coingecko.com/coins/images/1/large/bitcoin.png',
     market_cap_rank: 1,
@@ -33,9 +37,9 @@ const mockCoins = [
       '30d': 12.1
     },
     prices: {
-      '24h': Array.from({length: 24}, () => 4100 + Math.random() * 100),
-      '7d': Array.from({length: 7}, () => 4000 + Math.random() * 200),
-      '30d': Array.from({length: 30}, () => 3800 + Math.random() * 400)
+      '24h': Array.from({length: 24}, (_, i) => 4100 + Math.random() * 100),
+      '7d': Array.from({length: 7}, (_, i) => 4000 + Math.random() * 200),
+      '30d': Array.from({length: 30}, (_, i) => 3800 + Math.random() * 400)
     },
     image: 'https://assets.coingecko.com/coins/images/279/large/ethereum.png',
     market_cap_rank: 2,
@@ -52,9 +56,9 @@ const mockCoins = [
       '30d': 22.8
     },
     prices: {
-      '24h': Array.from({length: 24}, () => 2.80 + Math.random() * 0.10),
-      '7d': Array.from({length: 7}, () => 2.70 + Math.random() * 0.20),
-      '30d': Array.from({length: 30}, () => 2.20 + Math.random() * 0.80)
+      '24h': Array.from({length: 24}, (_, i) => 2.80 + Math.random() * 0.10),
+      '7d': Array.from({length: 7}, (_, i) => 2.70 + Math.random() * 0.20),
+      '30d': Array.from({length: 30}, (_, i) => 2.20 + Math.random() * 0.80)
     },
     image: 'https://assets.coingecko.com/coins/images/44/large/xrp-symbol-white-128.png',
     market_cap_rank: 3,
@@ -71,9 +75,9 @@ const mockCoins = [
       '30d': 18.5
     },
     prices: {
-      '24h': Array.from({length: 24}, () => 1.23 + Math.random() * 0.05),
-      '7d': Array.from({length: 7}, () => 1.15 + Math.random() * 0.15),
-      '30d': Array.from({length: 30}, () => 1.00 + Math.random() * 0.30)
+      '24h': Array.from({length: 24}, (_, i) => 1.23 + Math.random() * 0.05),
+      '7d': Array.from({length: 7}, (_, i) => 1.15 + Math.random() * 0.15),
+      '30d': Array.from({length: 30}, (_, i) => 1.00 + Math.random() * 0.30)
     },
     image: 'https://assets.coingecko.com/coins/images/975/large/cardano.png',
     market_cap_rank: 4,
@@ -90,9 +94,9 @@ const mockCoins = [
       '30d': 45.2
     },
     prices: {
-      '24h': Array.from({length: 24}, () => 242 + Math.random() * 8),
-      '7d': Array.from({length: 7}, () => 215 + Math.random() * 35),
-      '30d': Array.from({length: 30}, () => 165 + Math.random() * 85)
+      '24h': Array.from({length: 24}, (_, i) => 242 + Math.random() * 8),
+      '7d': Array.from({length: 7}, (_, i) => 215 + Math.random() * 35),
+      '30d': Array.from({length: 30}, (_, i) => 165 + Math.random() * 85)
     },
     image: 'https://assets.coingecko.com/coins/images/4128/large/solana.png',
     market_cap_rank: 5,
