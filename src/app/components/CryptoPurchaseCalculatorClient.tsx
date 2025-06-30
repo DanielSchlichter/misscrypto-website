@@ -285,12 +285,12 @@ const CryptoPurchaseCalculatorClient: React.FC<CryptoPurchaseCalculatorClientPro
               maxHeight: '400px',
               overflowY: 'auto'
             }}>
-              <div style={{ 
+                <div style={{
                 display: 'flex', 
                 flexDirection: 'column', 
                 gap: '1rem' 
               }}>
-                {results.map((result, index) => (
+                  {results.map((result, index) => (
                     <div
                       key={result.exchange.id}
                       style={{
@@ -438,7 +438,7 @@ const CryptoPurchaseCalculatorClient: React.FC<CryptoPurchaseCalculatorClientPro
                         </div>
                       )}
                     </div>
-                ))}
+                  ))}
               </div>
             </div>
           )}
