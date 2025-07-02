@@ -1,39 +1,31 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import HeroSection from '../components/HeroSection';
 import CryptoTicker from '../components/CryptoTicker';
 import FeaturesSection from '../components/FeaturesSection';
 import InvestmentCalculator from '../components/InvestmentCalculator';
+import NewsletterForm from '../components/NewsletterForm';
 
 const HomePage = () => {
-  /* Auskommentiert: Latest Articles Section
-  const latestArticles = [
-    {
-      title: 'Bitcoin über $107.000: MACD signalisiert weitere Stärke',
-      excerpt: 'Bitcoin notiert wieder über 107.000 US-Dollar. Technische Indikatoren zeigen weiteres Potenzial.',
-      category: 'Bitcoin',
-      readTime: '3 min',
-      href: '/artikel/bitcoin-macd-bullisch',
-    },
-    {
-      title: 'Ethereum ETF-Zuflüsse treiben Kurs auf neue Hochs',
-      excerpt: 'Über 960 Mio. USD flossen seit April in ETH-ETFs. Das Vertrauen in Ethereum wächst.',
-      category: 'Ethereum',
-      readTime: '4 min',
-      href: '/artikel/ethereum-etf-zufluesse',
-    },
-    {
-      title: 'XRP als neue Nummer 1 für Banken?',
-      excerpt: 'Mit 1.500 TPS und niedrigen Gebühren positioniert sich XRP als ideale Lösung für Banken.',
-      category: 'XRP',
-      readTime: '5 min',
-      href: '/artikel/xrp-banken-loesung',
-    },
-  ];
-  */
+  const [screenWidth, setScreenWidth] = useState(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    setScreenWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const isMobile = screenWidth < 768;
+  const isTablet = screenWidth >= 768 && screenWidth < 1024;
 
   return (
-    <div>
+    <div style={{ fontFamily: 'Raleway, sans-serif' }}>
       {/* Hero Section */}
       <HeroSection />
 
@@ -44,25 +36,49 @@ const HomePage = () => {
       <FeaturesSection />
 
       {/* Investment Calculator */}
-      <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+      <div style={{ 
+        maxWidth: '1280px', 
+        margin: '0 auto',
+        padding: isMobile ? '0 1rem' : '0 2rem'
+      }}>
         <InvestmentCalculator />
       </div>
 
       {/* Newsletter Section */}
-      <section className="mc-section" style={{ 
-        padding: '6rem 0'
+      <section style={{ 
+        padding: isMobile ? '4rem 0' : isTablet ? '5rem 0' : '6rem 0',
+        background: 'linear-gradient(135deg, #111111 0%, #1a1a1a 50%, #111111 100%)',
+        position: 'relative',
+        overflow: 'hidden'
       }}>
-        <div className="mc-container" style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 2rem' }}>
+        {/* Background Pattern */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'radial-gradient(circle at 30% 20%, rgba(248, 223, 165, 0.05) 0%, transparent 50%), radial-gradient(circle at 70% 80%, rgba(248, 223, 165, 0.05) 0%, transparent 50%)',
+          pointerEvents: 'none'
+        }}></div>
+
+        <div style={{ 
+          maxWidth: '1280px', 
+          margin: '0 auto', 
+          padding: isMobile ? '0 1rem' : '0 2rem',
+          position: 'relative',
+          zIndex: 1
+        }}>
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '4rem',
+            gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: isMobile ? '3rem' : '4rem',
             alignItems: 'center'
           }}>
             {/* Left Column - Text Content */}
             <div>
               <h2 style={{
-                fontSize: '40px',
+                fontSize: isMobile ? '2rem' : isTablet ? '2.5rem' : '2.75rem',
                 fontWeight: '500',
                 marginBottom: '1.5rem',
                 color: '#ffffff',
@@ -79,14 +95,18 @@ const HomePage = () => {
                 </span>
               </h2>
               <p style={{
-                fontSize: '1.125rem',
+                fontSize: isMobile ? '1rem' : '1.125rem',
                 color: '#d1d5db',
                 marginBottom: '2rem',
                 lineHeight: '1.6'
               }}>
                 Erhalte exklusive Einblicke, Marktanalysen und Trading-Strategien direkt in dein Postfach:
               </p>
-              <ul style={{ marginBottom: '2rem' }}>
+              <ul style={{ 
+                marginBottom: '2rem',
+                padding: 0,
+                listStyle: 'none'
+              }}>
                 {[
                   '🎯 Personalisierte Trading-Empfehlungen',
                   '📊 Wöchentliche Marktanalysen',
@@ -98,238 +118,118 @@ const HomePage = () => {
                     alignItems: 'center',
                     marginBottom: '1rem',
                     color: '#f8dfa5',
-                    fontSize: '1.125rem'
+                    fontSize: isMobile ? '1rem' : '1.125rem',
+                    padding: isMobile ? '0.5rem 0' : '0.75rem 0'
                   }}>
-                    <span style={{ marginRight: '1rem' }}>{item}</span>
+                    <span>{item}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
             {/* Right Column - Newsletter Form */}
-            <div style={{
-              background: 'rgba(0, 0, 0, 0.3)',
-              borderRadius: '1.5rem',
-              padding: '2.5rem',
-              border: '1px solid rgba(248, 223, 165, 0.3)',
-              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
-            }}>
-              <form style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                <div>
-                  <label htmlFor="name" style={{
-                    display: 'block',
-                    marginBottom: '0.5rem',
-                    color: '#f8dfa5',
-                    fontSize: '0.875rem',
-                    fontWeight: '500'
-                  }}>
-                    Dein Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    placeholder="Max Mustermann"
-                    style={{
-                      width: '100%',
-                      padding: '1rem',
-                      borderRadius: '0.75rem',
-                      border: '1px solid rgba(248, 223, 165, 0.3)',
-                      background: 'rgba(0, 0, 0, 0.2)',
-                      color: '#ffffff',
-                      fontSize: '1rem',
-                      transition: 'all 0.3s ease',
-                    }}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" style={{
-                    display: 'block',
-                    marginBottom: '0.5rem',
-                    color: '#f8dfa5',
-                    fontSize: '0.875rem',
-                    fontWeight: '500'
-                  }}>
-                    Deine E-Mail
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    placeholder="max@beispiel.de"
-                    style={{
-                      width: '100%',
-                      padding: '1rem',
-                      borderRadius: '0.75rem',
-                      border: '1px solid rgba(248, 223, 165, 0.3)',
-                      background: 'rgba(0, 0, 0, 0.2)',
-                      color: '#ffffff',
-                      fontSize: '1rem',
-                      transition: 'all 0.3s ease',
-                    }}
-                  />
-                </div>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  gap: '0.5rem',
-                  marginBottom: '1.5rem'
-                }}>
-                  <input
-                    type="checkbox"
-                    id="datenschutz"
-                    required
-                    style={{
-                      marginTop: '0.25rem',
-                      accentColor: '#f8dfa5'
-                    }}
-                  />
-                  <label
-                    htmlFor="datenschutz"
-                    style={{
-                      fontSize: '0.875rem',
-                      color: '#9ca3af',
-                      lineHeight: '1.4'
-                    }}
-                  >
-                    Ich stimme den{' '}
-                    <Link href="/datenschutz" style={{
-                      color: '#f8dfa5',
-                      textDecoration: 'underline',
-                      transition: 'color 0.3s ease'
-                    }}>
-                      Datenschutzbestimmungen
-                    </Link>
-                    {' '}zu und akzeptiere den Erhalt des Newsletters.
-                  </label>
-                </div>
-                <button
-                  type="submit"
-                  style={{
-                    width: '100%',
-                    padding: '1rem',
-                    borderRadius: '0.75rem',
-                    border: 'none',
-                    background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
-                    color: '#000000',
-                    fontSize: '1rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease'
-                  }}
-                >
-                  Newsletter abonnieren
-                </button>
-              </form>
-            </div>
+            <NewsletterForm isMobile={isMobile} isTablet={isTablet} />
           </div>
         </div>
       </section>
-
-      {/* Latest Articles Section - Auskommentiert
-      <section className="mc-section" style={{ background: 'linear-gradient(90deg, rgba(31, 41, 55, 0.5), rgba(0, 0, 0, 0.5))' }}>
-        <div className="mc-container">
-          <h2 className="mc-section-title">Neueste Artikel & Analysen</h2>
-          <p className="mc-section-subtitle">
-            Bleib auf dem Laufenden mit unseren aktuellen Marktanalysen und News
-          </p>
-
-          <div className="mc-features-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
-            {latestArticles.map((article, index) => (
-              <Link key={index} href={article.href} className="mc-feature-card">
-                <div style={{ 
-                  display: 'flex', 
-                  justifyContent: 'space-between', 
-                  alignItems: 'center', 
-                  marginBottom: '0.75rem' 
-                }}>
-                  <span style={{
-                    padding: '0.25rem 0.75rem',
-                    background: 'rgba(248, 223, 165, 0.2)',
-                    color: '#f8dfa5',
-                    fontSize: '0.875rem',
-                    borderRadius: '1rem',
-                    border: '1px solid rgba(248, 223, 165, 0.3)'
-                  }}>
-                    {article.category}
-                  </span>
-                  <span style={{ color: '#9ca3af', fontSize: '0.875rem' }}>{article.readTime}</span>
-                </div>
-                
-                <h3 className="mc-feature-title" style={{ marginBottom: '0.75rem' }}>
-                  {article.title}
-                </h3>
-                
-                <p className="mc-feature-description" style={{ marginBottom: '1rem' }}>
-                  {article.excerpt}
-                </p>
-                
-                <div style={{ color: '#f8dfa5', fontWeight: '500' }}>
-                  Weiterlesen →
-                </div>
-              </Link>
-            ))}
-          </div>
-
-          <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-            <Link href="/news" className="mc-btn-secondary">
-              Alle Artikel anzeigen
-            </Link>
-          </div>
-        </div>
-      </section>
-      */}
 
       {/* CTA Section */}
-      <section className="mc-section">
-        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 2rem' }}>
+      <section style={{
+        padding: isMobile ? '4rem 0' : isTablet ? '5rem 0' : '6rem 0',
+        background: 'linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%)',
+        position: 'relative'
+      }}>
+        <div style={{ 
+          maxWidth: '1280px', 
+          margin: '0 auto', 
+          padding: isMobile ? '0 1rem' : '0 2rem'
+        }}>
           <div style={{
-            background: 'linear-gradient(135deg, rgba(228, 177, 94, 0.2), rgba(248, 223, 165, 0.1), rgba(228, 177, 94, 0.2))',
+            background: 'linear-gradient(135deg, rgba(228, 177, 94, 0.15), rgba(248, 223, 165, 0.08), rgba(228, 177, 94, 0.15))',
+            backdropFilter: 'blur(10px)',
             borderRadius: '1.5rem',
-            padding: '4rem',
+            padding: isMobile ? '3rem 2rem' : isTablet ? '3.5rem 3rem' : '4rem',
             textAlign: 'center',
             border: '1px solid rgba(228, 177, 94, 0.3)',
-            boxShadow: '0 4px 15px rgba(248, 223, 165, 0.1)'
+            boxShadow: '0 4px 15px rgba(248, 223, 165, 0.1)',
+            position: 'relative',
+            overflow: 'hidden'
           }}>
-            <h2 className="mc-section-title" style={{ marginBottom: '1rem' }}>
-              Bereit für deine Krypto-Reise?
+            {/* Background Glow */}
+            <div style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: '300px',
+              height: '300px',
+              background: 'radial-gradient(circle, rgba(248, 223, 165, 0.1) 0%, transparent 70%)',
+              borderRadius: '50%',
+              pointerEvents: 'none'
+            }}></div>
+
+            <h2 style={{
+              fontSize: isMobile ? '1.75rem' : isTablet ? '2.25rem' : '2.5rem',
+              fontWeight: '500',
+              marginBottom: '1rem',
+              color: '#ffffff',
+              lineHeight: '1.2',
+              position: 'relative',
+              zIndex: 1
+            }}>
+              Bereit für deine{' '}
+              <span style={{
+                background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+                WebkitTextFillColor: 'transparent'
+              }}>
+                Krypto-Reise?
+              </span>
             </h2>
-            <p className="mc-section-subtitle" style={{ marginBottom: '2rem' }}>
+            <p style={{
+              fontSize: isMobile ? '1rem' : isTablet ? '1.125rem' : '1.25rem',
+              color: '#d1d5db',
+              marginBottom: '2rem',
+              lineHeight: '1.6',
+              maxWidth: '600px',
+              margin: '0 auto 2rem',
+              position: 'relative',
+              zIndex: 1
+            }}>
               Starte noch heute und werde Teil der Krypto-Revolution. 
-              Kostenlos, einfach und sicher.
+              Sicher und einfach zu den besten Konditionen.
             </p>
             <div style={{ 
               display: 'flex', 
-              gap: '1rem', 
               justifyContent: 'center',
-              flexWrap: 'wrap'
+              position: 'relative',
+              zIndex: 1
             }}>
               <Link 
-                href="/registrieren" 
+                href="/krypto-kaufen" 
                 style={{
                   background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
                   color: '#000000',
-                  padding: '1rem 2rem',
+                  padding: isMobile ? '1rem 2.5rem' : isTablet ? '1.125rem 2.75rem' : '1.25rem 3rem',
                   borderRadius: '0.75rem',
                   fontWeight: '600',
+                  fontSize: isMobile ? '1rem' : isTablet ? '1.075rem' : '1.125rem',
                   transition: 'all 0.3s ease',
-                  textDecoration: 'none'
+                  textDecoration: 'none',
+                  boxShadow: '0 4px 15px rgba(248, 223, 165, 0.3)',
+                  display: 'inline-block'
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-3px)';
+                  e.currentTarget.style.boxShadow = '0 8px 25px rgba(248, 223, 165, 0.4)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(248, 223, 165, 0.3)';
                 }}
               >
-                Kostenlos registrieren
-              </Link>
-              <Link 
-                href="/demo" 
-                style={{
-                  background: 'transparent',
-                  color: '#f8dfa5',
-                  padding: '1rem 2rem',
-                  borderRadius: '0.75rem',
-                  fontWeight: '600',
-                  border: '1px solid rgba(248, 223, 165, 0.3)',
-                  transition: 'all 0.3s ease',
-                  textDecoration: 'none'
-                }}
-              >
-                Demo ansehen
+                Krypto kaufen
               </Link>
             </div>
           </div>

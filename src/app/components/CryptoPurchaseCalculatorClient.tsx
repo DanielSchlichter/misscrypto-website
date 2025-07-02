@@ -17,8 +17,8 @@ const exchanges: Exchange[] = [
     id: 'bitvavo',
     name: 'Bitvavo',
     logo: '/logos/bitvavo.svg',
-    fees: 0.0003, // 0,03%
-    minDeposit: 10,
+    fees: 0.0025, // 0,25%
+    minDeposit: 1,
     currency: 'EUR',
     url: 'https://bitvavo.com/de/affiliate/misscrypto?a=05D0249945_misscryptoweb'
   },
@@ -26,8 +26,8 @@ const exchanges: Exchange[] = [
     id: 'bitpanda',
     name: 'Bitpanda',
     logo: '/logos/bitpanda.png',
-    fees: 0.0149, // 1,49%
-    minDeposit: 25,
+    fees: 0.0025, // 0,25%
+    minDeposit: 10,
     currency: 'EUR',
     url: 'https://bitpanda.pxf.io/c/2051965/2007465/15871'
   },

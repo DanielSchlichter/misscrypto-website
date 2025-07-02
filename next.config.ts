@@ -1,13 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Netlify-kompatible Konfiguration
-  output: 'export',
-  trailingSlash: true,
-  skipTrailingSlashRedirect: true,
-  distDir: 'out',
+  // Normale Next.js Konfiguration für Netlify
   images: {
-    unoptimized: true, // Erforderlich für statischen Export
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
@@ -20,15 +16,16 @@ const nextConfig: NextConfig = {
     ],
   },
   
-  // Asset-Optimierung
-  assetPrefix: process.env.NODE_ENV === 'production' ? '' : '',
+  // Deaktiviere unnötige Features für Build
+  poweredByHeader: false,
+  generateEtags: false,
   
   // Build-Konfiguration - Deaktiviere Checks für Deployment
   typescript: {
-    ignoreBuildErrors: true, // TypeScript-Fehler während Build ignorieren
+    ignoreBuildErrors: true,
   },
   eslint: {
-    ignoreDuringBuilds: true, // ESLint während Build ignorieren
+    ignoreDuringBuilds: true,
   },
 };
 

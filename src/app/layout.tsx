@@ -4,6 +4,8 @@ import "./globals.css";
 import TransparentHeader from './components/TransparentHeader';
 import StickyHeader from './components/StickyHeader';
 import Footer from './components/Footer';
+import CookieBanner from '../components/CookieBanner';
+import CookieManager from '../components/CookieManager';
 
 const raleway = Raleway({
   subsets: ['latin'],
@@ -32,6 +34,8 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
+        <CookieBanner />
+        <CookieManager />
       </body>
     </html>
   );

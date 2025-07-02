@@ -1,8 +1,25 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Logo from './Logo';
 
 const Footer = () => {
+  const [screenWidth, setScreenWidth] = useState(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    setScreenWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const isMobile = screenWidth < 768;
+  const isTablet = screenWidth >= 768 && screenWidth < 1024;
+
   const socialLinks = [
     { 
       name: 'YouTube', 
@@ -55,9 +72,7 @@ const Footer = () => {
     company: {
       title: 'Unternehmen',
       links: [
-        { name: 'Über uns', href: '/ueber-uns' },
-        { name: 'Team', href: '/team' },
-        { name: 'Karriere', href: '/karriere' },
+        { name: 'Über mich', href: '/ueber-mich' },
         { name: 'Presse', href: '/presse' },
         { name: 'Kontakt', href: '/kontakt' },
       ]
@@ -65,63 +80,121 @@ const Footer = () => {
     invest: {
       title: 'Investieren',
       links: [
-        { name: 'Bitcoin kaufen', href: '/bitcoin-kaufen' },
-        { name: 'Ethereum kaufen', href: '/ethereum-kaufen' },
-        { name: 'BNB kaufen', href: '/bnb-kaufen' },
-        { name: 'Solana kaufen', href: '/solana-kaufen' },
-        { name: 'XRP kaufen', href: '/xrp-kaufen' },
+        { name: 'Bitcoin kaufen', href: '/krypto-kaufen?currency=bitcoin' },
+        { name: 'Ethereum kaufen', href: '/krypto-kaufen?currency=ethereum' },
+        { name: 'BNB kaufen', href: '/krypto-kaufen?currency=bnb' },
+        { name: 'Solana kaufen', href: '/krypto-kaufen?currency=solana' },
+        { name: 'XRP kaufen', href: '/krypto-kaufen?currency=xrp' },
       ]
     },
     knowledge: {
       title: 'Wissen',
       links: [
         { name: 'Krypto Academy', href: 'https://www.btc-echo.de/academy/schulungen/investieren-in-kryptowahrungen-in-5-schritten/' },
-        { name: 'Börsen Vergleich', href: '/boersen-vergleich' },
+        { name: 'Börsen Vergleich', href: '/krypto-kaufen' },
         { name: 'News Feed', href: '/news' },
       ]
     }
   };
 
   return (
-    <footer className="mc-footer">
+    <footer style={{
+      background: 'linear-gradient(135deg, #1a1a1a 0%, #111111 100%)',
+      color: '#ffffff',
+      padding: isMobile ? '3rem 0 2rem' : isTablet ? '4rem 0 3rem' : '5rem 0 3rem',
+      fontFamily: 'Raleway, sans-serif',
+      position: 'relative',
+      overflow: 'hidden'
+    }}>
+      {/* Background Pattern */}
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: 'radial-gradient(circle at 20% 50%, rgba(248, 223, 165, 0.05) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(248, 223, 165, 0.05) 0%, transparent 50%)',
+        pointerEvents: 'none'
+      }}></div>
+      
       <div style={{
         maxWidth: '1280px',
         margin: '0 auto',
-        padding: '0 2rem',
-        width: '100%'
+        padding: isMobile ? '0 1rem' : '0 2rem',
+        width: '100%',
+        position: 'relative',
+        zIndex: 1
       }}>
         {/* Main Footer Content */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-          gap: '2rem',
-          marginBottom: '3rem'
+          gridTemplateColumns: isMobile ? '1fr' : isTablet ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
+          gap: isMobile ? '2.5rem' : '2rem',
+          marginBottom: isMobile ? '2.5rem' : '3rem'
         }}>
           {/* Company Info */}
-          <div>
-            <Logo 
-              className="mc-logo"
-              iconClassName="mc-logo-icon"
-              textClassName="mc-logo-text"
-            />
+          <div style={{
+            gridColumn: isMobile ? '1' : isTablet ? '1 / 3' : '1 / 2',
+            marginBottom: isMobile ? '1rem' : '0'
+          }}>
+            <div style={{ marginBottom: '1.5rem' }}>
+              <Logo />
+            </div>
             
-            <p style={{ color: '#9ca3af', marginBottom: '1.5rem', lineHeight: '1.6' }}>
+            <p style={{ 
+              color: '#9ca3af', 
+              marginBottom: '1.5rem', 
+              lineHeight: '1.6',
+              fontSize: isMobile ? '0.9rem' : '1rem'
+            }}>
               Deine vertrauensvolle Quelle für Krypto-Wissen, Trading-Strategien und Marktanalysen. 
               Wir machen Kryptowährungen für jeden verständlich und zugänglich.
             </p>
 
             {/* Social Links */}
             <div>
-              <p className="mc-footer-section-title" style={{ marginBottom: '1rem' }}>Folge uns</p>
-              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+              <p style={{ 
+                color: '#f8dfa5', 
+                fontWeight: '600', 
+                fontSize: isMobile ? '1rem' : '1.125rem',
+                marginBottom: '1rem' 
+              }}>
+                Folge uns
+              </p>
+              <div style={{ 
+                display: 'flex', 
+                gap: isMobile ? '0.5rem' : '0.75rem', 
+                flexWrap: 'wrap' 
+              }}>
                 {socialLinks.map((social) => (
                   <a 
                     key={social.name} 
                     href={social.href} 
-                    className="mc-social-link"
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Besuche uns auf ${social.name}`}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: isMobile ? '40px' : '44px',
+                      height: isMobile ? '40px' : '44px',
+                      background: 'rgba(248, 223, 165, 0.1)',
+                      borderRadius: '0.75rem',
+                      color: '#f8dfa5',
+                      transition: 'all 0.3s ease',
+                      border: '1px solid rgba(248, 223, 165, 0.2)'
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.background = 'rgba(248, 223, 165, 0.2)';
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.boxShadow = '0 4px 15px rgba(248, 223, 165, 0.3)';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.background = 'rgba(248, 223, 165, 0.1)';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = 'none';
+                    }}
                   >
                     {social.icon}
                   </a>
@@ -133,11 +206,40 @@ const Footer = () => {
           {/* Footer Links Sections */}
           {Object.values(footerSections).map((section) => (
             <div key={section.title}>
-              <h3 className="mc-footer-section-title">{section.title}</h3>
-              <ul style={{ listStyle: 'none' }}>
+              <h3 style={{
+                color: '#f8dfa5',
+                fontWeight: '600',
+                fontSize: isMobile ? '1rem' : '1.125rem',
+                marginBottom: '1rem'
+              }}>
+                {section.title}
+              </h3>
+              <ul style={{ 
+                listStyle: 'none',
+                padding: 0,
+                margin: 0
+              }}>
                 {section.links.map((link) => (
                   <li key={link.name} style={{ marginBottom: '0.5rem' }}>
-                    <Link href={link.href} className="mc-footer-link">
+                    <Link 
+                      href={link.href}
+                      style={{
+                        color: '#d1d5db',
+                        textDecoration: 'none',
+                        fontSize: isMobile ? '0.875rem' : '0.95rem',
+                        transition: 'all 0.3s ease',
+                        display: 'block',
+                        padding: '0.25rem 0'
+                      }}
+                      onMouseOver={(e) => {
+                        e.currentTarget.style.color = '#f8dfa5';
+                        e.currentTarget.style.paddingLeft = '0.5rem';
+                      }}
+                      onMouseOut={(e) => {
+                        e.currentTarget.style.color = '#d1d5db';
+                        e.currentTarget.style.paddingLeft = '0';
+                      }}
+                    >
                       {link.name}
                     </Link>
                   </li>
@@ -149,33 +251,63 @@ const Footer = () => {
 
         {/* Bottom Section */}
         <div style={{
-          paddingTop: '2rem',
+          paddingTop: isMobile ? '1.5rem' : '2rem',
           borderTop: '1px solid #374151',
           display: 'flex',
           flexDirection: 'column',
-          gap: '1rem'
+          gap: isMobile ? '1.5rem' : '1rem'
         }}>
           {/* Legal Links */}
           <div style={{
             display: 'flex',
             flexWrap: 'wrap',
-            gap: '1.5rem',
+            gap: isMobile ? '1rem' : '1.5rem',
             justifyContent: 'center'
           }}>
-            <Link href="/impressum" className="mc-bottom-link">Impressum</Link>
-            <Link href="/datenschutz" className="mc-bottom-link">Datenschutz</Link>
-            <Link href="/agb" className="mc-bottom-link">AGB</Link>
-            <Link href="/cookies" className="mc-bottom-link">Cookie-Richtlinie</Link>
-            <Link href="/haftungsausschluss" className="mc-bottom-link">Haftungsausschluss</Link>
-            <Link href="/risiken" className="mc-bottom-link">Risikohinweise</Link>
+            {[
+              { name: 'Impressum', href: '/impressum' },
+              { name: 'Datenschutz', href: '/datenschutz' },
+              { name: 'Cookie-Richtlinie', href: '/cookies' },
+              { name: 'Risikohinweise', href: '/risiken' }
+            ].map((link) => (
+              <Link 
+                key={link.name}
+                href={link.href}
+                style={{
+                  color: '#9ca3af',
+                  textDecoration: 'none',
+                  fontSize: isMobile ? '0.875rem' : '0.95rem',
+                  fontWeight: '500',
+                  transition: 'color 0.3s ease'
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.color = '#f8dfa5';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.color = '#9ca3af';
+                }}
+              >
+                {link.name}
+              </Link>
+            ))}
           </div>
 
           {/* Copyright and Disclaimer */}
           <div style={{ textAlign: 'center' }}>
-            <p style={{ color: '#6b7280', fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+            <p style={{ 
+              color: '#6b7280', 
+              fontSize: isMobile ? '0.8rem' : '0.875rem', 
+              marginBottom: '0.5rem' 
+            }}>
               © 2024 MissCrypto. Alle Rechte vorbehalten.
             </p>
-            <p style={{ color: '#6b7280', fontSize: '0.75rem', lineHeight: '1.5' }}>
+            <p style={{ 
+              color: '#6b7280', 
+              fontSize: isMobile ? '0.7rem' : '0.75rem', 
+              lineHeight: '1.5',
+              maxWidth: '800px',
+              margin: '0 auto'
+            }}>
               <strong>Risikohinweis:</strong> Der Handel mit Kryptowährungen ist mit hohen Risiken verbunden. 
               Vergangene Performance ist kein Indikator für zukünftige Ergebnisse. 
               Investiere nur Geld, dessen Verlust du dir leisten kannst.

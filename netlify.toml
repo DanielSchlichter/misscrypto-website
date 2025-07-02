@@ -1,10 +1,14 @@
 [build]
   command = "npm run build"
-  publish = "out"
+  publish = ".next"
 
 [build.environment]
   NODE_VERSION = "18"
   NPM_VERSION = "8"
+  SKIP_MONGODB = "true"
+  NEXT_PHASE = "phase-production-build"
+
+# Keine Plugins - einfacher Ansatz
 
 # Headers für bessere Performance
 [[headers]]

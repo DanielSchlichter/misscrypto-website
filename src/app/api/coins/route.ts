@@ -104,18 +104,37 @@ const mockCoins = [
   }
 ];
 
+// Timeout-Funktion für MongoDB-Operationen
+const withTimeout = <T>(promise: Promise<T>, timeoutMs: number): Promise<T> => {
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) => 
+      setTimeout(() => reject(new Error('Operation timeout')), timeoutMs)
+    )
+  ]);
+};
+
 export async function GET() {
+  // Bei Build-Zeit: Direkt Mock-Daten zurückgeben
+  if (process.env.SKIP_MONGODB === 'true' || process.env.NEXT_PHASE === 'phase-production-build') {
+    console.log('Build-Modus: Verwende Mock-Daten direkt');
+    return NextResponse.json(mockCoins);
+  }
+
   try {
     console.log('Starte Abruf der Coins aus der Datenbank...');
     
-    // Versuche MongoDB-Verbindung
-    const client = await clientPromise;
+    // Sehr kurzer Timeout für Build-Prozess
+    const client = await withTimeout(clientPromise, 2000);
     const db = client.db('misscrypto');
     
-    const coins = await db.collection('coins')
-      .find({})
-      .sort({ market_cap_rank: 1 })
-      .toArray();
+    const coins = await withTimeout(
+      db.collection('coins')
+        .find({})
+        .sort({ market_cap_rank: 1 })
+        .toArray(),
+      3000
+    );
 
     console.log(`${coins.length} Coins aus MongoDB gefunden`);
 
@@ -155,10 +174,10 @@ export async function GET() {
     return NextResponse.json(mappedCoins);
     
   } catch (error) {
-    console.error('MongoDB-Fehler, verwende Mock-Daten als Fallback:', error instanceof Error ? error.message : error);
+    console.error('MongoDB-Fehler oder Timeout, verwende Mock-Daten als Fallback:', error instanceof Error ? error.message : error);
     
-    // Fallback auf Mock-Daten bei jedem MongoDB-Fehler (einschließlich SSL)
-    console.log('Verwende Mock-Daten aufgrund von MongoDB-Verbindungsproblem');
+    // Fallback auf Mock-Daten bei jedem Fehler
+    console.log('Verwende Mock-Daten aufgrund von Fehler');
     return NextResponse.json(mockCoins);
   }
 } 

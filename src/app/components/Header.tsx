@@ -18,11 +18,8 @@ const Header = () => {
 
   const navigation = [
     { name: 'Start', href: '/' },
-    { name: 'Investieren', href: '/investieren' },
-    { name: 'Trading', href: '/trading' },
-    { name: 'Börsen', href: '/boersen' },
-    { name: 'Prognosen', href: '/prognosen' },
-    { name: 'Vergleiche', href: '/vergleiche' },
+    { name: 'Krypto kaufen', href: '/krypto-kaufen' },
+    { name: 'Investieren', href: '/krypto-kaufen?tab=investieren' },
   ];
 
   return (
@@ -47,7 +44,7 @@ const Header = () => {
 
         {/* CTA Button */}
         <div className="mc-nav">
-          <Link href="/boersen" className="mc-cta-button" style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
+          <Link href="/krypto-kaufen?currency=bitcoin" className="mc-cta-button" style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
             <span style={{ fontSize: '1rem' }}>🏅</span>
             Kryptobörsen
           </Link>
@@ -84,7 +81,7 @@ const Header = () => {
             ))}
           </nav>
           <div className="mc-mobile-cta">
-            <Link href="/boersen" className="mc-cta-button" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Link href="/krypto-kaufen?currency=bitcoin" className="mc-cta-button" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <span style={{ fontSize: '1.25rem' }}>🏦</span>
               Kryptobörsen
             </Link>

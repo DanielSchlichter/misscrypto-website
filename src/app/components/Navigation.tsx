@@ -3,11 +3,8 @@ import Link from 'next/link';
 
 export const navigationItems = [
   { name: 'Start', href: '/' },
-  { name: 'Investieren', href: '/investieren' },
-  { name: 'Trading', href: '/trading' },
-  { name: 'Börsen', href: '/boersen' },
-  { name: 'Prognosen', href: '/prognosen' },
-  { name: 'Vergleiche', href: '/vergleiche' },
+  { name: 'Krypto kaufen', href: '/krypto-kaufen' },
+  { name: 'Investieren', href: '/krypto-kaufen?tab=investieren' },
 ];
 
 interface NavigationProps {

@@ -24,11 +24,11 @@ const exchanges: Exchange[] = [
     name: 'Bitvavo',
     logo: '/logos/bitvavo.svg',
     rating: 4.5,
-    fees: 'ab 0,03%',
-    features: ['Beste Börse', 'Niedrigste Gebühren', 'EU-Lizenz', '300+ Währungen'],
-    pros: ['Extrem niedrige Gebühren', 'Höchste Funktionalität', 'Maximale Einfachheit', 'Powered by Hyphe'],
+    fees: '0,25%',
+    features: ['Beste Börse', 'EU-Lizenz', 'BaFin-Lizenz', '350+ Währungen'],
+    pros: ['0,25% Maker/Taker', 'Höchste Funktionalität', 'Maximale Einfachheit', 'Powered by Hyphe'],
     cons: ['Weniger Zahlungsmethoden', 'Professioneller Fokus'],
-    minDeposit: 'ab 1 Euro',
+    minDeposit: '1,00 €',
     paymentMethods: ['Mastercard', 'Visa', 'SEPA'],
     url: 'https://bitvavo.com/de/affiliate/misscrypto?a=05D0249945_misscryptoweb',
     isRecommended: true
@@ -38,11 +38,11 @@ const exchanges: Exchange[] = [
     name: 'Bitpanda',
     logo: '/logos/bitpanda.png',
     rating: 4.25,
-    fees: 'ab 0,25%',
-    features: ['Bester Broker', 'EU-reguliert', 'Deutscher Support', '300+ Währungen'],
+    fees: '0,25%',
+    features: ['Bester Broker', 'EU-reguliert', 'Deutscher Support', '500+ Währungen'],
     pros: ['Höchste Sicherheit', 'Sehr benutzerfreundlich', 'Große Auswahl', 'EU-Regulierung'],
     cons: ['Höhere Gebühren', 'Weniger Trading-Tools'],
-    minDeposit: 'ab 10 Euro',
+    minDeposit: '10,00 €',
     paymentMethods: ['PayPal', 'Mastercard', 'Visa', 'GiroPay', 'SEPA'],
     url: 'https://bitpanda.pxf.io/c/2051965/2007465/15871'
   },
@@ -77,6 +77,22 @@ const exchanges: Exchange[] = [
 const CryptoKaufenPage = () => {
   const [selectedCurrency, setSelectedCurrency] = useState<string>('');
   const [activeSection, setActiveSection] = useState<string>('bitpanda-broker');
+  const [isInvestTab, setIsInvestTab] = useState<boolean>(false);
+  const [screenWidth, setScreenWidth] = useState(0);
+
+  // Responsive breakpoints
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    setScreenWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const isMobile = screenWidth < 768;
+  const isTablet = screenWidth >= 768 && screenWidth < 1024;
 
   useEffect(() => {
     // Für statischen Export - keine URL-Parameter
@@ -84,8 +100,14 @@ const CryptoKaufenPage = () => {
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search);
       const currency = urlParams.get('currency');
+      const tab = urlParams.get('tab');
+      
       if (currency) {
         setSelectedCurrency(currency);
+      }
+      
+      if (tab === 'investieren') {
+        setIsInvestTab(true);
       }
     }
   }, []);
@@ -206,146 +228,189 @@ const CryptoKaufenPage = () => {
           }
         }
       `}</style>
-    <div style={{minHeight: '100vh'}}>
-              {/* Hero Section */}
-        <section className="mc-hero" style={{ position: 'relative', overflow: 'hidden', zIndex: 10, minHeight: 'auto', paddingBottom: '2rem' }}>
+    <div style={{
+      minHeight: '100vh',
+      fontFamily: 'Raleway, sans-serif'
+    }}>
+      {/* Hero Section */}
+      <section style={{ 
+        position: 'relative', 
+        overflow: 'hidden', 
+        zIndex: 10, 
+        minHeight: 'auto', 
+        paddingBottom: isMobile ? '1.5rem' : '2rem',
+        paddingTop: isMobile ? '6rem' : isTablet ? '7rem' : '8rem',
+        background: 'linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%)'
+      }}>
+        {/* Background Pattern */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'radial-gradient(circle at 20% 30%, rgba(248, 223, 165, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(248, 223, 165, 0.05) 0%, transparent 50%)',
+          pointerEvents: 'none'
+        }}></div>
         
-        <div className="mc-hero-content" style={{ position: 'relative', zIndex: 2 }}>
+        <div style={{ 
+          position: 'relative', 
+          zIndex: 2,
+          maxWidth: '1280px',
+          margin: '0 auto',
+          padding: isMobile ? '0 1rem' : '0 2rem'
+        }}>
           <div style={{
             display: 'grid',
-            gridTemplateColumns: '1fr',
-            gap: '2rem',
+            gridTemplateColumns: isMobile ? '1fr' : isTablet ? '1fr 0.8fr' : '1fr 1fr',
+            gap: isMobile ? '2rem' : '3rem',
             alignItems: 'center',
-            minHeight: '50vh'
-          }}
-          className="mc-hero-grid"
-          >
+            minHeight: isMobile ? 'auto' : '50vh'
+          }}>
             
             {/* Text Content - Left Side */}
-            <div style={{ textAlign: 'left', position: 'relative' }}>
+            <div style={{ 
+              textAlign: isMobile ? 'center' : 'left', 
+              position: 'relative'
+            }}>
               <div style={{
                 color: '#f8dfa5',
-                fontSize: '1.125rem',
+                fontSize: isMobile ? '0.875rem' : isTablet ? '1rem' : '1.125rem',
                 fontWeight: '600',
                 marginBottom: '0.75rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em'
               }}>
-                {selectedCurrency 
-                  ? `Die besten Börsen zum Kauf von ${selectedCurrency.charAt(0).toUpperCase() + selectedCurrency.slice(1)}`
-                  : 'Die besten Börsen zum Kauf von Kryptowährungen'
+                {isInvestTab 
+                  ? 'Investieren in Krypto-Börsen'
+                  : selectedCurrency 
+                    ? `Die besten Börsen zum Kauf von ${selectedCurrency.charAt(0).toUpperCase() + selectedCurrency.slice(1)}`
+                    : 'Die besten Börsen zum Kauf von Kryptowährungen'
                 }
               </div>
               
-              <h1 className="mc-hero-title" style={{ textAlign: 'left' }}>
-                <span className="mc-hero-gradient">Krypto-Börsen</span> im Vergleich
+              <h1 style={{
+                color: '#ffffff',
+                fontSize: isMobile ? '2rem' : isTablet ? '2.75rem' : '3.5rem',
+                fontWeight: '600',
+                lineHeight: '1.1',
+                marginBottom: '1.5rem',
+                textAlign: isMobile ? 'center' : 'left'
+              }}>
+                {isInvestTab 
+                  ? <>
+                      <span style={{
+                        background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
+                        WebkitBackgroundClip: 'text',
+                        backgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent'
+                      }}>Investieren</span> in Kryptowährungen
+                    </>
+                  : <>
+                      <span style={{
+                        background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
+                        WebkitBackgroundClip: 'text',
+                        backgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent'
+                      }}>Krypto-Börsen</span> im Vergleich
+                    </>
+                }
               </h1>
               
-              <p className="mc-hero-subtitle" style={{ 
-                textAlign: 'left',
+              <p style={{ 
+                color: '#d1d5db',
+                fontSize: isMobile ? '1rem' : isTablet ? '1.125rem' : '1.25rem',
+                lineHeight: '1.6',
+                textAlign: isMobile ? 'center' : 'left',
                 marginLeft: '0',
                 marginRight: '0',
                 maxWidth: 'none',
                 marginBottom: '2rem'
               }}>
-                Wir haben die führenden Krypto-Börsen getestet und verglichen. Hier findest du die besten Anbieter 
-                für den sicheren und günstigen Kauf von Kryptowährungen.
+                {isInvestTab 
+                  ? 'Entdecke die besten Krypto-Börsen für langfristige Investitionen. Wir zeigen dir, wo du sicher und günstig in Bitcoin, Ethereum und andere Kryptowährungen investieren kannst.'
+                  : 'Wir haben die führenden Krypto-Börsen getestet und verglichen. Hier findest du die besten Anbieter für den sicheren und günstigen Kauf von Kryptowährungen.'
+                }
               </p>
 
               {/* Crypto Cards */}
-              <div className="crypto-cards-container">
-                {/* Bitcoin Card */}
-                <div className="crypto-card crypto-card-1">
-                  <div className="crypto-card-content">
-                    <div className="crypto-card-logo" style={{
-                      background: '#F7931A',
-                      color: '#ffffff'
-                    }}>₿</div>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: isMobile ? 'repeat(3, 1fr)' : isTablet ? 'repeat(4, 1fr)' : 'repeat(7, 1fr)',
+                gap: isMobile ? '0.5rem' : '0.75rem',
+                marginTop: '2rem',
+                justifyContent: 'center'
+              }}>
+                {[
+                  { symbol: '₿', bg: '#F7931A', name: 'Bitcoin' },
+                  { symbol: 'Ξ', bg: '#627EEA', name: 'Ethereum' },
+                  { symbol: '✕', bg: '#23292F', name: 'XRP' },
+                  { symbol: '◎', bg: '#9945FF', name: 'Solana' },
+                  { symbol: '₳', bg: '#0033AD', name: 'Cardano' },
+                  { symbol: '◆', bg: '#F3BA2F', name: 'BNB' },
+                  { symbol: '●', bg: '#E6007A', name: 'Polkadot' }
+                ].slice(0, isMobile ? 6 : 7).map((crypto, index) => (
+                  <div key={index} style={{
+                    background: 'rgba(0, 0, 0, 0.3)',
+                    backdropFilter: 'blur(10px)',
+                    border: '1px solid rgba(248, 223, 165, 0.2)',
+                    borderRadius: '0.75rem',
+                    padding: isMobile ? '0.75rem' : '1rem',
+                    textAlign: 'center',
+                    transition: 'all 0.3s ease',
+                    cursor: 'pointer'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-3px)';
+                    e.currentTarget.style.borderColor = 'rgba(248, 223, 165, 0.5)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.borderColor = 'rgba(248, 223, 165, 0.2)';
+                  }}>
+                    <div style={{
+                      width: isMobile ? '2rem' : '2.5rem',
+                      height: isMobile ? '2rem' : '2.5rem',
+                      background: crypto.bg,
+                      color: '#ffffff',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: isMobile ? '1rem' : '1.25rem',
+                      fontWeight: 'bold',
+                      margin: '0 auto'
+                    }}>
+                      {crypto.symbol}
+                    </div>
                   </div>
-                </div>
-                
-                {/* Ethereum Card */}
-                <div className="crypto-card crypto-card-2">
-                  <div className="crypto-card-content">
-                    <div className="crypto-card-logo" style={{
-                      background: '#627EEA',
-                      color: '#ffffff'
-                    }}>Ξ</div>
-                  </div>
-                </div>
-                
-                {/* XRP Card */}
-                <div className="crypto-card crypto-card-3">
-                  <div className="crypto-card-content">
-                    <div className="crypto-card-logo" style={{
-                      background: '#23292F',
-                      color: '#ffffff'
-                    }}>✕</div>
-                  </div>
-                </div>
-                
-                {/* Solana Card */}
-                <div className="crypto-card crypto-card-4">
-                  <div className="crypto-card-content">
-                    <div className="crypto-card-logo" style={{
-                      background: '#9945FF',
-                      color: '#ffffff'
-                    }}>◎</div>
-                  </div>
-                </div>
-                
-                {/* Cardano Card */}
-                <div className="crypto-card crypto-card-5">
-                  <div className="crypto-card-content">
-                    <div className="crypto-card-logo" style={{
-                      background: '#0033AD',
-                      color: '#ffffff'
-                    }}>₳</div>
-                  </div>
-                </div>
-                
-                {/* BNB Card */}
-                <div className="crypto-card crypto-card-6">
-                  <div className="crypto-card-content">
-                    <div className="crypto-card-logo" style={{
-                      background: '#F3BA2F',
-                      color: '#ffffff'
-                    }}>◆</div>
-                  </div>
-                </div>
-                
-                {/* Polkadot Card */}
-                <div className="crypto-card crypto-card-7">
-                  <div className="crypto-card-content">
-                    <div className="crypto-card-logo" style={{
-                      background: '#E6007A',
-                      color: '#ffffff'
-                    }}>●</div>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
 
             {/* Image - Right Side */}
-            <div style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: '100%',
-              height: '60vh'
-            }}>
-              <img
-                src="/krypto.png"
-                alt="Kryptowährungen"
-                style={{
-                  objectFit: 'cover',
-                  objectPosition: 'center',
-                  maxHeight: '70vh',
-                  width: 'auto',
-                  borderRadius: '12px'
-                }}
-              />
-            </div>
+            {!isMobile && (
+              <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '100%',
+                height: isTablet ? '50vh' : '60vh'
+              }}>
+                <img
+                  src="/krypto.png"
+                  alt="Kryptowährungen"
+                  style={{
+                    objectFit: 'cover',
+                    objectPosition: 'center',
+                    maxHeight: isTablet ? '60vh' : '70vh',
+                    width: 'auto',
+                    borderRadius: '12px',
+                    boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3)'
+                  }}
+                />
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -357,85 +422,147 @@ const CryptoKaufenPage = () => {
       <CryptoPurchaseCalculator selectedCrypto={selectedCurrency} />
 
       {/* Top Exchanges Section */}
-      <div style={{ paddingTop: '2rem', paddingBottom: '1rem' }}>
+      <div style={{ 
+        paddingTop: isMobile ? '1.5rem' : '2rem', 
+        paddingBottom: isMobile ? '0.75rem' : '1rem',
+        background: 'linear-gradient(135deg, #111111 0%, #1a1a1a 50%, #111111 100%)'
+      }}>
         <div style={{
           maxWidth: '1280px',
           margin: '0 auto',
-          padding: '0 1rem'
+          padding: isMobile ? '0 1rem' : '0 2rem'
         }}>
-          <h2 className="mc-section-title" style={{ marginBottom: '1rem', textAlign: 'left' }}>
-            Unsere <span className="mc-hero-gradient">Topempfehlungen</span>
+          <h2 style={{
+            color: '#ffffff',
+            fontSize: isMobile ? '1.75rem' : isTablet ? '2.25rem' : '2.5rem',
+            fontWeight: '600',
+            lineHeight: '1.2',
+            marginBottom: '1rem',
+            textAlign: isMobile ? 'center' : 'left'
+          }}>
+            {isInvestTab 
+              ? <>Die besten <span style={{
+                  background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
+                  WebkitBackgroundClip: 'text',
+                  backgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent'
+                }}>Investment-Plattformen</span></>
+              : <>Unsere <span style={{
+                  background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
+                  WebkitBackgroundClip: 'text',
+                  backgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent'
+                }}>Topempfehlungen</span></>
+            }
           </h2>
-          <p className="mc-section-subtitle-left" style={{ marginBottom: '1.5rem' }}>
-            Die besten Krypto-Börsen für sicheren und günstigen Handel von uns für Dich getestet.
+          <p style={{
+            color: '#d1d5db',
+            fontSize: isMobile ? '1rem' : isTablet ? '1.125rem' : '1.25rem',
+            lineHeight: '1.6',
+            marginBottom: '1.5rem',
+            textAlign: isMobile ? 'center' : 'left',
+            maxWidth: '800px'
+          }}>
+            {isInvestTab 
+              ? 'Die sichersten und renommiertesten Krypto-Börsen für langfristige Investitionen und Vermögensaufbau.'
+              : 'Die besten Krypto-Börsen für sicheren und günstigen Handel von uns für Dich getestet.'
+            }
           </p>
-                  </div>
-                </div>
+        </div>
+      </div>
                 
       {/* Exchange Detail Cards */}
-      <div style={{ paddingTop: '0' }}>
+      <div style={{ 
+        paddingTop: '0',
+        background: 'linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%)',
+        minHeight: '100vh'
+      }}>
         <div style={{
           maxWidth: '1280px',
           margin: '0 auto',
-          padding: '0 1rem'
+          padding: isMobile ? '1rem' : '0 2rem',
+          display: 'flex',
+          flexDirection: isMobile ? 'column' : 'row',
+          gap: isMobile ? '1.5rem' : '2rem'
         }}>
+          {/* Exchange Cards Section */}
           <div style={{
+            flex: isMobile ? '1' : '1',
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
-            gap: '2rem'
+            gridTemplateColumns: isMobile ? '1fr' : isTablet ? 'repeat(auto-fit, minmax(350px, 1fr))' : 'repeat(auto-fit, minmax(400px, 1fr))',
+            gap: isMobile ? '1.5rem' : '2rem'
           }}>
             {exchanges.map((exchange) => (
               <div
                 key={exchange.id}
-                className={exchange.isRecommended ? 'gold-border' : ''}
                 style={{
-                  background: 'linear-gradient(135deg, #1a1a2e, #16213e)',
-                  borderRadius: exchange.isRecommended ? undefined : '16px',
-                  padding: '2rem',
-                  border: exchange.isRecommended ? 'none' : '1px solid rgba(248, 223, 165, 0.2)',
+                  background: exchange.isRecommended 
+                    ? 'linear-gradient(135deg, #1a1a2e, #16213e)' 
+                    : 'linear-gradient(135deg, #1a1a2e, #16213e)',
+                  borderRadius: '16px',
+                  padding: isMobile ? '1.5rem' : '2rem',
+                  border: exchange.isRecommended 
+                    ? '2px solid rgba(248, 223, 165, 0.4)' 
+                    : '1px solid rgba(248, 223, 165, 0.2)',
                   position: 'relative',
-                  overflow: 'visible'
+                  overflow: 'visible',
+                  boxShadow: exchange.isRecommended 
+                    ? '0 10px 25px rgba(248, 223, 165, 0.2)' 
+                    : '0 10px 25px rgba(0, 0, 0, 0.3)',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-5px)';
+                  e.currentTarget.style.boxShadow = exchange.isRecommended 
+                    ? '0 15px 35px rgba(248, 223, 165, 0.3)' 
+                    : '0 15px 35px rgba(0, 0, 0, 0.4)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = exchange.isRecommended 
+                    ? '0 10px 25px rgba(248, 223, 165, 0.2)' 
+                    : '0 10px 25px rgba(0, 0, 0, 0.3)';
                 }}
               >
                 {/* Bonus Badge - Positioned outside container */}
                 {exchange.id === 'bitvavo' && (
                   <div style={{
                     position: 'absolute',
-                    top: '-15px',
-                    right: '20px',
+                    top: isMobile ? '-10px' : '-15px',
+                    right: isMobile ? '10px' : '20px',
                     background: 'linear-gradient(135deg, #e4b15e, #f8dfa5)',
                     color: '#000000',
-                    padding: '0.5rem 1rem',
+                    padding: isMobile ? '0.4rem 0.75rem' : '0.5rem 1rem',
                     borderRadius: '20px',
-                    fontSize: '0.875rem',
+                    fontSize: isMobile ? '0.75rem' : '0.875rem',
                     fontWeight: '600',
-                    display: 'flex',
-                      alignItems: 'center',
-                    gap: '0.5rem',
-                    zIndex: 3,
-                    boxShadow: '0 4px 12px rgba(248, 223, 165, 0.3)'
-                  }}>
-                    💰 10 Euro Neukundenbonus
-                  </div>
-                )}
-                {exchange.id === 'coinbase' && (
-                  <div style={{
-                    position: 'absolute',
-                    top: '-15px',
-                    right: '20px',
-                      background: 'linear-gradient(135deg, #e4b15e, #f8dfa5)',
-                      color: '#000000',
-                    padding: '0.5rem 1rem',
-                    borderRadius: '20px',
-                      fontSize: '0.875rem',
-                      fontWeight: '600',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.5rem',
                     zIndex: 3,
                     boxShadow: '0 4px 12px rgba(248, 223, 165, 0.3)'
                   }}>
-                    💰 15 Euro Startbonus in BTC
+                    💰 {isMobile ? '10€ Bonus' : '10 Euro Neukundenbonus'}
+                  </div>
+                )}
+                {exchange.id === 'coinbase' && (
+                  <div style={{
+                    position: 'absolute',
+                    top: isMobile ? '-10px' : '-15px',
+                    right: isMobile ? '10px' : '20px',
+                    background: 'linear-gradient(135deg, #e4b15e, #f8dfa5)',
+                    color: '#000000',
+                    padding: isMobile ? '0.4rem 0.75rem' : '0.5rem 1rem',
+                    borderRadius: '20px',
+                    fontSize: isMobile ? '0.75rem' : '0.875rem',
+                    fontWeight: '600',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    zIndex: 3,
+                    boxShadow: '0 4px 12px rgba(248, 223, 165, 0.3)'
+                  }}>
+                    💰 {isMobile ? '15€ BTC Bonus' : '15 Euro Startbonus in BTC'}
                   </div>
                 )}
                 
@@ -514,7 +641,7 @@ const CryptoKaufenPage = () => {
                         fontSize: '12px',
                         fontWeight: 'bold',
                         color: '#f8dfa5'
-                      }}>+{exchange.id === 'mexc' ? '1500' : exchange.id === 'bitvavo' ? '300' : exchange.id === 'bitpanda' ? '300' : '260'}</div>
+                      }}>+{exchange.id === 'mexc' ? '1500' : exchange.id === 'bitvavo' ? '350' : exchange.id === 'bitpanda' ? '500' : '260'}</div>
                     </div>
                   </div>
                 </div>
@@ -592,7 +719,7 @@ const CryptoKaufenPage = () => {
                   <div>
                     <div style={{ color: '#9ca3af', fontSize: '0.875rem' }}>Gründung:</div>
                     <div style={{ color: '#ffffff', fontWeight: '600' }}>
-                      {exchange.id === 'bitvavo' ? '2021' : 
+                      {exchange.id === 'bitvavo' ? '2018' : 
                        exchange.id === 'bitpanda' ? '2014' :
                        exchange.id === 'coinbase' ? '2012' : '2019'}
                     </div>
@@ -648,7 +775,7 @@ const CryptoKaufenPage = () => {
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
                         <div>
                           {(exchange.id === 'bitvavo' ? [
-                            'Sehr günstige Trading-Gebühren ab 0,03%',
+                            'Transparente Trading-Gebühren 0,25% Maker/Taker',
                             'Intuitive Benutzeroberfläche für Anfänger',
                             'Reguliert durch deutsche BaFin-Lizenz'
                           ] : exchange.id === 'bitpanda' ? [
@@ -1026,7 +1153,7 @@ const CryptoKaufenPage = () => {
                       🏆 TESTSIEGER
                     </div>
                     <p style={{ margin: 0, fontWeight: '500' }}>
-                      <strong>Niedrigste Gebühren:</strong> Mit nur 0,25% Handelsgebühren und über 300 Kryptowährungen bietet Bitvavo das beste Preis-Leistungs-Verhältnis.
+                      <strong>Transparente Gebühren:</strong> Mit 0,25% Maker/Taker-Gebühren und über 350 Kryptowährungen bietet Bitvavo transparente Konditionen.
                     </p>
                   </div>
 
@@ -1058,7 +1185,7 @@ const CryptoKaufenPage = () => {
                       padding: '1rem',
                       textAlign: 'center'
                     }}>
-                      <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#f8dfa5' }}>300+</div>
+                      <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#f8dfa5' }}>350+</div>
                       <div style={{ fontSize: '0.8rem', color: '#9ca3af' }}>Kryptowährungen</div>
                     </div>
                     <div style={{
@@ -1257,140 +1384,140 @@ const CryptoKaufenPage = () => {
               </section>
             </div>
 
-            {/* Table of Contents - Sticky Sidebar */}
-            <div style={{ 
-              width: '280px',
-              position: 'sticky',
-              top: '120px',
-              height: 'fit-content'
-            }}>
-              <div style={{
-                background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f172a 50%, #1e293b 75%, #334155 100%)',
-                border: '2px solid rgba(248, 223, 165, 0.4)',
-                borderRadius: '12px',
-                padding: '1rem',
-                boxShadow: '0 10px 25px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+            {/* Table of Contents - Desktop Sidebar only */}
+            {!isMobile && (
+              <div style={{ 
+                width: isTablet ? '240px' : '280px',
+                position: 'sticky',
+                top: '120px',
+                height: 'fit-content',
+                flexShrink: 0
               }}>
                 <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  marginBottom: '1rem',
-                  paddingBottom: '0.5rem',
-                  borderBottom: '1px solid rgba(248, 223, 165, 0.3)'
+                  background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f172a 50%, #1e293b 75%, #334155 100%)',
+                  border: '2px solid rgba(248, 223, 165, 0.4)',
+                  borderRadius: '12px',
+                  padding: isTablet ? '0.875rem' : '1rem',
+                  boxShadow: '0 10px 25px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
                 }}>
-                  <div style={{ fontSize: '1.2rem' }}>📋</div>
-                  <h3 style={{
-                    color: '#f8dfa5',
-                    fontSize: '1.1rem',
-                    fontWeight: '600',
-                    margin: 0,
-                    background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent'
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    marginBottom: '1rem',
+                    paddingBottom: '0.5rem',
+                    borderBottom: '1px solid rgba(248, 223, 165, 0.3)'
                   }}>
-                    Inhaltsverzeichnis
-                  </h3>
+                    <div style={{ fontSize: '1.2rem' }}>📋</div>
+                    <h3 style={{
+                      color: '#f8dfa5',
+                      fontSize: isTablet ? '1rem' : '1.1rem',
+                      fontWeight: '600',
+                      margin: 0,
+                      background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent'
+                    }}>
+                      Inhaltsverzeichnis
+                    </h3>
+                  </div>
+                  <nav>
+                    <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+                      <li style={{ marginBottom: '0.75rem' }}>
+                        <a 
+                          href="#bitpanda-broker"
+                          style={{
+                            color: activeSection === 'bitpanda-broker' ? '#f8dfa5' : '#d1d5db',
+                            textDecoration: 'none',
+                            fontSize: isTablet ? '0.85rem' : '0.9rem',
+                            lineHeight: '1.4',
+                            display: 'block',
+                            padding: '0.5rem 0 0.5rem 0.75rem',
+                            marginLeft: '-1rem',
+                            paddingLeft: '1rem',
+                            borderLeft: activeSection === 'bitpanda-broker' ? '3px solid #f8dfa5' : '3px solid transparent',
+                            transition: 'all 0.3s ease'
+                          }}
+                          onMouseOver={(e) => {
+                            const target = e.target as HTMLElement;
+                            target.style.color = '#f8dfa5';
+                            target.style.borderLeftColor = '#f8dfa5';
+                          }}
+                          onMouseOut={(e) => {
+                            const target = e.target as HTMLElement;
+                            target.style.color = activeSection === 'bitpanda-broker' ? '#f8dfa5' : '#d1d5db';
+                            target.style.borderLeftColor = activeSection === 'bitpanda-broker' ? '#f8dfa5' : 'transparent';
+                          }}
+                        >
+                          1. Empfohlener Krypto-Broker
+                        </a>
+                      </li>
+                      <li style={{ marginBottom: '0.75rem' }}>
+                        <a 
+                          href="#bitvavo-exchange"
+                          style={{
+                            color: activeSection === 'bitvavo-exchange' ? '#f8dfa5' : '#d1d5db',
+                            textDecoration: 'none',
+                            fontSize: isTablet ? '0.85rem' : '0.9rem',
+                            lineHeight: '1.4',
+                            display: 'block',
+                            padding: '0.5rem 0 0.5rem 0.75rem',
+                            marginLeft: '-1rem',
+                            paddingLeft: '1rem',
+                            borderLeft: activeSection === 'bitvavo-exchange' ? '3px solid #f8dfa5' : '3px solid transparent',
+                            transition: 'all 0.3s ease'
+                          }}
+                          onMouseOver={(e) => {
+                            const target = e.target as HTMLElement;
+                            target.style.color = '#f8dfa5';
+                            target.style.borderLeftColor = '#f8dfa5';
+                          }}
+                          onMouseOut={(e) => {
+                            const target = e.target as HTMLElement;
+                            target.style.color = activeSection === 'bitvavo-exchange' ? '#f8dfa5' : '#d1d5db';
+                            target.style.borderLeftColor = activeSection === 'bitvavo-exchange' ? '#f8dfa5' : 'transparent';
+                          }}
+                        >
+                          2. Empfohlene Krypto-Börse
+                        </a>
+                      </li>
+                      <li style={{ marginBottom: '0.75rem' }}>
+                        <a 
+                          href="#mexc-trading"
+                          style={{
+                            color: activeSection === 'mexc-trading' ? '#f8dfa5' : '#d1d5db',
+                            textDecoration: 'none',
+                            fontSize: isTablet ? '0.85rem' : '0.9rem',
+                            lineHeight: '1.4',
+                            display: 'block',
+                            padding: '0.5rem 0 0.5rem 0.75rem',
+                            marginLeft: '-1rem',
+                            paddingLeft: '1rem',
+                            borderLeft: activeSection === 'mexc-trading' ? '3px solid #f8dfa5' : '3px solid transparent',
+                            transition: 'all 0.3s ease'
+                          }}
+                          onMouseOver={(e) => {
+                            const target = e.target as HTMLElement;
+                            target.style.color = '#f8dfa5';
+                            target.style.borderLeftColor = '#f8dfa5';
+                          }}
+                          onMouseOut={(e) => {
+                            const target = e.target as HTMLElement;
+                            target.style.color = activeSection === 'mexc-trading' ? '#f8dfa5' : '#d1d5db';
+                            target.style.borderLeftColor = activeSection === 'mexc-trading' ? '#f8dfa5' : 'transparent';
+                          }}
+                        >
+                          3. Empfohlene Trading-Börse
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
                 </div>
-                                <nav>
-                  <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
-                    <li style={{ marginBottom: '0.75rem' }}>
-                      <a 
-                        href="#bitpanda-broker"
-                        className="toc-link"
-                        style={{
-                          color: activeSection === 'bitpanda-broker' ? '#f8dfa5' : '#d1d5db',
-                          textDecoration: 'none',
-                          fontSize: '0.9rem',
-                          lineHeight: '1.4',
-                          display: 'block',
-                          padding: '0.5rem 0 0.5rem 0.75rem',
-                          marginLeft: '-1rem',
-                          paddingLeft: '1rem',
-                          borderLeft: activeSection === 'bitpanda-broker' ? '3px solid #f8dfa5' : '3px solid transparent',
-                          transition: 'all 0.3s ease'
-                        }}
-                        onMouseOver={(e) => {
-                          const target = e.target as HTMLElement;
-                          target.style.color = '#f8dfa5';
-                          target.style.borderLeftColor = '#f8dfa5';
-                        }}
-                        onMouseOut={(e) => {
-                          const target = e.target as HTMLElement;
-                          target.style.color = '#d1d5db';
-                          target.style.borderLeftColor = 'transparent';
-                        }}
-                      >
-                        1. Empfohlener Krypto-Broker
-                      </a>
-                    </li>
-                    <li style={{ marginBottom: '0.75rem' }}>
-                      <a 
-                        href="#bitvavo-exchange"
-                        className="toc-link"
-                        style={{
-                          color: activeSection === 'bitvavo-exchange' ? '#f8dfa5' : '#d1d5db',
-                          textDecoration: 'none',
-                          fontSize: '0.9rem',
-                          lineHeight: '1.4',
-                          display: 'block',
-                          padding: '0.5rem 0 0.5rem 0.75rem',
-                          marginLeft: '-1rem',
-                          paddingLeft: '1rem',
-                          borderLeft: activeSection === 'bitvavo-exchange' ? '3px solid #f8dfa5' : '3px solid transparent',
-                          transition: 'all 0.3s ease'
-                        }}
-                        onMouseOver={(e) => {
-                          const target = e.target as HTMLElement;
-                          target.style.color = '#f8dfa5';
-                          target.style.borderLeftColor = '#f8dfa5';
-                        }}
-                        onMouseOut={(e) => {
-                          const target = e.target as HTMLElement;
-                          target.style.color = '#d1d5db';
-                          target.style.borderLeftColor = 'transparent';
-                        }}
-                      >
-                        2. Empfohlene Krypto-Börse
-                      </a>
-                    </li>
-                    <li style={{ marginBottom: '0.75rem' }}>
-                      <a 
-                        href="#mexc-trading"
-                        className="toc-link"
-                        style={{
-                          color: activeSection === 'mexc-trading' ? '#f8dfa5' : '#d1d5db',
-                          textDecoration: 'none',
-                          fontSize: '0.9rem',
-                          lineHeight: '1.4',
-                          display: 'block',
-                          padding: '0.5rem 0 0.5rem 0.75rem',
-                          marginLeft: '-1rem',
-                          paddingLeft: '1rem',
-                          borderLeft: activeSection === 'mexc-trading' ? '3px solid #f8dfa5' : '3px solid transparent',
-                          transition: 'all 0.3s ease'
-                        }}
-                        onMouseOver={(e) => {
-                          const target = e.target as HTMLElement;
-                          target.style.color = '#f8dfa5';
-                          target.style.borderLeftColor = '#f8dfa5';
-                        }}
-                        onMouseOut={(e) => {
-                          const target = e.target as HTMLElement;
-                          target.style.color = '#d1d5db';
-                          target.style.borderLeftColor = 'transparent';
-                        }}
-                      >
-                        3. Empfohlene Trading-Börse
-                      </a>
-                    </li>
-                  </ul>
-                </nav>
-            </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
-    </div>
     </div>
     </>
   );
