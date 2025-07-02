@@ -92,7 +92,7 @@ const Footer = () => {
       links: [
         { name: 'Krypto Academy', href: 'https://www.btc-echo.de/academy/schulungen/investieren-in-kryptowahrungen-in-5-schritten/' },
         { name: 'Börsen Vergleich', href: '/krypto-kaufen' },
-        { name: 'News Feed', href: '/news' },
+        { name: 'Newsfeed', href: '/newsfeed' },
       ]
     }
   };
