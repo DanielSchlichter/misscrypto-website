@@ -125,8 +125,8 @@ const TransparentHeader = () => {
 
         {/* Mobile Menu Button */}
         {isMobile && (
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             style={{
               background: 'transparent',
               border: 'none',
@@ -142,15 +142,15 @@ const TransparentHeader = () => {
             onMouseOut={(e) => {
               e.currentTarget.style.color = '#ffffff';
             }}
-          >
-            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              {isMobileMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
+        >
+          <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {isMobileMenuOpen ? (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            ) : (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            )}
+          </svg>
+        </button>
         )}
       </div>
 
@@ -229,7 +229,7 @@ const TransparentHeader = () => {
           >
             <span style={{ fontSize: '1.25rem' }}>🏅</span>
             Krypto kaufen
-          </Link>
+            </Link>
         </div>
       )}
     </header>

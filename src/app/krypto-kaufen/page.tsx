@@ -25,7 +25,7 @@ const exchanges: Exchange[] = [
     logo: '/logos/bitvavo.svg',
     rating: 4.5,
     fees: '0,25%',
-    features: ['Beste Börse', 'EU-Lizenz', 'BaFin-Lizenz', '350+ Währungen'],
+    features: ['Niederlande', 'EU-Lizenz', 'BaFin-Lizenz', '350+ Währungen'],
     pros: ['0,25% Maker/Taker', 'Höchste Funktionalität', 'Maximale Einfachheit', 'Powered by Hyphe'],
     cons: ['Weniger Zahlungsmethoden', 'Professioneller Fokus'],
     minDeposit: '1,00 €',
@@ -39,12 +39,12 @@ const exchanges: Exchange[] = [
     logo: '/logos/bitpanda.png',
     rating: 4.25,
     fees: '0,25%',
-    features: ['Bester Broker', 'EU-reguliert', 'Deutscher Support', '500+ Währungen'],
+    features: ['Österreich', 'EU-reguliert', 'Deutscher Support', '500+ Währungen'],
     pros: ['Höchste Sicherheit', 'Sehr benutzerfreundlich', 'Große Auswahl', 'EU-Regulierung'],
     cons: ['Höhere Gebühren', 'Weniger Trading-Tools'],
     minDeposit: '10,00 €',
     paymentMethods: ['PayPal', 'Mastercard', 'Visa', 'GiroPay', 'SEPA'],
-    url: 'https://bitpanda.pxf.io/c/2051965/2007465/15871'
+    url: 'https://www.bitpanda.com/de?irclickid=V3QSGnzSyxycT6HTSnRCMTJoUksXvVxdVxomz00&utm_source=Impact&utm_medium=Affiliates&utm_campaign=2051965&utm_content=Miss%20Crypto%20YT&utm_term=Brombacher%2C%20Deines%2C%20Kretzschmar%2C%20Morgenroth%20GbR&ref=615250356669422741&tag=affiliates&subid1=&subid3=2051965&irgwc=1'
   },
   {
     id: 'coinbase',
@@ -57,7 +57,7 @@ const exchanges: Exchange[] = [
     cons: ['Hohe Gebühren', 'Weniger Coins', 'Nicht EU-reguliert'],
     minDeposit: 'ab 1 Euro',
     paymentMethods: ['PayPal', 'Mastercard', 'Visa', 'SEPA', 'Sofort'],
-    url: 'https://coinbase-consumer.sjv.io/c/2051965/1452448/9251'
+    url: 'https://coinbase-consumer.sjv.io/B0gm7q'
   },
   {
     id: 'mexc',
@@ -65,12 +65,38 @@ const exchanges: Exchange[] = [
     logo: '/logos/mexc.png',
     rating: 3.85,
     fees: 'ab 0,1%',
-    features: ['Weltweite Börse', 'Niedrige Gebühren', 'Mobile App', '1500+ Währungen'],
+    features: ['Seychellen', 'Niedrige Gebühren', 'Mobile App', '2000+ Währungen'],
     pros: ['Niedrige Gebühren', 'Riesige Auswahl', 'Viele Features', 'Globale Präsenz'],
     cons: ['Komplex für Anfänger', 'Weniger EU-Fokus', 'Regulatory Risiken'],
-    minDeposit: 'ab 1 Euro',
+    minDeposit: '10,00 €',
     paymentMethods: ['Visa', 'PayPal', 'Mastercard', 'GiroPay', 'SEPA'],
-    url: 'https://promote.mexc.com/a/LAHPsgFk'
+    url: 'https://www.mexc.com/acquisition/custom-sign-up?shareCode=mexc-2Xhb8'
+  },
+  {
+    id: 'okx',
+    name: 'OKX',
+    logo: '/logos/bingx.png',
+    rating: 4.0,
+    fees: '0,1%',
+    features: ['Internationale Börse', 'Niedrige Gebühren', 'Futures Trading', '1000+ Währungen'],
+    pros: ['Niedrige Gebühren', 'Große Auswahl', 'Professionelle Features', 'Globale Präsenz'],
+    cons: ['Komplex für Anfänger', 'Nicht EU-reguliert', 'Höhere Mindesteinzahlung'],
+    minDeposit: '50,00 €',
+    paymentMethods: ['Visa', 'Mastercard', 'Bank Transfer', 'Crypto'],
+    url: 'https://bingx.com/invite/OMAEVM/'
+  },
+  {
+    id: 'kraken',
+    name: 'Kraken',
+    logo: '/logos/kraken.png',
+    rating: 4.2,
+    fees: '0,25%',
+    features: ['US-Börse', 'Seit 2011', 'Hohe Sicherheit', '300+ Währungen'],
+    pros: ['Sehr sicher', 'Lange Erfahrung', 'Professionell', 'Gute Reputation'],
+    cons: ['Komplexere UI', 'Weniger EU-Fokus', 'Höhere Gebühren'],
+    minDeposit: '1,00 €',
+    paymentMethods: ['Visa', 'Mastercard', 'Bank Transfer', 'SEPA'],
+    url: 'https://kraken.pxf.io/RGE3yg'
   }
 ];
 
@@ -710,9 +736,12 @@ const CryptoKaufenPage = () => {
                   <div>
                     <div style={{ color: '#9ca3af', fontSize: '0.875rem' }}>Firmensitz:</div>
                     <div style={{ color: '#ffffff', fontWeight: '600' }}>
-                      {exchange.id === 'bitvavo' ? 'Deutschland 🇩🇪' : 
+                      {exchange.id === 'bitvavo' ? 'Niederlande 🇳🇱' : 
                        exchange.id === 'bitpanda' ? 'Österreich 🇦🇹' :
-                       exchange.id === 'coinbase' ? 'USA 🇺🇸' : 'Global 🌍'}
+                       exchange.id === 'coinbase' ? 'USA 🇺🇸' :
+                       exchange.id === 'mexc' ? 'Seychellen 🇸🇨' :
+                       exchange.id === 'okx' ? 'Singapur 🇸🇬' :
+                       exchange.id === 'kraken' ? 'USA 🇺🇸' : 'Global 🌍'}
                     </div>
                   </div>
 
@@ -721,7 +750,10 @@ const CryptoKaufenPage = () => {
                     <div style={{ color: '#ffffff', fontWeight: '600' }}>
                       {exchange.id === 'bitvavo' ? '2018' : 
                        exchange.id === 'bitpanda' ? '2014' :
-                       exchange.id === 'coinbase' ? '2012' : '2019'}
+                       exchange.id === 'coinbase' ? '2012' :
+                       exchange.id === 'mexc' ? '2018' :
+                       exchange.id === 'okx' ? '2018' :
+                       exchange.id === 'kraken' ? '2011' : '2019'}
                     </div>
                   </div>
                 </div>
@@ -786,10 +818,22 @@ const CryptoKaufenPage = () => {
                             'Sehr einfache Bedienung für Krypto-Neulinge',
                             'Große Krypto-Auswahl mit Trading-Features',
                             'Hohe Sicherheitsstandards mit Einlagenschutz'
-                          ] : [
-                            'Sehr niedrige Handelsgebühren',
-                            'Über 1500 verschiedene Kryptowährungen',
+                          ] : exchange.id === 'mexc' ? [
+                            'Sehr niedrige Handelsgebühren (0,1%)',
+                            'Über 2000 verschiedene Kryptowährungen',
                             'Weltweiter Zugang und Service'
+                          ] : exchange.id === 'okx' ? [
+                            'Niedrige Handelsgebühren (0,1%)',
+                            'Über 1000 Kryptowährungen verfügbar',
+                            'Professionelle Trading-Tools und Derivate'
+                          ] : exchange.id === 'kraken' ? [
+                            'Höchste Sicherheitsstandards seit 2011',
+                            'Reguliert und etabliert in den USA',
+                            'Starker Fokus auf institutionelle Kunden'
+                          ] : [
+                            'Niedrige Handelsgebühren',
+                            'Große Auswahl an Kryptowährungen',
+                            'Verschiedene Trading-Features'
                           ]).map((pro, index) => (
                             <div key={index} style={{
                               display: 'flex',
@@ -813,9 +857,18 @@ const CryptoKaufenPage = () => {
                           ] : exchange.id === 'coinbase' ? [
                             'Relativ hohe Gebühren im Vergleich zu Konkurrenten',
                             'Umfangreiche Datensammlung für US-Unternehmen'
-                          ] : [
+                          ] : exchange.id === 'mexc' ? [
                             'Komplexe Oberfläche für Krypto-Einsteiger',
                             'Weniger Fokus auf europäische Nutzer'
+                          ] : exchange.id === 'okx' ? [
+                            'Komplexe Plattform für Anfänger',
+                            'Höhere Mindesteinzahlung (50 €)'
+                          ] : exchange.id === 'kraken' ? [
+                            'Weniger benutzerfreundlich für Anfänger',
+                            'Begrenzte Zahlungsmethoden in Europa'
+                          ] : [
+                            'Potentielle Komplexität für Einsteiger',
+                            'Variierende regionale Verfügbarkeit'
                           ]).map((con, index) => (
                             <div key={index} style={{
                               display: 'flex',
@@ -866,7 +919,13 @@ const CryptoKaufenPage = () => {
                           'Bitpanda eignet sich sowohl für Krypto-Einsteiger als auch für Anleger, die ein vielseitiges Portfolio aus Kryptowährungen, Edelmetallen und Aktien aufbauen möchten. Die Plattform ist besonders für Nutzer aus Deutschland interessant, da Bitpanda eine Krypto-Verwahrlizenz durch die BaFin besitzt. Leider sind die Gebühren beim Bitpanda Broker etwas höher. Dafür sind die Gebühren bei One Trading (ehemals Bitpanda Pro) deutlich niedriger.' :
                          exchange.id === 'coinbase' ?
                           'Coinbase eignet sich vor allem für Krypto-Einsteiger und Anleger, die eine regulierte, benutzerfreundliche und sichere Plattform suchen. Die höheren Gebühren und Datenschutzbedenken könnten jedoch für preissensitive und datenschutzbewusste Nutzer ein Hindernis sein.' :
-                          'MEXC eignet sich für erfahrene Trader, die Zugang zu einer großen Auswahl an Kryptowährungen und Trading-Features suchen. Weniger geeignet für Anfänger aufgrund der Komplexität.'}
+                         exchange.id === 'mexc' ?
+                          'MEXC eignet sich für erfahrene Trader, die Zugang zu einer großen Auswahl an Kryptowährungen (2000+) und niedrigen Gebühren suchen. Weniger geeignet für Anfänger aufgrund der Komplexität der Plattform.' :
+                         exchange.id === 'okx' ?
+                          'OKX eignet sich für fortgeschrittene Trader, die professionelle Trading-Features und eine große Auswahl an Kryptowährungen (1000+) mit niedrigen Gebühren suchen. Die Plattform bietet Futures, Optionen und andere Derivate.' :
+                         exchange.id === 'kraken' ?
+                          'Kraken eignet sich für sicherheitsbewusste Trader und institutionelle Anleger. Als eine der ältesten und etabliertesten Börsen (seit 2011) bietet Kraken hohe Sicherheitsstandards und ist in den USA reguliert.' :
+                          'Diese Börse eignet sich für verschiedene Anlegertypen je nach ihren spezifischen Bedürfnissen.'}
                       </p>
                   </div>
                   </details>

@@ -29,7 +29,7 @@ const exchanges: Exchange[] = [
     fees: 0.0025, // 0,25%
     minDeposit: 10,
     currency: 'EUR',
-    url: 'https://bitpanda.pxf.io/c/2051965/2007465/15871'
+    url: 'https://www.bitpanda.com/de?irclickid=V3QSGnzSyxycT6HTSnRCMTJoUksXvVxdVxomz00&utm_source=Impact&utm_medium=Affiliates&utm_campaign=2051965&utm_content=Miss%20Crypto%20YT&utm_term=Brombacher%2C%20Deines%2C%20Kretzschmar%2C%20Morgenroth%20GbR&ref=615250356669422741&tag=affiliates&subid1=&subid3=2051965&irgwc=1'
   },
   {
     id: 'coinbase',
@@ -38,7 +38,7 @@ const exchanges: Exchange[] = [
     fees: 0.0149, // 1,49%
     minDeposit: 2,
     currency: 'EUR',
-    url: 'https://coinbase-consumer.sjv.io/c/2051965/1452448/9251'
+    url: 'https://coinbase-consumer.sjv.io/B0gm7q'
   },
   {
     id: 'mexc',
@@ -47,7 +47,25 @@ const exchanges: Exchange[] = [
     fees: 0.001, // 0,1%
     minDeposit: 10,
     currency: 'EUR',
-    url: 'https://promote.mexc.com/a/LAHPsgFk'
+    url: 'https://www.mexc.com/acquisition/custom-sign-up?shareCode=mexc-2Xhb8'
+  },
+  {
+    id: 'okx',
+    name: 'OKX',
+    logo: '/logos/bingx.png',
+    fees: 0.001, // 0,1%
+    minDeposit: 50,
+    currency: 'EUR',
+    url: 'https://bingx.com/invite/OMAEVM/'
+  },
+  {
+    id: 'kraken',
+    name: 'Kraken',
+    logo: '/logos/kraken.png',
+    fees: 0.0025, // 0,25%
+    minDeposit: 1,
+    currency: 'EUR',
+    url: 'https://kraken.pxf.io/RGE3yg'
   }
 ];
 
