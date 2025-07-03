@@ -87,6 +87,21 @@ const CryptoPurchaseCalculatorClient: React.FC<CryptoPurchaseCalculatorClientPro
   const [investmentAmount, setInvestmentAmount] = useState<number>(1000);
   const [selectedCrypto, setSelectedCrypto] = useState<Coin>(defaultCrypto);
   const [results, setResults] = useState<any[]>([]);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Mobile detection
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkIsMobile);
+    };
+  }, []);
 
   // Update selectedCrypto when defaultCrypto changes (from URL parameter)
   useEffect(() => {
@@ -165,20 +180,34 @@ const CryptoPurchaseCalculatorClient: React.FC<CryptoPurchaseCalculatorClientPro
   return (
     <section className="mc-section">
       <div className="mc-container">
-        <h2 className="mc-section-title" style={{ textAlign: 'left', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        <div style={{ 
+          textAlign: isMobile ? 'center' : 'left', 
+          marginBottom: '1rem'
+        }}>
           {selectedCrypto.image && (
             <img 
               src={selectedCrypto.image} 
               alt={`${selectedCrypto.name} Logo`}
               style={{
-                width: '48px',
-                height: '48px',
-                borderRadius: '50%'
+                width: isMobile ? '36px' : '48px',
+                height: isMobile ? '36px' : '48px',
+                borderRadius: '50%',
+                marginBottom: isMobile ? '0.5rem' : '0',
+                marginRight: isMobile ? '0' : '1rem',
+                display: isMobile ? 'block' : 'inline-block',
+                margin: isMobile ? '0 auto 0.5rem auto' : '0 1rem 0 0'
               }}
             />
           )}
-          {selectedCrypto.name}-Kauf <span className="mc-hero-gradient">Rechner</span>
-        </h2>
+          <h2 className="mc-section-title" style={{ 
+            textAlign: isMobile ? 'center' : 'left',
+            fontSize: isMobile ? '1.5rem' : '2.5rem',
+            margin: 0,
+            display: 'inline-block'
+          }}>
+            {selectedCrypto.name}-Kauf <span className="mc-hero-gradient">Rechner</span>
+          </h2>
+        </div>
         <p className="mc-section-subtitle-left">
           Berechne, wie viel {selectedCrypto.name} du für dein Investment bekommst und vergleiche die Gebühren.
         </p>
@@ -186,8 +215,8 @@ const CryptoPurchaseCalculatorClient: React.FC<CryptoPurchaseCalculatorClientPro
         {/* Zwei-spaltiges Layout */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
-          gap: '2rem',
+          gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(350px, 1fr))',
+          gap: isMobile ? '1.5rem' : '2rem',
           marginBottom: '2rem'
         }}>
           
@@ -195,7 +224,7 @@ const CryptoPurchaseCalculatorClient: React.FC<CryptoPurchaseCalculatorClientPro
           <div style={{
             background: 'rgba(248, 223, 165, 0.1)',
             borderRadius: '1rem',
-            padding: '2rem',
+            padding: isMobile ? '1.5rem' : '2rem',
             border: '1px solid rgba(248, 223, 165, 0.3)'
           }}>
             {/* Investment-Betrag */}
@@ -299,8 +328,8 @@ const CryptoPurchaseCalculatorClient: React.FC<CryptoPurchaseCalculatorClientPro
           {/* Rechte Spalte: Ergebnisse und Vergleich */}
           {results.length > 0 && (
             <div className="mc-feature-card" style={{
-              padding: '2rem',
-              maxHeight: '400px',
+              padding: isMobile ? '1.5rem' : '2rem',
+              maxHeight: isMobile ? '350px' : '400px',
               overflowY: 'auto'
             }}>
                 <div style={{

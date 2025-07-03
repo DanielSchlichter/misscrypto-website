@@ -362,7 +362,7 @@ const CryptoKaufenPage = () => {
               {/* Crypto Cards */}
               <div style={{
                 display: 'grid',
-                gridTemplateColumns: isMobile ? 'repeat(3, 1fr)' : isTablet ? 'repeat(4, 1fr)' : 'repeat(7, 1fr)',
+                gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : isTablet ? 'repeat(4, 1fr)' : 'repeat(7, 1fr)',
                 gap: isMobile ? '0.5rem' : '0.75rem',
                 marginTop: '2rem',
                 justifyContent: 'center'
@@ -375,7 +375,7 @@ const CryptoKaufenPage = () => {
                   { symbol: '₳', bg: '#0033AD', name: 'Cardano' },
                   { symbol: '◆', bg: '#F3BA2F', name: 'BNB' },
                   { symbol: '●', bg: '#E6007A', name: 'Polkadot' }
-                ].slice(0, isMobile ? 6 : 7).map((crypto, index) => (
+                ].slice(0, isMobile ? 4 : 7).map((crypto, index) => (
                   <div key={index} style={{
                     background: 'rgba(0, 0, 0, 0.3)',
                     backdropFilter: 'blur(10px)',
@@ -506,7 +506,7 @@ const CryptoKaufenPage = () => {
         <div style={{
           maxWidth: '1280px',
           margin: '0 auto',
-          padding: isMobile ? '1rem' : '0 2rem',
+          padding: isMobile ? '0 1rem' : '0 2rem',
           display: 'flex',
           flexDirection: isMobile ? 'column' : 'row',
           gap: isMobile ? '1.5rem' : '2rem'
@@ -515,7 +515,7 @@ const CryptoKaufenPage = () => {
           <div style={{
             flex: isMobile ? '1' : '1',
             display: 'grid',
-            gridTemplateColumns: isMobile ? '1fr' : isTablet ? 'repeat(auto-fit, minmax(350px, 1fr))' : 'repeat(auto-fit, minmax(400px, 1fr))',
+            gridTemplateColumns: isMobile ? '1fr' : isTablet ? '1fr' : 'repeat(auto-fit, minmax(400px, 1fr))',
             gap: isMobile ? '1.5rem' : '2rem'
           }}>
             {exchanges.map((exchange) => (
@@ -550,11 +550,11 @@ const CryptoKaufenPage = () => {
                     : '0 10px 25px rgba(0, 0, 0, 0.3)';
                 }}
               >
-                {/* Bonus Badge - Positioned outside container */}
+                {/* Bonus Badge - Positioned inside container for mobile */}
                 {exchange.id === 'bitvavo' && (
                   <div style={{
                     position: 'absolute',
-                    top: isMobile ? '-10px' : '-15px',
+                    top: isMobile ? '10px' : '-15px',
                     right: isMobile ? '10px' : '20px',
                     background: 'linear-gradient(135deg, #e4b15e, #f8dfa5)',
                     color: '#000000',
@@ -574,7 +574,7 @@ const CryptoKaufenPage = () => {
                 {exchange.id === 'coinbase' && (
                   <div style={{
                     position: 'absolute',
-                    top: isMobile ? '-10px' : '-15px',
+                    top: isMobile ? '10px' : '-15px',
                     right: isMobile ? '10px' : '20px',
                     background: 'linear-gradient(135deg, #e4b15e, #f8dfa5)',
                     color: '#000000',
@@ -972,8 +972,8 @@ const CryptoKaufenPage = () => {
             <p style={{
               color: '#d1d5db', 
               marginBottom: '2rem', 
-              padding: '0 5rem',
-              fontSize: '1.125rem', 
+              padding: isMobile ? '0' : isTablet ? '0 2rem' : '0 5rem',
+              fontSize: isMobile ? '1rem' : '1.125rem',
               lineHeight: '1.7'
             }}>
               Bitvavo bietet die beste Kombination aus niedrigen Gebühren, EU-Regulierung und 
@@ -1082,7 +1082,7 @@ const CryptoKaufenPage = () => {
                   {/* Stats Grid */}
                   <div style={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(3, 1fr)',
+                    gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
                     gap: '1rem',
                     margin: '2rem 0'
                   }}>
