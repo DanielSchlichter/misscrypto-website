@@ -1,19 +1,34 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
 const HeroSection = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkIsMobile);
+    };
+  }, []);
+
   return (
     <section className="mc-hero">
       <div className="mc-hero-content">
         <div style={{
           display: 'grid',
           gridTemplateColumns: '1fr',
-          gap: '2rem',
+          gap: isMobile ? '1rem' : '2rem',
           alignItems: 'center',
-          minHeight: '50vh'
+          minHeight: isMobile ? '60vh' : '50vh'
         }}>
           
           {/* Text Content - Left Side */}
@@ -34,7 +49,7 @@ const HeroSection = () => {
             </div>
             
             <h1 style={{
-              fontSize: '2rem',
+              fontSize: isMobile ? '1.5rem' : '2rem',
               fontWeight: 'bold',
               marginBottom: '1.25rem',
               lineHeight: '1.2',
@@ -46,7 +61,7 @@ const HeroSection = () => {
             </h1>
             
             <p style={{
-              fontSize: '1.125rem',
+              fontSize: isMobile ? '1rem' : '1.125rem',
               color: '#d1d5db',
               marginBottom: '2rem',
               lineHeight: '1.6',
@@ -59,7 +74,14 @@ const HeroSection = () => {
             </p>
             
             <div className="mc-hero-buttons" style={{ justifyContent: 'flex-start', textAlign: 'left' }}>
-              <Link href="/krypto-kaufen?currency=bitcoin" className="mc-btn-primary">
+              <Link 
+                href="/krypto-kaufen?currency=bitcoin" 
+                className="mc-btn-primary"
+                style={{
+                  fontSize: isMobile ? '0.875rem' : '1rem',
+                  padding: isMobile ? '0.75rem 1.5rem' : '1rem 2rem'
+                }}
+              >
                 Zum Börsenvergleich
               </Link>
               <button 
@@ -85,7 +107,9 @@ const HeroSection = () => {
                   border: 'none', 
                   cursor: 'pointer',
                   position: 'relative',
-                  overflow: 'visible'
+                  overflow: 'visible',
+                  fontSize: isMobile ? '0.875rem' : '1rem',
+                  padding: isMobile ? '0.75rem 1.5rem' : '1rem 2rem'
                 }}
               >
                 <span style={{
@@ -112,19 +136,19 @@ const HeroSection = () => {
             justifyContent: 'center',
             alignItems: 'center',
             width: '100%',
-            height: '60vh'
+            height: isMobile ? '40vh' : '60vh'
           }}>
             <Image
-              src="https://misscrypto.de/wp-content/uploads/2024/07/Steffi-Landingpage-Bild-scaled-1.webp"
+              src="/logos/Steffi-Landingpage-Bild-scaled-1 2.webp"
               alt="Steffi - Deine Krypto-Expertin und Mentorin"
-              width={500}
-              height={600}
+              width={isMobile ? 300 : 500}
+              height={isMobile ? 360 : 600}
               style={{
                 objectFit: 'cover',
                 objectPosition: 'center 0%',
-                maxHeight: '70vh',
+                maxHeight: isMobile ? '35vh' : '70vh',
                 width: 'auto',
-                marginBottom: '-72px'
+                marginBottom: isMobile ? '0px' : '-72px'
               }}
               priority
             />

@@ -17,7 +17,7 @@ const Logo: React.FC<LogoProps> = ({
     <Link href="/" className={className}>
       <div className={iconClassName}>
         <Image
-          src="https://misscrypto.de/wp-content/uploads/2024/07/Logo-weiss.webp"
+          src="/logos/Logo-weiss.webp"
           alt="MissCrypto Logo"
           width={120}
           height={40}

@@ -48,6 +48,20 @@ const InvestmentCalculatorClient: React.FC<InvestmentCalculatorClientProps> = ({
   const [selectionMode, setSelectionMode] = useState<SelectionMode>('top10');
   const [selectedCoins, setSelectedCoins] = useState<string[]>([]);
   const [results, setResults] = useState<any[]>([]);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkIsMobile);
+    };
+  }, []);
 
   // Top Coins basierend auf Performance sortieren
   const getTopPerformers = (count: number) => {
@@ -225,7 +239,7 @@ const InvestmentCalculatorClient: React.FC<InvestmentCalculatorClientProps> = ({
   };
 
   return (
-    <section className="mc-section">
+    <section className="mc-section mc-investment-calculator">
       <div className="mc-container">
         <h2 className="mc-section-title">Was wäre wenn... Rechner</h2>
         <p className="mc-section-subtitle">
@@ -235,15 +249,15 @@ const InvestmentCalculatorClient: React.FC<InvestmentCalculatorClientProps> = ({
         {/* Investment-Eingabe */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
-          gap: '2rem',
+          gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(350px, 1fr))',
+          gap: isMobile ? '1.5rem' : '2rem',
           marginBottom: '2rem'
         }}>
           {/* Linke Spalte: Betrag + Strategie */}
           <div style={{
             background: 'rgba(248, 223, 165, 0.1)',
             borderRadius: '1rem',
-            padding: '2rem',
+            padding: isMobile ? '1.5rem' : '2rem',
             border: '1px solid rgba(248, 223, 165, 0.3)'
           }}>
             {/* Investment-Betrag */}
@@ -307,7 +321,11 @@ const InvestmentCalculatorClient: React.FC<InvestmentCalculatorClientProps> = ({
               }}>
                 🎯 Strategie wählen
               </label>
-              <div style={{ display: 'flex', gap: '0.75rem' }}>
+              <div style={{ 
+                display: 'flex', 
+                flexDirection: isMobile ? 'column' : 'row',
+                gap: '0.75rem' 
+              }}>
                 {[
                   { mode: 'top10', label: 'Top 10 Performer', icon: '🏆' },
                   { mode: 'top5', label: 'Top 5 Performer', icon: '⭐' }
@@ -321,7 +339,7 @@ const InvestmentCalculatorClient: React.FC<InvestmentCalculatorClientProps> = ({
                       onClick={() => setSelectionMode(mode as SelectionMode)}
                       style={{
                         flex: 1,
-                        padding: '1rem',
+                        padding: isMobile ? '0.75rem' : '1rem',
                         borderRadius: '0.5rem',
                         border: 'none',
                         background: isActive 
@@ -329,18 +347,18 @@ const InvestmentCalculatorClient: React.FC<InvestmentCalculatorClientProps> = ({
                           : 'rgba(0, 0, 0, 0.3)',
                         color: isActive ? '#f8dfa5' : '#ffffff',
                         cursor: 'pointer',
-                        fontSize: '1rem',
+                        fontSize: isMobile ? '0.875rem' : '1rem',
                         fontWeight: '600',
                         textAlign: 'center',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        gap: '0.75rem',
+                        gap: isMobile ? '0.5rem' : '0.75rem',
                         transition: 'all 0.2s ease'
                       }}
                     >
-                      <span style={{ fontSize: '1.25rem' }}>{icon}</span>
-                      {label}
+                      <span style={{ fontSize: isMobile ? '1rem' : '1.25rem' }}>{icon}</span>
+                      {isMobile ? label.replace(' Performer', '') : label}
                     </button>
                   );
                 })}
@@ -364,7 +382,7 @@ const InvestmentCalculatorClient: React.FC<InvestmentCalculatorClientProps> = ({
                 }}>
                   <div style={{ 
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(2, 1fr)',
+                    gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
                     gap: '1rem'
                   }}>
                   {results.map((result, index) => (
@@ -478,41 +496,46 @@ const InvestmentCalculatorClient: React.FC<InvestmentCalculatorClientProps> = ({
           {/* Rechte Spalte: Gesamtergebnis + Chart */}
           {results.length > 0 && (
             <div className="mc-feature-card" style={{
-              padding: '2rem'
+              padding: isMobile ? '1.5rem' : '2rem'
             }}>
               {/* Gesamt-Zusammenfassung */}
               <div style={{ marginBottom: '2rem' }}>
-                <h3 style={{ color: '#ffffff', marginBottom: '1.5rem', fontSize: '1.5rem', textAlign: 'center' }}>
+                <h3 style={{ 
+                  color: '#ffffff', 
+                  marginBottom: '1.5rem', 
+                  fontSize: isMobile ? '1.25rem' : '1.5rem', 
+                  textAlign: 'center' 
+                }}>
                   📊 Dein Ergebnis
                 </h3>
                 <div style={{ 
                   display: 'grid', 
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', 
-                  gap: '1rem',
+                  gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(120px, 1fr))', 
+                  gap: isMobile ? '0.75rem' : '1rem',
                   textAlign: 'center'
                 }}>
                   <div>
-                    <div style={{ color: '#9ca3af', fontSize: '0.875rem' }}>Investiert</div>
-                    <div style={{ color: '#ffffff', fontSize: '1.125rem', fontWeight: 'bold' }}>
+                    <div style={{ color: '#9ca3af', fontSize: isMobile ? '0.8rem' : '0.875rem' }}>Investiert</div>
+                    <div style={{ color: '#ffffff', fontSize: isMobile ? '1rem' : '1.125rem', fontWeight: 'bold' }}>
                       {totalInitialValue.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}
                     </div>
                   </div>
                   <div>
-                    <div style={{ color: '#9ca3af', fontSize: '0.875rem' }}>Aktueller Wert</div>
-                    <div style={{ color: '#ffffff', fontSize: '1.125rem', fontWeight: 'bold' }}>
+                    <div style={{ color: '#9ca3af', fontSize: isMobile ? '0.8rem' : '0.875rem' }}>Aktueller Wert</div>
+                    <div style={{ color: '#ffffff', fontSize: isMobile ? '1rem' : '1.125rem', fontWeight: 'bold' }}>
                       {totalCurrentValue.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}
                     </div>
                   </div>
                   <div>
-                    <div style={{ color: '#9ca3af', fontSize: '0.875rem' }}>Gewinn/Verlust</div>
+                    <div style={{ color: '#9ca3af', fontSize: isMobile ? '0.8rem' : '0.875rem' }}>Gewinn/Verlust</div>
                     <div style={{ 
                       color: totalProfit >= 0 ? '#f8dfa5' : '#ef4444', 
-                      fontSize: '1.125rem', 
+                      fontSize: isMobile ? '1rem' : '1.125rem', 
                       fontWeight: 'bold' 
                     }}>
                       {totalProfit >= 0 ? '+' : ''}{totalProfit.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}
                       <br />
-                      <span style={{ fontSize: '0.875rem' }}>
+                      <span style={{ fontSize: isMobile ? '0.8rem' : '0.875rem' }}>
                         ({totalProfitPercentage >= 0 ? '+' : ''}{totalProfitPercentage.toFixed(1)}%)
                       </span>
                     </div>

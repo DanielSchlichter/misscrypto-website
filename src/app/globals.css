@@ -388,6 +388,37 @@ body {
   margin-right: 60px;
 }
 
+/* Mobile optimizations for ticker */
+@media (max-width: 767px) {
+  .mc-crypto-ticker .mc-container {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  
+  .mc-ticker-item:first-child {
+    margin-left: 1rem;
+  }
+  
+  .mc-ticker-item:last-child {
+    margin-right: 1rem;
+  }
+}
+
+/* Mobile optimizations for investment calculator */
+@media (max-width: 767px) {
+  .mc-investment-calculator {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  
+  .mc-investment-calculator .mc-container {
+    padding: 0;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+  }
+}
+
 .mc-ticker-item:hover {
   border-color: rgba(248, 223, 165, 0.5);
   transform: translateY(-5px);
@@ -752,6 +783,16 @@ body {
   gap: 1.5rem;
   max-width: 1200px;
   margin: 0 auto;
+}
+
+/* Mobile horizontal scroll - hide scrollbars */
+.mc-mobile-features-scroll::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* Hide scrollbar for mobile feature scrolling */
+div[style*="overflowX: auto"]::-webkit-scrollbar {
+  display: none;
 }
 
 @media (min-width: 768px) {
