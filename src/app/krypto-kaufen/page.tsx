@@ -514,9 +514,10 @@ const CryptoKaufenPage = () => {
           {/* Exchange Cards Section */}
           <div style={{
             flex: isMobile ? '1' : '1',
-            display: 'grid',
-            gridTemplateColumns: isMobile ? '1fr' : isTablet ? '1fr' : 'repeat(auto-fit, minmax(400px, 1fr))',
-            gap: isMobile ? '1.5rem' : '2rem'
+            display: 'flex',
+            flexDirection: 'column',
+            gap: isMobile ? '1.5rem' : '2rem',
+            alignItems: isMobile ? 'center' : 'stretch'
           }}>
             {exchanges.map((exchange) => (
               <div
@@ -535,7 +536,9 @@ const CryptoKaufenPage = () => {
                   boxShadow: exchange.isRecommended 
                     ? '0 10px 25px rgba(248, 223, 165, 0.2)' 
                     : '0 10px 25px rgba(0, 0, 0, 0.3)',
-                  transition: 'all 0.3s ease'
+                  transition: 'all 0.3s ease',
+                  width: isMobile ? '100%' : 'auto',
+                  maxWidth: isMobile ? '380px' : 'none'
                 }}
                 onMouseOver={(e) => {
                   e.currentTarget.style.transform = 'translateY(-5px)';
@@ -550,11 +553,11 @@ const CryptoKaufenPage = () => {
                     : '0 10px 25px rgba(0, 0, 0, 0.3)';
                 }}
               >
-                {/* Bonus Badge - Positioned inside container for mobile */}
+                {/* Bonus Badge - Positioned above crypto icons */}
                 {exchange.id === 'bitvavo' && (
                   <div style={{
                     position: 'absolute',
-                    top: isMobile ? '10px' : '-15px',
+                    top: isMobile ? '-12px' : '-15px',
                     right: isMobile ? '10px' : '20px',
                     background: 'linear-gradient(135deg, #e4b15e, #f8dfa5)',
                     color: '#000000',
@@ -574,7 +577,7 @@ const CryptoKaufenPage = () => {
                 {exchange.id === 'coinbase' && (
                   <div style={{
                     position: 'absolute',
-                    top: isMobile ? '10px' : '-15px',
+                    top: isMobile ? '-12px' : '-15px',
                     right: isMobile ? '10px' : '20px',
                     background: 'linear-gradient(135deg, #e4b15e, #f8dfa5)',
                     color: '#000000',
@@ -605,6 +608,7 @@ const CryptoKaufenPage = () => {
                       alt={`${exchange.name} Logo`}
                       style={{
                         height: '40px',
+                        maxWidth: exchange.id === 'coinbase' ? '80px' : 'none',
                         objectFit: 'contain'
                       }}
                     />
@@ -720,22 +724,22 @@ const CryptoKaufenPage = () => {
                 <div style={{
                   display: 'grid',
                   gridTemplateColumns: 'repeat(2, 1fr)',
-                  gap: '1rem',
-                  marginBottom: '1.5rem'
+                  gap: isMobile ? '0.5rem' : '1rem',
+                  marginBottom: isMobile ? '1rem' : '1.5rem'
                 }}>
                   <div>
-                    <div style={{ color: '#9ca3af', fontSize: '0.875rem' }}>Mindesteinzahlung:</div>
-                    <div style={{ color: '#ffffff', fontWeight: '600' }}>{exchange.minDeposit}</div>
+                    <div style={{ color: '#9ca3af', fontSize: isMobile ? '0.75rem' : '0.875rem' }}>Mindesteinzahlung:</div>
+                    <div style={{ color: '#ffffff', fontWeight: '600', fontSize: isMobile ? '0.875rem' : '1rem' }}>{exchange.minDeposit}</div>
                   </div>
 
                   <div>
-                    <div style={{ color: '#9ca3af', fontSize: '0.875rem' }}>Gebühren:</div>
-                    <div style={{ color: '#ffffff', fontWeight: '600' }}>{exchange.fees}</div>
+                    <div style={{ color: '#9ca3af', fontSize: isMobile ? '0.75rem' : '0.875rem' }}>Gebühren:</div>
+                    <div style={{ color: '#ffffff', fontWeight: '600', fontSize: isMobile ? '0.875rem' : '1rem' }}>{exchange.fees}</div>
                   </div>
 
                   <div>
-                    <div style={{ color: '#9ca3af', fontSize: '0.875rem' }}>Firmensitz:</div>
-                    <div style={{ color: '#ffffff', fontWeight: '600' }}>
+                    <div style={{ color: '#9ca3af', fontSize: isMobile ? '0.75rem' : '0.875rem' }}>Firmensitz:</div>
+                    <div style={{ color: '#ffffff', fontWeight: '600', fontSize: isMobile ? '0.875rem' : '1rem' }}>
                       {exchange.id === 'bitvavo' ? 'Niederlande 🇳🇱' : 
                        exchange.id === 'bitpanda' ? 'Österreich 🇦🇹' :
                        exchange.id === 'coinbase' ? 'USA 🇺🇸' :
@@ -746,8 +750,8 @@ const CryptoKaufenPage = () => {
                   </div>
 
                   <div>
-                    <div style={{ color: '#9ca3af', fontSize: '0.875rem' }}>Gründung:</div>
-                    <div style={{ color: '#ffffff', fontWeight: '600' }}>
+                    <div style={{ color: '#9ca3af', fontSize: isMobile ? '0.75rem' : '0.875rem' }}>Gründung:</div>
+                    <div style={{ color: '#ffffff', fontWeight: '600', fontSize: isMobile ? '0.875rem' : '1rem' }}>
                       {exchange.id === 'bitvavo' ? '2018' : 
                        exchange.id === 'bitpanda' ? '2014' :
                        exchange.id === 'coinbase' ? '2012' :
@@ -938,14 +942,26 @@ const CryptoKaufenPage = () => {
       </div>
 
       {/* Recommendation Section */}
-      <div className="mc-section">
-        <div className="mc-container">
+      <div style={{ 
+        paddingTop: isMobile ? '1.5rem' : '2rem', 
+        paddingBottom: isMobile ? '1.5rem' : '2rem',
+        background: 'linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%)'
+      }}>
+        <div style={{
+          maxWidth: '1280px',
+          margin: '0 auto',
+          padding: isMobile ? '0 1rem' : '0 2rem',
+          display: 'flex',
+          justifyContent: 'center'
+        }}>
           <div className="mc-feature-card" style={{
             background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f172a 50%, #1e293b 75%, #334155 100%)',
             border: '2px solid rgba(248, 223, 165, 0.4)',
             boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
-            padding: '3rem',
-            textAlign: 'center'
+            padding: isMobile ? '2rem' : '3rem',
+            textAlign: 'center',
+            width: isMobile ? '100%' : 'auto',
+            maxWidth: isMobile ? '380px' : '600px'
           }}>
             <h2 className="mc-section-title" style={{marginBottom: '2rem'}}>
               <span className="mc-hero-gradient">Von MissCrypto empfohlen</span>
@@ -1002,29 +1018,33 @@ const CryptoKaufenPage = () => {
       </div>
 
       {/* Content Section with Table of Contents */}
-      <div style={{ padding: '3rem 0' }}>
-        <div className="mc-container">
-          <div style={{ display: 'flex', gap: '3rem', position: 'relative' }}>
+      <div style={{ padding: isMobile ? '2rem 0' : '3rem 0' }}>
+        <div style={{
+          maxWidth: '1280px',
+          margin: '0 auto',
+          padding: isMobile ? '0 1rem' : '0 2rem'
+        }}>
+          <div style={{ display: 'flex', gap: isMobile ? '2rem' : '3rem', position: 'relative' }}>
             
             {/* Main Content */}
-            <div style={{ flex: '1', maxWidth: '800px' }}>
+            <div style={{ flex: '1', maxWidth: isMobile ? '100%' : '800px' }}>
               
-              <section id="bitpanda-broker" style={{ marginBottom: '3rem' }}>
+                              <section id="bitpanda-broker" style={{ marginBottom: isMobile ? '2rem' : '3rem' }}>
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '1rem',
-                  marginBottom: '2rem'
+                  gap: isMobile ? '0.75rem' : '1rem',
+                  marginBottom: isMobile ? '1.5rem' : '2rem'
                 }}>
                   <div style={{
-                    width: '60px',
-                    height: '60px',
+                    width: isMobile ? '40px' : '60px',
+                    height: isMobile ? '40px' : '60px',
                     background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
                     borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: '1.5rem',
+                    fontSize: isMobile ? '1.125rem' : '1.5rem',
                     fontWeight: 'bold',
                     color: '#1a1a2e'
                   }}>
@@ -1032,7 +1052,7 @@ const CryptoKaufenPage = () => {
                   </div>
                   <h2 style={{ 
                     color: '#ffffff', 
-                    fontSize: '1.75rem', 
+                    fontSize: isMobile ? '1.25rem' : '1.75rem',
                     fontWeight: '700', 
                     margin: 0,
                     background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
@@ -1150,22 +1170,22 @@ const CryptoKaufenPage = () => {
                 </div>
               </section>
 
-              <section id="bitvavo-exchange" style={{ marginBottom: '3rem' }}>
+              <section id="bitvavo-exchange" style={{ marginBottom: isMobile ? '2rem' : '3rem' }}>
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '1rem',
-                  marginBottom: '2rem'
+                  gap: isMobile ? '0.75rem' : '1rem',
+                  marginBottom: isMobile ? '1.5rem' : '2rem'
                 }}>
                   <div style={{
-                    width: '60px',
-                    height: '60px',
+                    width: isMobile ? '40px' : '60px',
+                    height: isMobile ? '40px' : '60px',
                     background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
                     borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: '1.5rem',
+                    fontSize: isMobile ? '1.125rem' : '1.5rem',
                     fontWeight: 'bold',
                     color: '#1a1a2e'
                   }}>
@@ -1173,7 +1193,7 @@ const CryptoKaufenPage = () => {
                   </div>
                   <h2 style={{ 
                     color: '#ffffff', 
-                    fontSize: '1.75rem', 
+                    fontSize: isMobile ? '1.25rem' : '1.75rem',
                     fontWeight: '700', 
                     margin: 0,
                     background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
@@ -1224,38 +1244,38 @@ const CryptoKaufenPage = () => {
                   <div style={{
                     display: 'grid',
                     gridTemplateColumns: 'repeat(3, 1fr)',
-                    gap: '1rem',
-                    margin: '2rem 0'
+                    gap: isMobile ? '0.5rem' : '1rem',
+                    margin: isMobile ? '1.5rem 0' : '2rem 0'
                   }}>
                     <div style={{
                       background: 'rgba(0, 0, 0, 0.3)',
                       border: '1px solid rgba(248, 223, 165, 0.2)',
                       borderRadius: '8px',
-                      padding: '1rem',
+                      padding: isMobile ? '0.75rem 0.5rem' : '1rem',
                       textAlign: 'center'
                     }}>
-                      <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#f8dfa5' }}>0,25%</div>
-                      <div style={{ fontSize: '0.8rem', color: '#9ca3af' }}>Handelsgebühren</div>
+                      <div style={{ fontSize: isMobile ? '1.125rem' : '1.5rem', fontWeight: 'bold', color: '#f8dfa5' }}>0,25%</div>
+                      <div style={{ fontSize: isMobile ? '0.7rem' : '0.8rem', color: '#9ca3af' }}>Handelsgebühren</div>
                     </div>
                     <div style={{
                       background: 'rgba(0, 0, 0, 0.3)',
                       border: '1px solid rgba(248, 223, 165, 0.2)',
                       borderRadius: '8px',
-                      padding: '1rem',
+                      padding: isMobile ? '0.75rem 0.5rem' : '1rem',
                       textAlign: 'center'
                     }}>
-                      <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#f8dfa5' }}>350+</div>
-                      <div style={{ fontSize: '0.8rem', color: '#9ca3af' }}>Kryptowährungen</div>
+                      <div style={{ fontSize: isMobile ? '1.125rem' : '1.5rem', fontWeight: 'bold', color: '#f8dfa5' }}>350+</div>
+                      <div style={{ fontSize: isMobile ? '0.7rem' : '0.8rem', color: '#9ca3af' }}>Kryptowährungen</div>
                     </div>
                     <div style={{
                       background: 'rgba(0, 0, 0, 0.3)',
                       border: '1px solid rgba(248, 223, 165, 0.2)',
                       borderRadius: '8px',
-                      padding: '1rem',
+                      padding: isMobile ? '0.75rem 0.5rem' : '1rem',
                       textAlign: 'center'
                     }}>
-                      <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#f8dfa5' }}>BaFin</div>
-                      <div style={{ fontSize: '0.8rem', color: '#9ca3af' }}>Reguliert</div>
+                      <div style={{ fontSize: isMobile ? '1.125rem' : '1.5rem', fontWeight: 'bold', color: '#f8dfa5' }}>BaFin</div>
+                      <div style={{ fontSize: isMobile ? '0.7rem' : '0.8rem', color: '#9ca3af' }}>Reguliert</div>
                     </div>
                   </div>
 
@@ -1287,22 +1307,22 @@ const CryptoKaufenPage = () => {
                 </div>
               </section>
 
-              <section id="mexc-trading" style={{ marginBottom: '3rem' }}>
+              <section id="mexc-trading" style={{ marginBottom: isMobile ? '2rem' : '3rem' }}>
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '1rem',
-                  marginBottom: '2rem'
+                  gap: isMobile ? '0.75rem' : '1rem',
+                  marginBottom: isMobile ? '1.5rem' : '2rem'
                 }}>
                   <div style={{
-                    width: '60px',
-                    height: '60px',
+                    width: isMobile ? '40px' : '60px',
+                    height: isMobile ? '40px' : '60px',
                     background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
                     borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: '1.5rem',
+                    fontSize: isMobile ? '1.125rem' : '1.5rem',
                     fontWeight: 'bold',
                     color: '#1a1a2e'
                   }}>
@@ -1310,7 +1330,7 @@ const CryptoKaufenPage = () => {
                   </div>
                   <h2 style={{ 
                     color: '#ffffff', 
-                    fontSize: '1.75rem', 
+                    fontSize: isMobile ? '1.25rem' : '1.75rem',
                     fontWeight: '700', 
                     margin: 0,
                     background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
@@ -1361,38 +1381,38 @@ const CryptoKaufenPage = () => {
                   <div style={{
                     display: 'grid',
                     gridTemplateColumns: 'repeat(3, 1fr)',
-                    gap: '1rem',
-                    margin: '2rem 0'
+                    gap: isMobile ? '0.5rem' : '1rem',
+                    margin: isMobile ? '1.5rem 0' : '2rem 0'
                   }}>
                     <div style={{
                       background: 'rgba(0, 0, 0, 0.3)',
                       border: '1px solid rgba(248, 223, 165, 0.2)',
                       borderRadius: '8px',
-                      padding: '1rem',
+                      padding: isMobile ? '0.75rem 0.5rem' : '1rem',
                       textAlign: 'center'
                     }}>
-                      <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#f8dfa5' }}>0%</div>
-                      <div style={{ fontSize: '0.8rem', color: '#9ca3af' }}>Maker-Gebühren</div>
+                      <div style={{ fontSize: isMobile ? '1.125rem' : '1.5rem', fontWeight: 'bold', color: '#f8dfa5' }}>0%</div>
+                      <div style={{ fontSize: isMobile ? '0.7rem' : '0.8rem', color: '#9ca3af' }}>Maker-Gebühren</div>
                     </div>
                     <div style={{
                       background: 'rgba(0, 0, 0, 0.3)',
                       border: '1px solid rgba(248, 223, 165, 0.2)',
                       borderRadius: '8px',
-                      padding: '1rem',
+                      padding: isMobile ? '0.75rem 0.5rem' : '1rem',
                       textAlign: 'center'
                     }}>
-                      <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#f8dfa5' }}>1.500+</div>
-                      <div style={{ fontSize: '0.8rem', color: '#9ca3af' }}>Kryptowährungen</div>
+                      <div style={{ fontSize: isMobile ? '1.125rem' : '1.5rem', fontWeight: 'bold', color: '#f8dfa5' }}>1.500+</div>
+                      <div style={{ fontSize: isMobile ? '0.7rem' : '0.8rem', color: '#9ca3af' }}>Kryptowährungen</div>
                     </div>
                     <div style={{
                       background: 'rgba(0, 0, 0, 0.3)',
                       border: '1px solid rgba(248, 223, 165, 0.2)',
                       borderRadius: '8px',
-                      padding: '1rem',
+                      padding: isMobile ? '0.75rem 0.5rem' : '1rem',
                       textAlign: 'center'
                     }}>
-                      <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#f8dfa5' }}>1,4M</div>
-                      <div style={{ fontSize: '0.8rem', color: '#9ca3af' }}>TPS Engine</div>
+                      <div style={{ fontSize: isMobile ? '1.125rem' : '1.5rem', fontWeight: 'bold', color: '#f8dfa5' }}>1,4M</div>
+                      <div style={{ fontSize: isMobile ? '0.7rem' : '0.8rem', color: '#9ca3af' }}>TPS Engine</div>
                     </div>
                   </div>
 

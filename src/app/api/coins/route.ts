@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
 
 // Für statischen Export erforderlich
-export const dynamic = 'force-static';
-export const revalidate = false;
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 // Mock-Daten als Fallback
 const mockCoins = [
@@ -115,13 +115,13 @@ const withTimeout = <T>(promise: Promise<T>, timeoutMs: number): Promise<T> => {
 };
 
 export async function GET() {
-  // Bei Build-Zeit: Direkt Mock-Daten zurückgeben
-  if (process.env.SKIP_MONGODB === 'true' || process.env.NEXT_PHASE === 'phase-production-build') {
-    console.log('Build-Modus: Verwende Mock-Daten direkt');
-    return NextResponse.json(mockCoins);
-  }
-
   try {
+    // Bei Build-Zeit oder wenn MongoDB nicht verfügbar ist: Direkt Mock-Daten zurückgeben
+    if (process.env.SKIP_MONGODB === 'true' || process.env.NEXT_PHASE === 'phase-production-build') {
+      console.log('Build-Modus: Verwende Mock-Daten direkt');
+      return NextResponse.json(mockCoins);
+    }
+
     console.log('Starte Abruf der Coins aus der Datenbank...');
     
     // Sehr kurzer Timeout für Build-Prozess
