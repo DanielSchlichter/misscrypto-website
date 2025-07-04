@@ -8,12 +8,9 @@
   SKIP_MONGODB = "true"
   NEXT_PHASE = "phase-production-build"
 
-# Scheduled Function für tägliche Crypto-Updates (2:00 UTC)
-[[functions]]
-  name = "update-crypto-daily"
-  schedule = "0 2 * * *"
-
-# Keine zusätzlichen Plugins benötigt - Netlify unterstützt Scheduled Functions nativ
+# Netlify Functions Konfiguration
+[functions]
+  external_node_modules = []
 
 # Headers für bessere Performance
 [[headers]]
