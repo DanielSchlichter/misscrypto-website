@@ -221,27 +221,53 @@ const Footer = () => {
               }}>
                 {section.links.map((link) => (
                   <li key={link.name} style={{ marginBottom: '0.5rem' }}>
-                    <Link 
-                      href={link.href}
-                      style={{
-                        color: '#d1d5db',
-                        textDecoration: 'none',
-                        fontSize: isMobile ? '0.875rem' : '0.95rem',
-                        transition: 'all 0.3s ease',
-                        display: 'block',
-                        padding: '0.25rem 0'
-                      }}
-                      onMouseOver={(e) => {
-                        e.currentTarget.style.color = '#f8dfa5';
-                        e.currentTarget.style.paddingLeft = '0.5rem';
-                      }}
-                      onMouseOut={(e) => {
-                        e.currentTarget.style.color = '#d1d5db';
-                        e.currentTarget.style.paddingLeft = '0';
-                      }}
-                    >
-                      {link.name}
-                    </Link>
+                    {link.href.startsWith('http') ? (
+                      <a 
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          color: '#d1d5db',
+                          textDecoration: 'none',
+                          fontSize: isMobile ? '0.875rem' : '0.95rem',
+                          transition: 'all 0.3s ease',
+                          display: 'block',
+                          padding: '0.25rem 0'
+                        }}
+                        onMouseOver={(e) => {
+                          e.currentTarget.style.color = '#f8dfa5';
+                          e.currentTarget.style.paddingLeft = '0.5rem';
+                        }}
+                        onMouseOut={(e) => {
+                          e.currentTarget.style.color = '#d1d5db';
+                          e.currentTarget.style.paddingLeft = '0';
+                        }}
+                      >
+                        {link.name}
+                      </a>
+                    ) : (
+                      <Link 
+                        href={link.href}
+                        style={{
+                          color: '#d1d5db',
+                          textDecoration: 'none',
+                          fontSize: isMobile ? '0.875rem' : '0.95rem',
+                          transition: 'all 0.3s ease',
+                          display: 'block',
+                          padding: '0.25rem 0'
+                        }}
+                        onMouseOver={(e) => {
+                          e.currentTarget.style.color = '#f8dfa5';
+                          e.currentTarget.style.paddingLeft = '0.5rem';
+                        }}
+                        onMouseOut={(e) => {
+                          e.currentTarget.style.color = '#d1d5db';
+                          e.currentTarget.style.paddingLeft = '0';
+                        }}
+                      >
+                        {link.name}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>

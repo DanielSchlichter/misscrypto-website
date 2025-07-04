@@ -50,8 +50,8 @@ const exchanges: Exchange[] = [
     url: 'https://www.mexc.com/acquisition/custom-sign-up?shareCode=mexc-2Xhb8'
   },
   {
-    id: 'okx',
-    name: 'OKX',
+    id: 'bingx',
+    name: 'BingX',
     logo: '/logos/bingx.png',
     fees: 0.001, // 0,1%
     minDeposit: 50,
@@ -144,11 +144,20 @@ const CryptoPurchaseCalculatorClient: React.FC<CryptoPurchaseCalculatorClientPro
       };
     });
 
-    // Sortiere nach bestem Wert (meiste Crypto für das Geld)
+    // Sortiere mit Bitvavo oben, dann nach bestem Wert (meiste Crypto für das Geld)
     const validResults = calculationResults.filter(r => !r.tooLow);
     const invalidResults = calculationResults.filter(r => r.tooLow);
     
-    const sortedValid = validResults.sort((a, b) => b.cryptoAmount - a.cryptoAmount);
+    // Bitvavo immer oben, dann nach Crypto-Menge sortieren
+    const sortedValid = validResults.sort((a, b) => {
+      // Bitvavo immer oben
+      if (a.exchange.id === 'bitvavo') return -1;
+      if (b.exchange.id === 'bitvavo') return 1;
+      
+      // Dann nach Crypto-Menge sortieren (mehr Crypto = besser)
+      return b.cryptoAmount - a.cryptoAmount;
+    });
+    
     setResults([...sortedValid, ...invalidResults]);
   };
 
@@ -344,7 +353,7 @@ const CryptoPurchaseCalculatorClient: React.FC<CryptoPurchaseCalculatorClientPro
                         background: 'rgba(0, 0, 0, 0.3)',
                         borderRadius: '0.75rem',
                         padding: '1rem',
-                        border: index === 0 && !result.tooLow ? '2px solid rgba(16, 185, 129, 0.5)' : '1px solid rgba(248, 223, 165, 0.3)',
+                        border: result.exchange.id === 'bitvavo' && !result.tooLow ? '2px solid rgba(16, 185, 129, 0.5)' : '1px solid rgba(248, 223, 165, 0.3)',
                         opacity: result.tooLow ? 0.6 : 1
                       }}
                     >
@@ -379,7 +388,7 @@ const CryptoPurchaseCalculatorClient: React.FC<CryptoPurchaseCalculatorClientPro
                           }}>
                             {result.exchange.name}
                           </h4>
-                          {index === 0 && !result.tooLow && (
+                          {(index === 0 || result.exchange.id === 'bitvavo') && !result.tooLow && (
                             <span style={{
                               background: 'linear-gradient(135deg, #e4b15e, #f8dfa5)',
                               color: '#000000',
@@ -390,7 +399,30 @@ const CryptoPurchaseCalculatorClient: React.FC<CryptoPurchaseCalculatorClientPro
                               marginTop: '0.25rem',
                               display: 'inline-block'
                             }}>
-                              BESTE WAHL
+                              EMPFOHLEN
+                            </span>
+                          )}
+                          {(() => {
+                            // Finde den günstigsten Preis (niedrigste Gebühren)
+                            const validResults = results.filter(r => !r.tooLow);
+                            const cheapestResult = validResults.reduce((min, curr) => 
+                              curr.exchange.fees < min.exchange.fees ? curr : min
+                            );
+                            return result.exchange.id === cheapestResult.exchange.id && 
+                                   result.exchange.id !== 'bitvavo' && 
+                                   !result.tooLow;
+                          })() && (
+                            <span style={{
+                              background: 'linear-gradient(135deg, #10b981, #059669)',
+                              color: '#ffffff',
+                              fontSize: '0.7rem',
+                              fontWeight: '600',
+                              padding: '0.15rem 0.5rem',
+                              borderRadius: '10px',
+                              marginTop: '0.25rem',
+                              display: 'inline-block'
+                            }}>
+                              GÜNSTIGSTER PREIS
                             </span>
                           )}
                         </div>
@@ -466,15 +498,15 @@ const CryptoPurchaseCalculatorClient: React.FC<CryptoPurchaseCalculatorClientPro
                               display: 'block',
                               textAlign: 'center',
                               padding: '0.5rem 1rem',
-                              background: index === 0 && !result.tooLow ? 
+                              background: result.exchange.id === 'bitvavo' && !result.tooLow ? 
                                 'linear-gradient(135deg, #e4b15e, #f8dfa5)' : 
                                 'rgba(248, 223, 165, 0.2)',
-                              color: index === 0 && !result.tooLow ? '#000000' : '#f8dfa5',
+                              color: result.exchange.id === 'bitvavo' && !result.tooLow ? '#000000' : '#f8dfa5',
                               borderRadius: '6px',
                               textDecoration: 'none',
                               fontSize: '0.875rem',
                               fontWeight: '600',
-                              border: index === 0 && !result.tooLow ? 
+                              border: result.exchange.id === 'bitvavo' && !result.tooLow ? 
                                 'none' : 
                                 '1px solid rgba(248, 223, 165, 0.3)',
                               transition: 'all 0.3s ease'

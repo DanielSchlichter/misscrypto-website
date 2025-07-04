@@ -31,54 +31,24 @@ const InvestmentCalculator = () => {
         
         // Transformiere die Daten für den Investment-Calculator
         const transformedCoins: Coin[] = data.map((coin: any) => {
-          // Berechne 1-Jahres-Performance aus verfügbaren Daten
-          let yearlyChange = 0;
-          let historicalPrices: number[] = [];
-          
-          if (coin.price_changes?.['30d']) {
-            // Schätze basierend auf 30-Tage-Trend
-            yearlyChange = coin.price_changes['30d'] * 8;
-          } else if (coin.price_changes?.['7d']) {
-            // Fallback: 7-Tage-Trend
-            yearlyChange = coin.price_changes['7d'] * 20;
-          }
-          
-          // Generiere realistische monatliche Preise
-          const currentPrice = coin.current_price;
-          const startPrice = currentPrice / (1 + yearlyChange / 100);
-          
-          for (let i = 0; i < 12; i++) {
-            const progress = i / 11;
-            const trend = startPrice + (currentPrice - startPrice) * progress;
-            
-            if (i === 0) {
-              historicalPrices.push(startPrice);
-            } else if (i === 11) {
-              historicalPrices.push(currentPrice);
-            } else {
-              // Kleine Volatilität hinzufügen
-              const volatility = (Math.random() - 0.5) * 0.2;
-              historicalPrices.push(Math.max(trend * (1 + volatility), startPrice * 0.1));
-            }
-          }
-
           return {
             id: coin.id,
             name: coin.name,
             symbol: coin.symbol?.toUpperCase(),
             current_price: coin.current_price,
-            price_change_percentage_1y: yearlyChange,
+            price_change_percentage_1y: coin.price_changes?.['1y'] || 0, // Nutze echte 1y-Performance aus DB
             image: coin.image,
             market_cap_rank: coin.market_cap_rank,
             is_stablecoin: false,
-            historical_prices_1y: historicalPrices
+            historical_prices_1y: coin.prices?.['1y'] || [] // Nutze echte historische Preise aus DB
           };
         }).filter((coin: Coin) => 
           coin.id && 
           coin.name && 
           coin.current_price && 
-          !coin.is_stablecoin
-        ).slice(0, 20); // Top 20 für Calculator
+          !coin.is_stablecoin &&
+          coin.price_change_percentage_1y !== 0 // Nur Coins mit echter Performance-Daten
+        );
         
         setCoins(transformedCoins);
       } catch (err) {

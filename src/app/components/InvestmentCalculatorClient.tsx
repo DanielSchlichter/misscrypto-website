@@ -66,7 +66,8 @@ const InvestmentCalculatorClient: React.FC<InvestmentCalculatorClientProps> = ({
   // Top Coins basierend auf Performance sortieren
   const getTopPerformers = (count: number) => {
     return coins
-      .sort((a, b) => b.price_change_percentage_1y - a.price_change_percentage_1y)
+      .filter(coin => coin && coin.price_change_percentage_1y !== undefined && coin.price_change_percentage_1y !== null)
+      .sort((a, b) => (b.price_change_percentage_1y || 0) - (a.price_change_percentage_1y || 0))
       .slice(0, count);
   };
 
@@ -75,6 +76,13 @@ const InvestmentCalculatorClient: React.FC<InvestmentCalculatorClientProps> = ({
 
   // Berechnung der Investment-Ergebnisse
   const calculateInvestmentResults = () => {
+    // Prüfe, ob Coins verfügbar sind
+    if (!coins || coins.length === 0) {
+      console.log('Keine Coins verfügbar für Investment Calculator');
+      setResults([]);
+      return;
+    }
+
     let coinsToCalculate: Coin[] = [];
 
     switch (selectionMode) {
@@ -86,14 +94,22 @@ const InvestmentCalculatorClient: React.FC<InvestmentCalculatorClientProps> = ({
         break;
     }
 
+    // Prüfe, ob wir Coins zum Berechnen haben
+    if (coinsToCalculate.length === 0) {
+      console.log('Keine gültigen Coins für Berechnung gefunden');
+      setResults([]);
+      return;
+    }
+
     // Gleichmäßige Verteilung des Investments
     const amountPerCoin = investmentAmount / coinsToCalculate.length;
     
     const calculationResults = coinsToCalculate.map(coin => {
       const initialValue = amountPerCoin;
-      const currentValue = initialValue * (1 + coin.price_change_percentage_1y / 100);
+      const performancePercent = coin.price_change_percentage_1y || 0;
+      const currentValue = initialValue * (1 + performancePercent / 100);
       const profit = currentValue - initialValue;
-      const profitPercentage = coin.price_change_percentage_1y;
+      const profitPercentage = performancePercent;
 
       return {
         coin,
@@ -144,12 +160,12 @@ const InvestmentCalculatorClient: React.FC<InvestmentCalculatorClientProps> = ({
         const amountPerCoin = result.initialValue;
         const coin = result.coin;
         
-                 if (coin.historical_prices_1y && coin.historical_prices_1y[monthIndex]) {
-           // Verwende echte historische Preise
-           const historicalPrice = coin.historical_prices_1y[monthIndex];
-           const originalPrice = coin.historical_prices_1y[0]; // Preis vor 1 Jahr
-           const coinsOwned = amountPerCoin / originalPrice;
-           monthlyPortfolioValue += coinsOwned * historicalPrice;
+        if (coin.historical_prices_1y && coin.historical_prices_1y[monthIndex]) {
+          // Verwende echte historische Preise
+          const historicalPrice = coin.historical_prices_1y[monthIndex];
+          const originalPrice = coin.historical_prices_1y[0]; // Preis vor 1 Jahr
+          const coinsOwned = amountPerCoin / originalPrice;
+          monthlyPortfolioValue += coinsOwned * historicalPrice;
         } else {
           // Fallback: Schätze basierend auf linearer Entwicklung
           const progressPercent = monthIndex / 11; // 0 bis 1
@@ -333,7 +349,7 @@ const InvestmentCalculatorClient: React.FC<InvestmentCalculatorClientProps> = ({
                   const isActive = selectionMode === mode;
                   const coinsToShow = mode === 'top10' ? getTop10() : mode === 'top5' ? getTop5() : [];
                   
-                                    return (
+                  return (
                     <button
                       key={mode}
                       onClick={() => setSelectionMode(mode as SelectionMode)}

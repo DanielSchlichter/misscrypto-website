@@ -520,7 +520,8 @@ const PressePage = () => {
           <div style={{
             display: 'grid',
             gridTemplateColumns: isMobile ? '1fr' : isTablet ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
-            gap: isMobile ? '2rem' : '2.5rem'
+            gap: isMobile ? '2rem' : '2.5rem',
+            gridAutoRows: '1fr'
           }}>
             {pressItems.map((item) => (
               <article key={item.id} style={{
@@ -531,7 +532,9 @@ const PressePage = () => {
                 backdropFilter: 'blur(10px)',
                 boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
                 transition: 'all 0.3s ease',
-                height: 'fit-content'
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column'
               }}>
                 {/* Header with Logo and Date */}
                 <div style={{
@@ -603,48 +606,52 @@ const PressePage = () => {
                 </div>
 
                 {/* Description */}
-                <p style={{
-                  color: '#d1d5db',
-                  lineHeight: '1.6',
-                  fontSize: isMobile ? '0.9rem' : '1rem',
-                  marginBottom: '1.5rem'
-                }}>
-                  {item.description}
-                </p>
+                <div style={{ flex: '1', display: 'flex', flexDirection: 'column' }}>
+                  <p style={{
+                    color: '#d1d5db',
+                    lineHeight: '1.6',
+                    fontSize: isMobile ? '0.9rem' : '1rem',
+                    marginBottom: '1.5rem',
+                    flex: '1'
+                  }}>
+                    {item.description}
+                  </p>
 
-                {/* CTA Button */}
-                {item.url !== '#' && (
-                  <Link
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.5rem',
-                      background: item.color,
-                      color: '#000000',
-                      padding: isMobile ? '0.75rem 1.25rem' : '0.875rem 1.5rem',
-                      borderRadius: '0.75rem',
-                      fontWeight: '600',
-                      fontSize: isMobile ? '0.875rem' : '0.95rem',
-                      textDecoration: 'none',
-                      transition: 'all 0.3s ease',
-                      width: 'fit-content'
-                    }}
-                    onMouseOver={(e) => {
-                      e.currentTarget.style.transform = 'translateY(-2px)';
-                      e.currentTarget.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.3)';
-                    }}
-                    onMouseOut={(e) => {
-                      e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.boxShadow = 'none';
-                    }}
-                  >
-                    Artikel lesen
-                    <span style={{ fontSize: '0.875rem' }}>↗</span>
-                  </Link>
-                )}
+                  {/* CTA Button */}
+                  {item.url !== '#' && (
+                    <Link
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        background: item.color,
+                        color: '#000000',
+                        padding: isMobile ? '0.75rem 1.25rem' : '0.875rem 1.5rem',
+                        borderRadius: '0.75rem',
+                        fontWeight: '600',
+                        fontSize: isMobile ? '0.875rem' : '0.95rem',
+                        textDecoration: 'none',
+                        transition: 'all 0.3s ease',
+                        width: 'fit-content',
+                        alignSelf: 'flex-start'
+                      }}
+                      onMouseOver={(e) => {
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                        e.currentTarget.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.3)';
+                      }}
+                      onMouseOut={(e) => {
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = 'none';
+                      }}
+                    >
+                      Artikel lesen
+                      <span style={{ fontSize: '0.875rem' }}>↗</span>
+                    </Link>
+                  )}
+                </div>
               </article>
             ))}
           </div>

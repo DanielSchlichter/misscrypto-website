@@ -53,6 +53,9 @@ if (isBuildTime) {
     const client = new MongoClient(process.env.MONGODB_URI, {
       connectTimeoutMS: 10000,
       serverSelectionTimeoutMS: 10000,
+      tls: true,
+      tlsAllowInvalidCertificates: true,
+      tlsAllowInvalidHostnames: true,
     });
     
     globalWithMongo._mongoClientPromise = client.connect()
@@ -78,6 +81,9 @@ if (isBuildTime) {
     minPoolSize: 1,
     retryWrites: true,
     retryReads: true,
+    tls: true,
+    tlsAllowInvalidCertificates: true,
+    tlsAllowInvalidHostnames: true,
   });
 
   clientPromise = client.connect()

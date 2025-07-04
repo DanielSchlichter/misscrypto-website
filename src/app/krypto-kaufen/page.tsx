@@ -514,8 +514,9 @@ const CryptoKaufenPage = () => {
           {/* Exchange Cards Section */}
           <div style={{
             flex: isMobile ? '1' : '1',
-            display: 'flex',
-            flexDirection: 'column',
+            display: isMobile ? 'flex' : 'grid',
+            flexDirection: isMobile ? 'column' : undefined,
+            gridTemplateColumns: isMobile ? undefined : 'repeat(2, 1fr)',
             gap: isMobile ? '1.5rem' : '2rem',
             alignItems: isMobile ? 'center' : 'stretch'
           }}>
@@ -537,7 +538,7 @@ const CryptoKaufenPage = () => {
                     ? '0 10px 25px rgba(248, 223, 165, 0.2)' 
                     : '0 10px 25px rgba(0, 0, 0, 0.3)',
                   transition: 'all 0.3s ease',
-                  width: isMobile ? '100%' : 'auto',
+                  width: '100%',
                   maxWidth: isMobile ? '380px' : 'none'
                 }}
                 onMouseOver={(e) => {

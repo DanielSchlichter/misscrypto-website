@@ -1,43 +1,12 @@
-import { MongoClient } from 'mongodb';
-import dotenv from 'dotenv';
-import path from 'path';
-import clientPromise from '@/lib/mongodb';
-
-// Lade Umgebungsvariablen (beide Dateien)
-dotenv.config({ path: '.env' });
-dotenv.config({ path: '.env.local' });
-
-// Hilfsfunktion für Verzögerungen
-const delay = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
-
-// Typdefinitionen
-interface CoinData {
-  id: string;
-  name: string;
-  symbol: string;
-  current_price: number;
-  price_change_percentage_24h: number;
-  price_change_percentage_7d_in_currency: number;
-  price_change_percentage_30d_in_currency: number;
-  price_change_percentage_1y_in_currency: number;
-  image: string;
-  market_cap_rank: number;
-}
-
-interface PriceData {
-  prices: [number, number][];
-}
-
-interface TimeRange {
-  key: string;
-  days: string;
-  maxPoints: number;
-}
+const { MongoClient } = require('mongodb');
 
 // Stablecoins die wir ausschließen wollen
 const stablecoins = ['tether', 'usd-coin', 'binance-usd', 'dai', 'frax', 'trueusd', 'paxos-standard', 'gemini-dollar'];
 
-async function fetchWithRetry(url: string, retries = 3, delayMs = 20000): Promise<any> {
+// Hilfsfunktion für Verzögerungen
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+async function fetchWithRetry(url, retries = 3, delayMs = 20000) {
   for (let i = 0; i < retries; i++) {
     try {
       const response = await fetch(url, {
@@ -47,7 +16,7 @@ async function fetchWithRetry(url: string, retries = 3, delayMs = 20000): Promis
       });
 
       if (response.status === 429) {
-        console.log(`  Rate limit erreicht, warte ${delayMs/1000} Sekunden...`);
+        console.log(`Rate limit erreicht, warte ${delayMs/1000} Sekunden...`);
         await delay(delayMs);
         continue;
       }
@@ -60,13 +29,13 @@ async function fetchWithRetry(url: string, retries = 3, delayMs = 20000): Promis
       return data;
     } catch (error) {
       if (i === retries - 1) throw error;
-      console.log(`  Versuch ${i + 1} fehlgeschlagen, warte ${delayMs/1000} Sekunden...`);
+      console.log(`Versuch ${i + 1} fehlgeschlagen, warte ${delayMs/1000} Sekunden...`);
       await delay(delayMs);
     }
   }
 }
 
-async function fetchMarketData(coinId: string, days: string): Promise<PriceData> {
+async function fetchMarketData(coinId, days) {
   const data = await fetchWithRetry(
     `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=eur&days=${days}`
   );
@@ -78,7 +47,7 @@ async function fetchMarketData(coinId: string, days: string): Promise<PriceData>
   return data;
 }
 
-async function processChartData(prices: [number, number][], maxPoints: number): Promise<number[]> {
+async function processChartData(prices, maxPoints) {
   if (!Array.isArray(prices)) {
     throw new Error('Ungültige Preisdaten: Kein Array');
   }
@@ -94,19 +63,19 @@ async function processChartData(prices: [number, number][], maxPoints: number): 
 }
 
 async function updateCryptoData() {
-  let client: MongoClient | null = null;
+  const client = new MongoClient(process.env.MONGODB_URI);
   
   try {
-    console.log('Starte Aktualisierung der Krypto-Daten...');
+    console.log('Starte tägliche Aktualisierung der Krypto-Daten...');
 
-    client = await clientPromise;
+    await client.connect();
     const db = client.db('misscrypto');
     const collection = db.collection('coins');
 
     // Hole Top 50 Coins von CoinGecko mit Retry
     const marketData = await fetchWithRetry(
       'https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&order=market_cap_desc&per_page=50&page=1&sparkline=false&price_change_percentage=24h,7d,30d,1y'
-    ) as CoinData[];
+    );
 
     if (!Array.isArray(marketData)) {
       throw new Error('Ungültige API-Antwort: Keine Coin-Liste gefunden');
@@ -132,14 +101,14 @@ async function updateCryptoData() {
         // Warte 20 Sekunden zwischen Coins
         await delay(20000);
 
-        const timeRanges: TimeRange[] = [
+        const timeRanges = [
           { key: '24h', days: '1', maxPoints: 288 },
           { key: '7d', days: '7', maxPoints: 168 },
           { key: '30d', days: '30', maxPoints: 720 },
           { key: '1y', days: '365', maxPoints: 12 } // 12 monatliche Punkte für 1 Jahr
         ];
 
-        const prices: Record<string, number[]> = {};
+        const prices = {};
         for (const { key, days, maxPoints } of timeRanges) {
           console.log(`  Hole ${key}-Daten...`);
           try {
@@ -187,12 +156,42 @@ async function updateCryptoData() {
       }
     }
 
-    console.log('\nAktualisierung abgeschlossen!');
+    console.log('\nTägliche Aktualisierung abgeschlossen!');
+    return {
+      success: true,
+      processed: filteredCoins.length,
+      timestamp: new Date().toISOString()
+    };
   } catch (error) {
-    console.error('Fehler beim Aktualisieren der Krypto-Daten:', error);
+    console.error('Fehler bei täglicher Aktualisierung:', error);
     throw error;
+  } finally {
+    await client.close();
   }
 }
 
-// Starte die Aktualisierung
-updateCryptoData().catch(console.error); 
+// Standard Netlify Function Handler
+exports.handler = async (event, context) => {
+  try {
+    console.log('Starte geplante Krypto-Datenaktualisierung...');
+    const result = await updateCryptoData();
+    
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: 'Krypto-Daten erfolgreich aktualisiert',
+        ...result
+      })
+    };
+  } catch (error) {
+    console.error('Fehler bei geplanter Aktualisierung:', error);
+    
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        error: 'Fehler bei der Aktualisierung',
+        message: error.message
+      })
+    };
+  }
+}; 
