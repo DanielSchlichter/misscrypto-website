@@ -19,7 +19,6 @@ const Header = () => {
   const navigation = [
     { name: 'Start', href: '/' },
     { name: 'Krypto kaufen', href: '/krypto-kaufen' },
-    { name: 'Investieren', href: '/krypto-kaufen?tab=investieren' },
   ];
 
   return (

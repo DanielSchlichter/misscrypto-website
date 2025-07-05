@@ -1,0 +1,271 @@
+import { NextResponse } from 'next/server'
+import { MongoClient } from 'mongodb'
+
+// Aktuelle CoinGecko-Daten vom 03.07.2025
+const getTestCoins = () => [
+  {
+    id: 'bitcoin',
+    name: 'Bitcoin',
+    symbol: 'BTC',
+    current_price: 91615,
+    price_changes: {
+      '24h': -1.72,
+      '7d': 0.35,
+      '30d': -0.42,
+      '1y': 70.07
+    },
+    prices: {
+      '24h': [93100, 93000, 92900, 92800, 92700, 92600, 92500, 92400, 92300, 92200, 92100, 92000, 91900, 91800, 91700, 91600, 91500, 91400, 91300, 91200, 91100, 91000, 90900, 91615],
+      '7d': [91300, 91400, 91500, 91600, 91700, 91800, 91615],
+      '30d': [92000, 91900, 91800, 91700, 91600, 91500, 91400, 91300, 91200, 91100, 91000, 90900, 90800, 90700, 90600, 90500, 90400, 90300, 90200, 90100, 90000, 89900, 89800, 89700, 89600, 89700, 89800, 89900, 90000, 91615],
+      '1y': []
+    },
+    image: 'https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400',
+    market_cap: 1812000000000,
+    market_cap_rank: 1,
+    price_change_percentage_1y: 70.07,
+    last_updated: new Date().toISOString()
+  },
+  {
+    id: 'ethereum',
+    name: 'Ethereum',
+    symbol: 'ETH',
+    current_price: 2116.55,
+    price_changes: {
+      '24h': -3.55,
+      '7d': 3.02,
+      '30d': -8.29,
+      '1y': -27.04
+    },
+    prices: {
+      '24h': [2195, 2190, 2185, 2180, 2175, 2170, 2165, 2160, 2155, 2150, 2145, 2140, 2135, 2130, 2125, 2120, 2115, 2110, 2105, 2100, 2095, 2090, 2085, 2116.55],
+      '7d': [2050, 2060, 2070, 2080, 2090, 2100, 2116.55],
+      '30d': [2310, 2300, 2290, 2280, 2270, 2260, 2250, 2240, 2230, 2220, 2210, 2200, 2190, 2180, 2170, 2160, 2150, 2140, 2130, 2120, 2110, 2100, 2090, 2080, 2070, 2080, 2090, 2100, 2110, 2116.55],
+      '1y': []
+    },
+    image: 'https://coin-images.coingecko.com/coins/images/279/large/ethereum.png?1696501628',
+    market_cap: 254000000000,
+    market_cap_rank: 2,
+    price_change_percentage_1y: -27.04,
+    last_updated: new Date().toISOString()
+  },
+  {
+    id: 'ripple',
+    name: 'XRP',
+    symbol: 'XRP',
+    current_price: 1.89,
+    price_changes: {
+      '24h': -2.09,
+      '7d': 5.67,
+      '30d': -3.34,
+      '1y': 362.90
+    },
+    prices: {
+      '24h': [1.93, 1.92, 1.91, 1.90, 1.89, 1.88, 1.87, 1.86, 1.85, 1.84, 1.83, 1.82, 1.81, 1.80, 1.79, 1.78, 1.77, 1.76, 1.75, 1.74, 1.73, 1.72, 1.71, 1.89],
+      '7d': [1.79, 1.80, 1.81, 1.82, 1.83, 1.84, 1.89],
+      '30d': [1.96, 1.95, 1.94, 1.93, 1.92, 1.91, 1.90, 1.89, 1.88, 1.87, 1.86, 1.85, 1.84, 1.83, 1.82, 1.81, 1.80, 1.79, 1.78, 1.77, 1.76, 1.75, 1.74, 1.73, 1.72, 1.75, 1.78, 1.81, 1.84, 1.89],
+      '1y': []
+    },
+    image: 'https://coin-images.coingecko.com/coins/images/44/large/xrp-symbol-white-128.png?1696501442',
+    market_cap: 108000000000,
+    market_cap_rank: 3,
+    price_change_percentage_1y: 362.90,
+    last_updated: new Date().toISOString()
+  },
+  {
+    id: 'binancecoin',
+    name: 'BNB',
+    symbol: 'BNB',
+    current_price: 554.72,
+    price_changes: {
+      '24h': -1.12,
+      '7d': 0.77,
+      '30d': -5.07,
+      '1y': 14.26
+    },
+    prices: {
+      '24h': [561, 560, 559, 558, 557, 556, 555, 554, 553, 552, 551, 550, 549, 548, 547, 546, 545, 544, 543, 542, 541, 540, 539, 554.72],
+      '7d': [551, 552, 553, 554, 555, 556, 554.72],
+      '30d': [584, 582, 580, 578, 576, 574, 572, 570, 568, 566, 564, 562, 560, 558, 556, 554, 552, 550, 548, 546, 544, 542, 540, 538, 536, 540, 544, 548, 552, 554.72],
+      '1y': []
+    },
+    image: 'https://coin-images.coingecko.com/coins/images/825/large/bnb-icon2_2x.png?1696501970',
+    market_cap: 79000000000,
+    market_cap_rank: 4,
+    price_change_percentage_1y: 14.26,
+    last_updated: new Date().toISOString()
+  },
+  {
+    id: 'solana',
+    name: 'Solana',
+    symbol: 'SOL',
+    current_price: 124.39,
+    price_changes: {
+      '24h': -3.28,
+      '7d': 3.57,
+      '30d': -6.12,
+      '1y': -0.48
+    },
+    prices: {
+      '24h': [128.60, 128.40, 128.20, 128.00, 127.80, 127.60, 127.40, 127.20, 127.00, 126.80, 126.60, 126.40, 126.20, 126.00, 125.80, 125.60, 125.40, 125.20, 125.00, 124.80, 124.60, 124.40, 124.20, 124.39],
+      '7d': [120.10, 120.50, 120.90, 121.30, 121.70, 122.10, 124.39],
+      '30d': [132.50, 132.00, 131.50, 131.00, 130.50, 130.00, 129.50, 129.00, 128.50, 128.00, 127.50, 127.00, 126.50, 126.00, 125.50, 125.00, 124.50, 124.00, 123.50, 123.00, 122.50, 122.00, 121.50, 121.00, 120.50, 121.00, 121.50, 122.00, 122.50, 124.39],
+      '1y': []
+    },
+    image: 'https://coin-images.coingecko.com/coins/images/4128/large/solana.png?1696504756',
+    market_cap: 59000000000,
+    market_cap_rank: 5,
+    price_change_percentage_1y: -0.48,
+    last_updated: new Date().toISOString()
+  },
+  {
+    id: 'dogecoin',
+    name: 'Dogecoin',
+    symbol: 'DOGE',
+    current_price: 0.3124,
+    price_changes: {
+      '24h': -2.45,
+      '7d': 1.87,
+      '30d': -8.12,
+      '1y': 89.23
+    },
+    prices: {
+      '24h': [0.3203, 0.3195, 0.3187, 0.3179, 0.3171, 0.3163, 0.3155, 0.3147, 0.3139, 0.3131, 0.3123, 0.3115, 0.3107, 0.3099, 0.3091, 0.3083, 0.3075, 0.3067, 0.3059, 0.3051, 0.3043, 0.3035, 0.3027, 0.3124],
+      '7d': [0.3068, 0.3076, 0.3084, 0.3092, 0.3100, 0.3108, 0.3124],
+      '30d': [0.3401, 0.3389, 0.3377, 0.3365, 0.3353, 0.3341, 0.3329, 0.3317, 0.3305, 0.3293, 0.3281, 0.3269, 0.3257, 0.3245, 0.3233, 0.3221, 0.3209, 0.3197, 0.3185, 0.3173, 0.3161, 0.3149, 0.3137, 0.3125, 0.3113, 0.3101, 0.3089, 0.3077, 0.3065, 0.3124],
+      '1y': []
+    },
+    image: 'https://coin-images.coingecko.com/coins/images/5/large/dogecoin.png?1696501409',
+    market_cap: 46000000000,
+    market_cap_rank: 6,
+    price_change_percentage_1y: 89.23,
+    last_updated: new Date().toISOString()
+  },
+  {
+    id: 'cardano',
+    name: 'Cardano',
+    symbol: 'ADA',
+    current_price: 0.3456,
+    price_changes: {
+      '24h': -3.89,
+      '7d': 2.34,
+      '30d': -9.12,
+      '1y': -48.23
+    },
+    prices: {
+      '24h': [0.3596, 0.3588, 0.3580, 0.3572, 0.3564, 0.3556, 0.3548, 0.3540, 0.3532, 0.3524, 0.3516, 0.3508, 0.3500, 0.3492, 0.3484, 0.3476, 0.3468, 0.3460, 0.3452, 0.3444, 0.3436, 0.3428, 0.3420, 0.3456],
+      '7d': [0.3377, 0.3389, 0.3401, 0.3413, 0.3425, 0.3437, 0.3456],
+      '30d': [0.3799, 0.3787, 0.3775, 0.3763, 0.3751, 0.3739, 0.3727, 0.3715, 0.3703, 0.3691, 0.3679, 0.3667, 0.3655, 0.3643, 0.3631, 0.3619, 0.3607, 0.3595, 0.3583, 0.3571, 0.3559, 0.3547, 0.3535, 0.3523, 0.3511, 0.3499, 0.3487, 0.3475, 0.3463, 0.3456],
+      '1y': []
+    },
+    image: 'https://coin-images.coingecko.com/coins/images/975/large/cardano.png?1696502090',
+    market_cap: 12100000000,
+    market_cap_rank: 7,
+    price_change_percentage_1y: -48.23,
+    last_updated: new Date().toISOString()
+  },
+  {
+    id: 'avalanche-2',
+    name: 'Avalanche',
+    symbol: 'AVAX',
+    current_price: 28.12,
+    price_changes: {
+      '24h': -4.56,
+      '7d': 1.23,
+      '30d': -12.78,
+      '1y': -36.12
+    },
+    prices: {
+      '24h': [29.47, 29.39, 29.31, 29.23, 29.15, 29.07, 28.99, 28.91, 28.83, 28.75, 28.67, 28.59, 28.51, 28.43, 28.35, 28.27, 28.19, 28.11, 28.03, 27.95, 27.87, 27.79, 27.71, 28.12],
+      '7d': [27.78, 27.86, 27.94, 28.02, 28.10, 28.18, 28.12],
+      '30d': [32.23, 32.11, 31.99, 31.87, 31.75, 31.63, 31.51, 31.39, 31.27, 31.15, 31.03, 30.91, 30.79, 30.67, 30.55, 30.43, 30.31, 30.19, 30.07, 29.95, 29.83, 29.71, 29.59, 29.47, 29.35, 29.23, 29.11, 28.99, 28.87, 28.12],
+      '1y': []
+    },
+    image: 'https://coin-images.coingecko.com/coins/images/12559/large/Avalanche_Circle_RedWhite_Trans.png?1696512369',
+    market_cap: 11300000000,
+    market_cap_rank: 8,
+    price_change_percentage_1y: -36.12,
+    last_updated: new Date().toISOString()
+  },
+  {
+    id: 'tron',
+    name: 'TRON',
+    symbol: 'TRX',
+    current_price: 0.2145,
+    price_changes: {
+      '24h': -1.89,
+      '7d': 4.12,
+      '30d': -4.23,
+      '1y': 104.87
+    },
+    prices: {
+      '24h': [0.2187, 0.2184, 0.2181, 0.2178, 0.2175, 0.2172, 0.2169, 0.2166, 0.2163, 0.2160, 0.2157, 0.2154, 0.2151, 0.2148, 0.2145, 0.2142, 0.2139, 0.2136, 0.2133, 0.2130, 0.2127, 0.2124, 0.2121, 0.2145],
+      '7d': [0.2060, 0.2070, 0.2080, 0.2090, 0.2100, 0.2110, 0.2145],
+      '30d': [0.2240, 0.2236, 0.2232, 0.2228, 0.2224, 0.2220, 0.2216, 0.2212, 0.2208, 0.2204, 0.2200, 0.2196, 0.2192, 0.2188, 0.2184, 0.2180, 0.2176, 0.2172, 0.2168, 0.2164, 0.2160, 0.2156, 0.2152, 0.2148, 0.2144, 0.2140, 0.2136, 0.2132, 0.2128, 0.2145],
+      '1y': []
+    },
+    image: 'https://coin-images.coingecko.com/coins/images/1094/large/tron-logo.png?1696502193',
+    market_cap: 18500000000,
+    market_cap_rank: 9,
+    price_change_percentage_1y: 104.87,
+    last_updated: new Date().toISOString()
+  },
+  {
+    id: 'chainlink',
+    name: 'Chainlink',
+    symbol: 'LINK',
+    current_price: 10.67,
+    price_changes: {
+      '24h': -2.78,
+      '7d': 3.45,
+      '30d': -9.67,
+      '1y': -16.23
+    },
+    prices: {
+      '24h': [10.98, 10.96, 10.94, 10.92, 10.90, 10.88, 10.86, 10.84, 10.82, 10.80, 10.78, 10.76, 10.74, 10.72, 10.70, 10.68, 10.66, 10.64, 10.62, 10.60, 10.58, 10.56, 10.54, 10.67],
+      '7d': [10.31, 10.38, 10.45, 10.52, 10.59, 10.66, 10.67],
+      '30d': [11.81, 11.77, 11.73, 11.69, 11.65, 11.61, 11.57, 11.53, 11.49, 11.45, 11.41, 11.37, 11.33, 11.29, 11.25, 11.21, 11.17, 11.13, 11.09, 11.05, 11.01, 10.97, 10.93, 10.89, 10.85, 10.81, 10.77, 10.73, 10.69, 10.67],
+      '1y': []
+    },
+    image: 'https://coin-images.coingecko.com/coins/images/877/large/chainlink-new-logo.png?1696502009',
+    market_cap: 6600000000,
+    market_cap_rank: 10,
+    price_change_percentage_1y: -16.23,
+    last_updated: new Date().toISOString()
+  }
+];
+
+export async function GET() {
+  try {
+    const uri = process.env.MONGODB_URI;
+    
+    if (!uri) {
+      console.log('⚠️  Keine MongoDB URI gefunden, verwende Testdaten');
+      return NextResponse.json(getTestCoins().sort((a, b) => b.price_changes['1y'] - a.price_changes['1y']));
+    }
+
+    const client = new MongoClient(uri);
+    await client.connect();
+    
+    const db = client.db('misscrypto');
+    const coins = await db.collection('coins').find({}).sort({ 'price_changes.1y': -1 }).toArray();
+    
+    await client.close();
+    
+    if (coins.length === 0) {
+      console.log('⚠️  Keine Daten in MongoDB gefunden, verwende Testdaten');
+      return NextResponse.json(getTestCoins().sort((a, b) => b.price_changes['1y'] - a.price_changes['1y']));
+    }
+
+    const mappedCoins = coins.map(coin => ({
+      ...coin,
+      price_change_percentage_1y: coin.price_changes?.['1y'] || 0,
+      _id: undefined
+    }));
+
+    return NextResponse.json(mappedCoins);
+  } catch (error) {
+    console.error('❌ Fehler beim Laden der Coins:', error);
+    return NextResponse.json(getTestCoins().sort((a, b) => b.price_changes['1y'] - a.price_changes['1y']));
+  }
+} 
