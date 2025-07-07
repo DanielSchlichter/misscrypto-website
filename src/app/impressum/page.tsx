@@ -102,9 +102,8 @@ const ImpressumPage = () => {
                 fontFamily: 'Raleway, sans-serif'
               }}>
                 <p><strong style={{ color: '#f8dfa5' }}>Dr. Stephanie Morgenroth</strong></p>
-                <p>c/o COCENTER</p>
-                <p>Koppoldstr. 1</p>
-                <p>86551 Aichach</p>
+                <p>Hallandstr. 16</p>
+                <p>13189 Berlin</p>
                 <p>Germany</p>
               </div>
             </div>
@@ -130,19 +129,6 @@ const ImpressumPage = () => {
                 fontSize: isMobile ? '0.9rem' : isTablet ? '0.95rem' : '1rem',
                 fontFamily: 'Raleway, sans-serif'
               }}>
-                <p>
-                  <strong style={{ color: '#f8dfa5' }}>Telefon:</strong> 
-                  <a 
-                    href="tel:+491726715491" 
-                    style={{ 
-                      color: '#f8dfa5', 
-                      textDecoration: 'underline',
-                      marginLeft: '0.5rem'
-                    }}
-                  >
-                    +49 1726715491
-                  </a>
-                </p>
                 <p>
                   <strong style={{ color: '#f8dfa5' }}>E-Mail:</strong> 
                   <a 
