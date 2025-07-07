@@ -147,8 +147,7 @@ const Footer = () => {
               lineHeight: '1.6',
               fontSize: isMobile ? '0.9rem' : '1rem'
             }}>
-              Deine vertrauensvolle Quelle für Krypto-Wissen, Trading-Strategien und Marktanalysen. 
-              Wir machen Kryptowährungen für jeden verständlich und zugänglich.
+              Ich helfe dir, Krypto zu verstehen – verständlich, ehrlich und mit Empfehlungen, auf die du dich verlassen kannst.
             </p>
 
             {/* Social Links */}
@@ -159,7 +158,7 @@ const Footer = () => {
                 fontSize: isMobile ? '1rem' : '1.125rem',
                 marginBottom: '1rem' 
               }}>
-                Folge uns
+                Folge mir für mehr.
               </p>
               <div style={{ 
                 display: 'flex', 

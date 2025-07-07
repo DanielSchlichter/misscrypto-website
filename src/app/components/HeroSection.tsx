@@ -37,17 +37,6 @@ const HeroSection = () => {
             gridRow: '2',
             textAlign: 'left'
           }}>
-            <div style={{
-              color: '#f8dfa5',
-              fontSize: '1.125rem',
-              fontWeight: '600',
-              marginBottom: '0.75rem',
-              textTransform: 'uppercase',
-              letterSpacing: '0.1em'
-            }}>
-              MissCrypto
-            </div>
-            
             <h1 style={{
               fontSize: isMobile ? '1.5rem' : '2rem',
               fontWeight: 'bold',
@@ -55,9 +44,8 @@ const HeroSection = () => {
               lineHeight: '1.2',
               color: '#ffffff'
             }}>
-              Deine Reise in die Welt der{' '}
-              <span className="mc-hero-gradient">Kryptowährungen</span>{' '}
-              beginnt HIER.
+              Dein Einstieg in die<br />
+              <span className="mc-hero-gradient">Krypto-Welt</span>.
             </h1>
             
             <p style={{
@@ -68,9 +56,8 @@ const HeroSection = () => {
               maxWidth: '600px',
               margin: '0 0 2rem 0'
             }}>
-              Erlebe die Zukunft der digitalen Assets mit meinem Kurs für deinen erfolgreichen Einstieg in Kryptowährungen! 
-              Ich zeige dir Schritt für Schritt, wie du dein eigenes Portfolio aufbaust und souverän in die Welt von Bitcoin, 
-              Ethereum & Co. startest.
+              Deine Anlaufstelle, um mit Krypto zu starten<br />
+              – klar, sicher und mit Plan.
             </p>
             
             <div className="mc-hero-buttons" style={{ justifyContent: 'flex-start', textAlign: 'left' }}>
@@ -146,9 +133,9 @@ const HeroSection = () => {
               style={{
                 objectFit: 'cover',
                 objectPosition: 'center 0%',
-                maxHeight: isMobile ? '35vh' : '70vh',
+                maxHeight: isMobile ? '35vh' : '60vh',
                 width: 'auto',
-                marginBottom: isMobile ? '0px' : '-72px'
+                marginBottom: isMobile ? '0px' : '-150px'
               }}
               priority
             />

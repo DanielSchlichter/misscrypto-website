@@ -257,9 +257,9 @@ const InvestmentCalculatorClient: React.FC<InvestmentCalculatorClientProps> = ({
   return (
     <section className="mc-section mc-investment-calculator">
       <div className="mc-container">
-        <h2 className="mc-section-title">Was wäre wenn... Rechner</h2>
+        <h2 className="mc-section-title">Was wäre gewesen, wenn…?</h2>
         <p className="mc-section-subtitle">
-          Entdecke, wie sich dein Investment vor einem Jahr entwickelt hätte
+          Sieh, wie sich dein Investment entwickelt hätte – und finde deinen Einstieg.
         </p>
 
         {/* Investment-Eingabe */}

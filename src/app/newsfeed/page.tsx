@@ -79,8 +79,7 @@ export default function NewsfeedPage() {
             maxWidth: '800px',
             margin: '0 auto 3rem'
           }}>
-            Dein zentraler Hub für die wichtigsten Krypto-Nachrichten, 
-            Marktanalysen und Trading-Einblicke – immer aktuell, immer relevant.
+            Ich sammle hier die wichtigsten Krypto-Themen, ordne sie für dich ein – und halte dich auf dem Laufenden.
           </p>
         </div>
       </section>
@@ -121,261 +120,92 @@ export default function NewsfeedPage() {
             }}></div>
 
             <div style={{
-              fontSize: isMobile ? '3rem' : '4rem',
-              marginBottom: '2rem',
-              position: 'relative',
-              zIndex: 1
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minHeight: '40vh',
+              marginBottom: '3rem'
             }}>
-              🚀
-            </div>
-            
-            <h2 style={{
-              fontSize: isMobile ? '2.5rem' : isTablet ? '3rem' : '3.5rem',
-              fontWeight: '700',
-              marginBottom: '1.5rem',
-              color: '#f8dfa5',
-              position: 'relative',
-              zIndex: 1
-            }}>
-              Coming Soon
-            </h2>
-            
-            <p style={{
-              fontSize: isMobile ? '1.1rem' : '1.3rem',
-              lineHeight: '1.6',
-              color: '#d1d5db',
-              marginBottom: '3rem',
-              maxWidth: '700px',
-              margin: '0 auto 3rem',
-              position: 'relative',
-              zIndex: 1
-            }}>
-              Wir entwickeln einen innovativen Newsfeed, der dir die wichtigsten 
-              Krypto-Nachrichten, tiefgreifende Marktanalysen und exklusive 
-              Trading-Insights in Echtzeit liefert.
-            </p>
-
-            {/* Features Preview */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: isMobile ? '1fr' : isTablet ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
-              gap: isMobile ? '2rem' : '2.5rem',
-              marginTop: '3rem',
-              position: 'relative',
-              zIndex: 1
-            }}>
-              <div style={{
-                background: 'rgba(248, 223, 165, 0.1)',
-                borderRadius: '1.5rem',
-                padding: isMobile ? '2rem 1.5rem' : '2.5rem 2rem',
-                border: '1px solid rgba(248, 223, 165, 0.2)',
-                textAlign: 'center'
-              }}>
-                <div style={{
-                  fontSize: '2.5rem',
-                  marginBottom: '1.5rem'
-                }}>📈</div>
-                <h3 style={{
-                  fontSize: isMobile ? '1.2rem' : '1.4rem',
-                  color: '#f8dfa5',
-                  marginBottom: '1rem',
-                  fontWeight: '600'
-                }}>
-                  Live Marktanalysen
-                </h3>
-                <p style={{
-                  fontSize: '1rem',
-                  color: '#d1d5db',
-                  lineHeight: '1.5'
-                }}>
-                  Echtzeitanalysen der wichtigsten Kryptowährungen mit professionellen Einschätzungen
-                </p>
-              </div>
-              
-              <div style={{
-                background: 'rgba(248, 223, 165, 0.1)',
-                borderRadius: '1.5rem',
-                padding: isMobile ? '2rem 1.5rem' : '2.5rem 2rem',
-                border: '1px solid rgba(248, 223, 165, 0.2)',
-                textAlign: 'center'
-              }}>
-                <div style={{
-                  fontSize: '2.5rem',
-                  marginBottom: '1.5rem'
-                }}>⚡</div>
-                <h3 style={{
-                  fontSize: isMobile ? '1.2rem' : '1.4rem',
-                  color: '#f8dfa5',
-                  marginBottom: '1rem',
-                  fontWeight: '600'
-                }}>
-                  Breaking News
-                </h3>
-                <p style={{
-                  fontSize: '1rem',
-                  color: '#d1d5db',
-                  lineHeight: '1.5'
-                }}>
-                  Die wichtigsten Krypto-News sofort verfügbar – sei immer einen Schritt voraus
-                </p>
-              </div>
-              
-              <div style={{
-                background: 'rgba(248, 223, 165, 0.1)',
-                borderRadius: '1.5rem',
-                padding: isMobile ? '2rem 1.5rem' : '2.5rem 2rem',
-                border: '1px solid rgba(248, 223, 165, 0.2)',
+              <span style={{ fontSize: '3rem', marginBottom: '1rem' }}>🚀</span>
+              <h2 style={{
+                color: '#f8dfa5',
+                fontWeight: 700,
+                fontSize: isMobile ? '2.2rem' : isTablet ? '2.8rem' : '3.2rem',
+                marginBottom: '1.5rem',
                 textAlign: 'center',
-                gridColumn: isMobile ? '1' : isTablet ? '1 / 3' : 'auto'
+                letterSpacing: '0.01em',
               }}>
-                <div style={{
-                  fontSize: '2.5rem',
-                  marginBottom: '1.5rem'
-                }}>🎯</div>
-                <h3 style={{
-                  fontSize: isMobile ? '1.2rem' : '1.4rem',
-                  color: '#f8dfa5',
-                  marginBottom: '1rem',
-                  fontWeight: '600'
-                }}>
-                  Personalisierte Insights
-                </h3>
-                <p style={{
-                  fontSize: '1rem',
-                  color: '#d1d5db',
-                  lineHeight: '1.5'
-                }}>
-                  Maßgeschneiderte Trading-Empfehlungen basierend auf deinen Interessen
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Timeline Preview */}
-          <div style={{
-            background: 'rgba(17, 17, 17, 0.8)',
-            borderRadius: '1.5rem',
-            padding: isMobile ? '2rem' : '3rem',
-            border: '1px solid rgba(248, 223, 165, 0.1)',
-            marginBottom: '4rem'
-          }}>
-            <h3 style={{
-              fontSize: isMobile ? '1.5rem' : '1.8rem',
-              color: '#f8dfa5',
-              marginBottom: '2rem',
-              textAlign: 'center',
-              fontWeight: '600'
-            }}>
-              🗓️ Entwicklungsplan
-            </h3>
-            
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
-              gap: '2rem'
-            }}>
-              <div style={{
+                Coming Soon
+              </h2>
+              <p style={{
+                color: '#d1d5db',
+                fontSize: isMobile ? '1.1rem' : isTablet ? '1.2rem' : '1.3rem',
                 textAlign: 'center',
-                padding: '1.5rem'
+                maxWidth: '700px',
+                margin: '0 auto 2.5rem',
+                lineHeight: '1.6',
+              }}>
+                Bald findest du hier tagesaktuelle Krypto-News, Einschätzungen und Marktanalysen – verständlich erklärt, zuverlässig ausgewählt.
+              </p>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: isMobile ? '1fr' : isTablet ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
+                gap: isMobile ? '1.5rem' : '2rem',
+                width: '100%',
+                maxWidth: '900px',
               }}>
                 <div style={{
-                  background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
-                  color: '#000',
-                  borderRadius: '50%',
-                  width: '60px',
-                  height: '60px',
+                  background: 'rgba(30, 30, 30, 0.7)',
+                  borderRadius: '1.25rem',
+                  padding: isMobile ? '1.5rem' : '2rem',
                   display: 'flex',
+                  flexDirection: 'column',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto 1rem',
-                  fontWeight: 'bold',
-                  fontSize: '1.2rem'
+                  boxShadow: '0 2px 16px 0 rgba(0,0,0,0.10)',
                 }}>
-                  Q1
+                  <span style={{ fontSize: '2.2rem', marginBottom: '1rem' }}>📰</span>
+                  <h3 style={{ color: '#f8dfa5', fontWeight: 600, fontSize: '1.3rem', marginBottom: '0.75rem', textAlign: 'center' }}>
+                    News & Berichte
+                  </h3>
+                  <p style={{ color: '#d1d5db', textAlign: 'center', fontSize: '1rem', lineHeight: '1.5' }}>
+                    Bleib auf dem Laufenden mit den wichtigsten Krypto-News – verständlich, aktuell und auf den Punkt gebracht.
+                  </p>
                 </div>
-                <h4 style={{
-                  color: '#f8dfa5',
-                  marginBottom: '0.5rem',
-                  fontSize: '1.1rem'
-                }}>
-                  Beta Version
-                </h4>
-                <p style={{
-                  color: '#d1d5db',
-                  fontSize: '0.9rem'
-                }}>
-                  Erste Testversion mit grundlegenden News-Features
-                </p>
-              </div>
-              
-              <div style={{
-                textAlign: 'center',
-                padding: '1.5rem'
-              }}>
                 <div style={{
-                  background: 'rgba(248, 223, 165, 0.2)',
-                  color: '#f8dfa5',
-                  border: '2px solid #f8dfa5',
-                  borderRadius: '50%',
-                  width: '60px',
-                  height: '60px',
+                  background: 'rgba(30, 30, 30, 0.7)',
+                  borderRadius: '1.25rem',
+                  padding: isMobile ? '1.5rem' : '2rem',
                   display: 'flex',
+                  flexDirection: 'column',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto 1rem',
-                  fontWeight: 'bold',
-                  fontSize: '1.2rem'
+                  boxShadow: '0 2px 16px 0 rgba(0,0,0,0.10)',
                 }}>
-                  Q2
+                  <span style={{ fontSize: '2.2rem', marginBottom: '1rem' }}>📊</span>
+                  <h3 style={{ color: '#f8dfa5', fontWeight: 600, fontSize: '1.3rem', marginBottom: '0.75rem', textAlign: 'center' }}>
+                    Krypto-Analysen
+                  </h3>
+                  <p style={{ color: '#d1d5db', textAlign: 'center', fontSize: '1rem', lineHeight: '1.5' }}>
+                    Fundierte Marktanalysen zu Bitcoin, Ethereum & Co. – mit Einblicken, die dir wirklich weiterhelfen.
+                  </p>
                 </div>
-                <h4 style={{
-                  color: '#f8dfa5',
-                  marginBottom: '0.5rem',
-                  fontSize: '1.1rem'
-                }}>
-                  Live Analytics
-                </h4>
-                <p style={{
-                  color: '#d1d5db',
-                  fontSize: '0.9rem'
-                }}>
-                  Echtzeitanalysen und erweiterte Marktdaten
-                </p>
-              </div>
-              
-              <div style={{
-                textAlign: 'center',
-                padding: '1.5rem'
-              }}>
                 <div style={{
-                  background: 'rgba(248, 223, 165, 0.1)',
-                  color: '#f8dfa5',
-                  border: '2px solid rgba(248, 223, 165, 0.3)',
-                  borderRadius: '50%',
-                  width: '60px',
-                  height: '60px',
+                  background: 'rgba(30, 30, 30, 0.7)',
+                  borderRadius: '1.25rem',
+                  padding: isMobile ? '1.5rem' : '2rem',
                   display: 'flex',
+                  flexDirection: 'column',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto 1rem',
-                  fontWeight: 'bold',
-                  fontSize: '1.2rem'
+                  boxShadow: '0 2px 16px 0 rgba(0,0,0,0.10)',
                 }}>
-                  Q3
+                  <span style={{ fontSize: '2.2rem', marginBottom: '1rem' }}>🎯</span>
+                  <h3 style={{ color: '#f8dfa5', fontWeight: 600, fontSize: '1.3rem', marginBottom: '0.75rem', textAlign: 'center' }}>
+                    Vergleiche & Einordnungen
+                  </h3>
+                  <p style={{ color: '#d1d5db', textAlign: 'center', fontSize: '1rem', lineHeight: '1.5' }}>
+                    Plattformen, Tools und Trends – geprüft, verglichen und verständlich erklärt.
+                  </p>
                 </div>
-                <h4 style={{
-                  color: '#f8dfa5',
-                  marginBottom: '0.5rem',
-                  fontSize: '1.1rem'
-                }}>
-                  Vollversion
-                </h4>
-                <p style={{
-                  color: '#d1d5db',
-                  fontSize: '0.9rem'
-                }}>
-                  Personalisierung und Premium-Features
-                </p>
               </div>
             </div>
           </div>
@@ -416,53 +246,46 @@ export default function NewsfeedPage() {
             {/* Left Column - Text Content */}
             <div>
               <h2 style={{
-                fontSize: isMobile ? '2rem' : isTablet ? '2.5rem' : '2.75rem',
-                fontWeight: '600',
+                fontSize: isMobile ? '2.5rem' : isTablet ? '3rem' : '3.5rem',
+                fontWeight: '700',
+                color: '#fff',
                 marginBottom: '1.5rem',
-                color: '#ffffff',
-                lineHeight: '1.2'
+                lineHeight: '1.1',
+                textAlign: isMobile ? 'center' : 'left'
               }}>
                 Verpasse{' '}
                 <span style={{
                   background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
                   WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
                   backgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent'
                 }}>
                   nichts Wichtiges!
                 </span>
               </h2>
               <p style={{
-                fontSize: isMobile ? '1rem' : '1.125rem',
                 color: '#d1d5db',
+                fontSize: isMobile ? '1.1rem' : isTablet ? '1.2rem' : '1.3rem',
                 marginBottom: '2rem',
-                lineHeight: '1.6'
+                lineHeight: '1.6',
+                textAlign: isMobile ? 'center' : 'left',
+                maxWidth: '600px'
               }}>
-                Melde dich für unseren Newsletter an und erfahre als Erste, 
-                wenn der Newsfeed live geht. Plus exklusive Vorab-Einblicke:
+                Ich bereite für dich regelmäßig Krypto-Updates auf, die du nicht verpassen solltest: verständlich, verlässlich und mit echtem Mehrwert. Trag dich ein und sei ganz vorne dabei, wenn der Newsfeed startet.
               </p>
-              <ul style={{ 
-                marginBottom: '2rem',
-                padding: 0,
-                listStyle: 'none'
+              <ul style={{
+                color: '#f8dfa5',
+                fontSize: isMobile ? '1rem' : '1.1rem',
+                marginBottom: '2.5rem',
+                paddingLeft: 0,
+                listStyle: 'none',
+                lineHeight: '2.1',
+                textAlign: isMobile ? 'center' : 'left',
               }}>
-                {[
-                  '📧 Early Access zum Newsfeed',
-                  '🎁 Exklusive Beta-Features',
-                  '📊 Wöchentliche Markt-Updates',
-                  '🔔 Breaking News Alerts'
-                ].map((item, index) => (
-                  <li key={index} style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    marginBottom: '1rem',
-                    color: '#f8dfa5',
-                    fontSize: isMobile ? '1rem' : '1.125rem',
-                    padding: isMobile ? '0.5rem 0' : '0.75rem 0'
-                  }}>
-                    <span>{item}</span>
-                  </li>
-                ))}
+                <li>📰 Krypto-News, die du verstehst</li>
+                <li>📚 Wissen, das dich weiterbringt</li>
+                <li>💡 Tipps, die wirklich helfen</li>
+                <li>🤝 Ehrlich & Unabhängig</li>
               </ul>
             </div>
 

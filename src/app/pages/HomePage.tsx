@@ -84,15 +84,7 @@ const HomePage = () => {
                 color: '#ffffff',
                 lineHeight: '1.2'
               }}>
-                Bleib immer auf dem{' '}
-                <span style={{
-                  background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
-                  WebkitBackgroundClip: 'text',
-                  backgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent'
-                }}>
-                  neuesten Stand
-                </span>
+                Bleib auf dem Laufenden.
               </h2>
               <p style={{
                 fontSize: isMobile ? '1rem' : '1.125rem',
@@ -100,7 +92,7 @@ const HomePage = () => {
                 marginBottom: '2rem',
                 lineHeight: '1.6'
               }}>
-                Erhalte exklusive Einblicke, Marktanalysen und Trading-Strategien direkt in dein Postfach:
+                Krypto-Wissen, Updates und Empfehlungen – direkt in dein Postfach.
               </p>
               <ul style={{ 
                 marginBottom: '2rem',
@@ -108,10 +100,10 @@ const HomePage = () => {
                 listStyle: 'none'
               }}>
                 {[
-                  '🎯 Personalisierte Trading-Empfehlungen',
-                  '📊 Wöchentliche Marktanalysen',
-                  '🔔 Wichtige Krypto-News in Echtzeit',
-                  '💡 Exklusive Trading-Strategien'
+                  '📰 Verständliche Artikel',
+                  '🔍 Hintergründe & Einblicke',
+                  '🛠️ Nützliche Tools & Tipps',
+                  '📬 Krypto-Updates per Mail'
                 ].map((item, index) => (
                   <li key={index} style={{
                     display: 'flex',
@@ -177,15 +169,7 @@ const HomePage = () => {
               position: 'relative',
               zIndex: 1
             }}>
-              Bereit für deine{' '}
-              <span style={{
-                background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
-                WebkitBackgroundClip: 'text',
-                backgroundClip: 'text',
-                WebkitTextFillColor: 'transparent'
-              }}>
-                Krypto-Reise?
-              </span>
+              Bereit für deinen ersten Schritt in Krypto?
             </h2>
             <p style={{
               fontSize: isMobile ? '1rem' : isTablet ? '1.125rem' : '1.25rem',
@@ -197,8 +181,7 @@ const HomePage = () => {
               position: 'relative',
               zIndex: 1
             }}>
-              Starte noch heute und werde Teil der Krypto-Revolution. 
-              Sicher und einfach zu den besten Konditionen.
+              Finde die passende Börse und starte sicher mit Bitcoin, Ethereum & Co.
             </p>
             <div style={{ 
               display: 'flex', 

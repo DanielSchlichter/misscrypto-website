@@ -21,37 +21,32 @@ const FeaturesSection = () => {
 
   const features = [
     {
-      title: 'Krypto kaufen',
-      description: 'Sicher und einfach in Bitcoin, Ethereum und andere Kryptowährungen investieren',
+      title: 'Krypto kaufen (Börsenvergleich)',
+      description: 'Vergleiche geprüfte Anbieter und erfahre, worauf du beim Einstieg achten musst.',
       icon: '💰',
-      href: '/investieren',
+      href: '/krypto-kaufen',
     },
     {
-      title: 'Trading lernen',
-      description: 'Von Grundlagen bis Profi-Strategien - alles was du für erfolgreiches Trading brauchst',
-      icon: '📈',
-      href: '/trading',
-    },
-    {
-      title: 'Börsen vergleichen',
-      description: 'Die besten Krypto-Börsen im Test - finde die passende Plattform für dich',
-      icon: '🏛️',
-      href: '/boersen',
+      title: 'Krypto verstehen (YouTube)',
+      description: 'Erklärvideos, Tipps & persönliche Einblicke – direkt von MissCrypto.',
+      icon: '🎥',
+      href: 'https://www.youtube.com/@MissCrypto',
+      target: '_blank',
     },
     {
       title: 'News & Analysen',
-      description: 'Aktuelle Marktanalysen, News und Prognosen von unseren Krypto-Experten',
+      description: 'Bleib auf dem Laufenden mit Marktanalysen und echten Krypto-Insights.',
       icon: '📰',
-      href: '/news',
+      href: '/newsfeed',
     },
   ];
 
   return (
     <section className="mc-section">
       <div className="mc-container">
-        <h2 className="mc-section-title">Was möchtest du erreichen?</h2>
+        <h2 className="mc-section-title">Was du hier findest.</h2>
         <p className="mc-section-subtitle">
-          Egal ob Anfänger oder Profi - wir haben die richtigen Tools und Inhalte für dich
+          Von geprüften Börsen bis zu klaren Erklärvideos – alles, was dir beim Krypto-Start hilft
         </p>
 
         {isMobile ? (
@@ -74,6 +69,7 @@ const FeaturesSection = () => {
                 <Link 
                   key={feature.title} 
                   href={feature.href} 
+                  {...(feature.target ? { target: feature.target } : {})}
                   style={{
                     minWidth: '280px',
                     maxWidth: '280px',
@@ -109,9 +105,13 @@ const FeaturesSection = () => {
             </div>
           </div>
         ) : (
-          <div className="mc-features-grid">
+          <div className="mc-features-grid" style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: '2rem'
+          }}>
             {features.map((feature) => (
-              <Link key={feature.title} href={feature.href} className="mc-feature-card">
+              <Link key={feature.title} href={feature.href} {...(feature.target ? { target: feature.target } : {})} className="mc-feature-card">
                 <div className="mc-feature-icon">{feature.icon}</div>
                 <h3 className="mc-feature-title">{feature.title}</h3>
                 <p className="mc-feature-description">{feature.description}</p>

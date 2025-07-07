@@ -158,12 +158,11 @@ const PressePage = () => {
                 lineHeight: '1.6'
               }}>
                 <p style={{ marginBottom: '1.5rem' }}>
-                  Du hast Interesse an einer Zusammenarbeit, möchtest ein Interview mit mir oder 
-                  hast spezielle Fragen zu Kryptowährungen, Blockchain oder Web3?
+                  Du möchtest ein Interview führen, an einer Zusammenarbeit arbeiten oder hast Fragen rund um Krypto, Blockchain oder Web3?<br />
+                  Dann schreib mir gern direkt hier.
                 </p>
-                
                 <p style={{ marginBottom: '1.5rem' }}>
-                  Dann kontaktiere mich einfach hier. Ich freue mich über deine Anfrage!
+                  Ich freue mich auf deine Nachricht!
                 </p>
                 
                 <div style={{
@@ -198,11 +197,11 @@ const PressePage = () => {
               <h3 style={{
                 fontSize: isMobile ? '1.25rem' : isTablet ? '1.375rem' : '1.5rem',
                 fontWeight: '600',
-                marginBottom: '1.5rem',
                 color: '#f8dfa5',
-                textAlign: 'center'
+                marginBottom: '2rem',
+                textAlign: isMobile ? 'center' : 'left'
               }}>
-                Lust auf ein Gespräch mit MissCrypto?
+                Ich freue mich auf deine Nachricht.
               </h3>
               
               <form style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -687,7 +686,7 @@ const PressePage = () => {
               color: '#ffffff',
               lineHeight: '1.2'
             }}>
-              Interesse an einer{' '}
+              Lust auf eine{' '}
               <span style={{
                 background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
                 WebkitBackgroundClip: 'text',
@@ -705,8 +704,7 @@ const PressePage = () => {
               maxWidth: '600px',
               margin: '0 auto 2rem'
             }}>
-              Kontaktiere mich für Interviews, Gastbeiträge oder Kooperationen. 
-              Ich freue mich auf deine Anfrage!
+              Ob Interview, Gastbeitrag oder Kooperation – ich freue mich, von dir zu hören.
             </p>
             <div style={{ 
               display: 'flex', 

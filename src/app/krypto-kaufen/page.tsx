@@ -353,10 +353,8 @@ const CryptoKaufenPage = () => {
                 maxWidth: 'none',
                 marginBottom: '2rem'
               }}>
-                {isInvestTab 
-                  ? 'Entdecke die besten Krypto-Börsen für langfristige Investitionen. Wir zeigen dir, wo du sicher und günstig in Bitcoin, Ethereum und andere Kryptowährungen investieren kannst.'
-                  : 'Wir haben die führenden Krypto-Börsen getestet und verglichen. Hier findest du die besten Anbieter für den sicheren und günstigen Kauf von Kryptowährungen.'
-                }
+                Ich habe mir viele Krypto-Börsen genau angeschaut und eine Auswahl getroffen, die besonders einsteigerfreundlich, sicher und gut verständlich ist.<br />
+                Hier findest du Anbieter, mit denen der Einstieg in Bitcoin, Ethereum & Co. einfach gelingt – ganz ohne Fachchinesisch.
               </p>
 
               {/* Crypto Cards */}
@@ -368,13 +366,13 @@ const CryptoKaufenPage = () => {
                 justifyContent: 'center'
               }}>
                 {[
-                  { symbol: '₿', bg: '#F7931A', name: 'Bitcoin' },
-                  { symbol: 'Ξ', bg: '#627EEA', name: 'Ethereum' },
-                  { symbol: '✕', bg: '#23292F', name: 'XRP' },
-                  { symbol: '◎', bg: '#9945FF', name: 'Solana' },
-                  { symbol: '₳', bg: '#0033AD', name: 'Cardano' },
-                  { symbol: '◆', bg: '#F3BA2F', name: 'BNB' },
-                  { symbol: '●', bg: '#E6007A', name: 'Polkadot' }
+                  { src: '/cryptologos/bitcoin-btc-logo.png', name: 'Bitcoin' },
+                  { src: '/cryptologos/Ethereum ICON.png', name: 'Ethereum' },
+                  { src: '/cryptologos/XRP.png', name: 'XRP' },
+                  { src: '/cryptologos/solana-sol-logo.png', name: 'Solana' },
+                  { src: '/cryptologos/Cardano.png', name: 'Cardano' },
+                  { src: '/cryptologos/binance-logo.png', name: 'BNB' },
+                  { src: '/cryptologos/Avalanche Coin (AVAX).png', name: 'Avalanche' }
                 ].slice(0, isMobile ? 4 : 7).map((crypto, index) => (
                   <div key={index} style={{
                     background: 'rgba(0, 0, 0, 0.3)',
@@ -397,17 +395,23 @@ const CryptoKaufenPage = () => {
                     <div style={{
                       width: isMobile ? '2rem' : '2.5rem',
                       height: isMobile ? '2rem' : '2.5rem',
-                      background: crypto.bg,
-                      color: '#ffffff',
                       borderRadius: '50%',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      fontSize: isMobile ? '1rem' : '1.25rem',
-                      fontWeight: 'bold',
-                      margin: '0 auto'
+                      margin: '0 auto',
+                      background: '#18181b'
                     }}>
-                      {crypto.symbol}
+                      <img
+                        src={crypto.src}
+                        alt={crypto.name}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'contain',
+                          borderRadius: '50%'
+                        }}
+                      />
                     </div>
                   </div>
                 ))}
@@ -466,20 +470,12 @@ const CryptoKaufenPage = () => {
             marginBottom: '1rem',
             textAlign: isMobile ? 'center' : 'left'
           }}>
-            {isInvestTab 
-              ? <>Die besten <span style={{
-                  background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
-                  WebkitBackgroundClip: 'text',
-                  backgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent'
-                }}>Investment-Plattformen</span></>
-              : <>Unsere <span style={{
-                  background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
-                  WebkitBackgroundClip: 'text',
-                  backgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent'
-                }}>Topempfehlungen</span></>
-            }
+            Meine <span style={{
+              background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
+              WebkitBackgroundClip: 'text',
+              backgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }}>Empfehlungen</span>
           </h2>
           <p style={{
             color: '#d1d5db',
@@ -489,10 +485,7 @@ const CryptoKaufenPage = () => {
             textAlign: isMobile ? 'center' : 'left',
             maxWidth: '800px'
           }}>
-            {isInvestTab 
-              ? 'Die sichersten und renommiertesten Krypto-Börsen für langfristige Investitionen und Vermögensaufbau.'
-              : 'Die besten Krypto-Börsen für sicheren und günstigen Handel von uns für Dich getestet.'
-            }
+            Ich habe mir diese Börsen genauer angeschaut – sie sind fair, verständlich und gut für den Einstieg geeignet.
           </p>
         </div>
       </div>
@@ -993,9 +986,7 @@ const CryptoKaufenPage = () => {
               fontSize: isMobile ? '1rem' : '1.125rem',
               lineHeight: '1.7'
             }}>
-              Bitvavo bietet die beste Kombination aus niedrigen Gebühren, EU-Regulierung und 
-              großer Coin-Auswahl. Mit nur 0,25% Gebühren und über 175 verfügbaren Kryptowährungen 
-              ist es unsere Top-Empfehlung für deutsche Nutzer.
+              Bitvavo bietet für mich die beste Kombination aus niedrigen Gebühren, EU-Regulierung und großer Coin-Auswahl. Mit nur 0,15 % bis 0,25 % Gebühren und über 350+ verfügbaren Kryptowährungen ist es meine Empfehlung für deinen Einstieg.
             </p>
 
             <div style={{display: 'flex', justifyContent: 'center'}}>

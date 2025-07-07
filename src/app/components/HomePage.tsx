@@ -81,9 +81,9 @@ const HomePage = () => {
       {/* Features Section */}
       <section className="mc-section">
         <div className="mc-container">
-          <h2 className="mc-section-title">Was möchtest du erreichen?</h2>
+          <h2 className="mc-section-title">Was du hier findest.</h2>
           <p className="mc-section-subtitle">
-            Egal ob Anfänger oder Profi - wir haben die richtigen Tools und Inhalte für dich
+            Von geprüften Börsen bis zu klaren Erklärvideos – alles, was dir beim Krypto-Start hilft
           </p>
 
           {isMobile ? (
@@ -102,53 +102,131 @@ const HomePage = () => {
                 scrollbarWidth: 'none',
                 msOverflowStyle: 'none'
               }}>
-                {features.map((feature) => (
-                  <Link 
-                    key={feature.title} 
-                    href={feature.href} 
-                    style={{
-                      minWidth: '280px',
-                      maxWidth: '280px',
-                      scrollSnapAlign: 'start',
-                      background: 'linear-gradient(135deg, rgba(55, 65, 81, 0.5), rgba(17, 24, 39, 0.5))',
-                      padding: '1.5rem',
-                      borderRadius: '16px',
-                      border: '1px solid #374151',
-                      textDecoration: 'none',
-                      transition: 'all 0.3s ease',
-                      display: 'block',
-                      flexShrink: 0
-                    }}
-                  >
-                    <div style={{
-                      fontSize: '2rem',
-                      marginBottom: '1rem'
-                    }}>{feature.icon}</div>
-                    <h3 style={{
-                      fontSize: '1.125rem',
-                      fontWeight: '500',
-                      color: '#ffffff',
-                      marginBottom: '0.75rem'
-                    }}>{feature.title}</h3>
-                    <p style={{
-                      color: '#9ca3af',
-                      fontSize: '0.875rem',
-                      lineHeight: '1.5',
-                      margin: 0
-                    }}>{feature.description}</p>
-                  </Link>
-                ))}
+                {/* Box 1: Krypto kaufen (börsenvergleich) */}
+                <Link 
+                  href="/krypto-kaufen" 
+                  style={{
+                    minWidth: '280px',
+                    maxWidth: '280px',
+                    scrollSnapAlign: 'start',
+                    background: 'linear-gradient(135deg, rgba(55, 65, 81, 0.5), rgba(17, 24, 39, 0.5))',
+                    padding: '1.5rem',
+                    borderRadius: '16px',
+                    border: '1px solid #374151',
+                    textDecoration: 'none',
+                    transition: 'all 0.3s ease',
+                    display: 'block',
+                    flexShrink: 0
+                  }}
+                >
+                  <div style={{
+                    fontSize: '2rem',
+                    marginBottom: '1rem'
+                  }}>💰</div>
+                  <h3 style={{
+                    fontSize: '1.125rem',
+                    fontWeight: '500',
+                    color: '#ffffff',
+                    marginBottom: '0.75rem'
+                  }}>Krypto kaufen (Börsenvergleich)</h3>
+                  <p style={{
+                    color: '#9ca3af',
+                    fontSize: '0.875rem',
+                    lineHeight: '1.5',
+                    margin: 0
+                  }}>Vergleiche geprüfte Anbieter und erfahre, worauf du beim Einstieg achten musst.</p>
+                </Link>
+                {/* Box 2: Krypto verstehen (youtube) */}
+                <Link 
+                  href="https://www.youtube.com/@MissCrypto" 
+                  target="_blank"
+                  style={{
+                    minWidth: '280px',
+                    maxWidth: '280px',
+                    scrollSnapAlign: 'start',
+                    background: 'linear-gradient(135deg, rgba(55, 65, 81, 0.5), rgba(17, 24, 39, 0.5))',
+                    padding: '1.5rem',
+                    borderRadius: '16px',
+                    border: '1px solid #374151',
+                    textDecoration: 'none',
+                    transition: 'all 0.3s ease',
+                    display: 'block',
+                    flexShrink: 0
+                  }}
+                >
+                  <div style={{
+                    fontSize: '2rem',
+                    marginBottom: '1rem'
+                  }}>🎥</div>
+                  <h3 style={{
+                    fontSize: '1.125rem',
+                    fontWeight: '500',
+                    color: '#ffffff',
+                    marginBottom: '0.75rem'
+                  }}>Krypto verstehen (YouTube)</h3>
+                  <p style={{
+                    color: '#9ca3af',
+                    fontSize: '0.875rem',
+                    lineHeight: '1.5',
+                    margin: 0
+                  }}>Erklärvideos, Tipps & persönliche Einblicke – direkt von MissCrypto.</p>
+                </Link>
+                {/* Box 3: News & Analysen (newsfeed) */}
+                <Link 
+                  href="/newsfeed" 
+                  style={{
+                    minWidth: '280px',
+                    maxWidth: '280px',
+                    scrollSnapAlign: 'start',
+                    background: 'linear-gradient(135deg, rgba(55, 65, 81, 0.5), rgba(17, 24, 39, 0.5))',
+                    padding: '1.5rem',
+                    borderRadius: '16px',
+                    border: '1px solid #374151',
+                    textDecoration: 'none',
+                    transition: 'all 0.3s ease',
+                    display: 'block',
+                    flexShrink: 0
+                  }}
+                >
+                  <div style={{
+                    fontSize: '2rem',
+                    marginBottom: '1rem'
+                  }}>📰</div>
+                  <h3 style={{
+                    fontSize: '1.125rem',
+                    fontWeight: '500',
+                    color: '#ffffff',
+                    marginBottom: '0.75rem'
+                  }}>News & Analysen</h3>
+                  <p style={{
+                    color: '#9ca3af',
+                    fontSize: '0.875rem',
+                    lineHeight: '1.5',
+                    margin: 0
+                  }}>Bleib auf dem Laufenden mit Marktanalysen und echten Krypto-Insights.</p>
+                </Link>
               </div>
             </div>
           ) : (
             <div className="mc-features-grid">
-              {features.map((feature) => (
-                <Link key={feature.title} href={feature.href} className="mc-feature-card">
-                  <div className="mc-feature-icon">{feature.icon}</div>
-                  <h3 className="mc-feature-title">{feature.title}</h3>
-                  <p className="mc-feature-description">{feature.description}</p>
-                </Link>
-              ))}
+              {/* Box 1: Krypto kaufen (börsenvergleich) */}
+              <Link key="Krypto kaufen" href="/krypto-kaufen" className="mc-feature-card">
+                <div className="mc-feature-icon">💰</div>
+                <h3 className="mc-feature-title">Krypto kaufen (Börsenvergleich)</h3>
+                <p className="mc-feature-description">Vergleiche geprüfte Anbieter und erfahre, worauf du beim Einstieg achten musst.</p>
+              </Link>
+              {/* Box 2: Krypto verstehen (youtube) */}
+              <Link key="Krypto verstehen" href="https://www.youtube.com/@MissCrypto" target="_blank" className="mc-feature-card">
+                <div className="mc-feature-icon">🎥</div>
+                <h3 className="mc-feature-title">Krypto verstehen (YouTube)</h3>
+                <p className="mc-feature-description">Erklärvideos, Tipps & persönliche Einblicke – direkt von MissCrypto.</p>
+              </Link>
+              {/* Box 3: News & Analysen (newsfeed) */}
+              <Link key="News & Analysen" href="/newsfeed" className="mc-feature-card">
+                <div className="mc-feature-icon">📰</div>
+                <h3 className="mc-feature-title">News & Analysen</h3>
+                <p className="mc-feature-description">Bleib auf dem Laufenden mit Marktanalysen und echten Krypto-Insights.</p>
+              </Link>
             </div>
           )}
         </div>

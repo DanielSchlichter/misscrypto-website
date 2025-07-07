@@ -218,7 +218,7 @@ const CryptoPurchaseCalculatorClient: React.FC<CryptoPurchaseCalculatorClientPro
           </h2>
         </div>
         <p className="mc-section-subtitle-left">
-          Berechne, wie viel {selectedCrypto.name} du für dein Investment bekommst und vergleiche die Gebühren.
+          Vergleiche, wie viel {selectedCrypto.name} du bei welchem Anbieter erhältst – ganz einfach.
         </p>
 
         {/* Zwei-spaltiges Layout */}
@@ -250,8 +250,15 @@ const CryptoPurchaseCalculatorClient: React.FC<CryptoPurchaseCalculatorClientPro
               <div style={{ position: 'relative' }}>
                 <input
                   type="number"
-                  value={investmentAmount}
-                  onChange={(e) => setInvestmentAmount(Number(e.target.value))}
+                  value={investmentAmount === 0 ? '' : investmentAmount}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (val === '' || val === '0') {
+                      setInvestmentAmount(0);
+                    } else {
+                      setInvestmentAmount(Number(val));
+                    }
+                  }}
                   style={{
                     width: '100%',
                     padding: '1rem 3rem 1rem 1rem',
