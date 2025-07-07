@@ -138,7 +138,7 @@ const HomePage = () => {
                 </Link>
                 {/* Box 2: Krypto verstehen (youtube) */}
                 <Link 
-                  href="https://www.youtube.com/@MissCrypto" 
+                  href="https://www.youtube.com/@MissCryptoGer" 
                   target="_blank"
                   style={{
                     minWidth: '280px',
@@ -216,7 +216,7 @@ const HomePage = () => {
                 <p className="mc-feature-description">Vergleiche geprüfte Anbieter und erfahre, worauf du beim Einstieg achten musst.</p>
               </Link>
               {/* Box 2: Krypto verstehen (youtube) */}
-              <Link key="Krypto verstehen" href="https://www.youtube.com/@MissCrypto" target="_blank" className="mc-feature-card">
+              <Link key="Krypto verstehen" href="https://www.youtube.com/@MissCryptoGer" target="_blank" className="mc-feature-card">
                 <div className="mc-feature-icon">🎥</div>
                 <h3 className="mc-feature-title">Krypto verstehen (YouTube)</h3>
                 <p className="mc-feature-description">Erklärvideos, Tipps & persönliche Einblicke – direkt von MissCrypto.</p>

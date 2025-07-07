@@ -47,45 +47,6 @@ const exchanges: Exchange[] = [
     url: 'https://www.bitpanda.com/de?irclickid=V3QSGnzSyxycT6HTSnRCMTJoUksXvVxdVxomz00&utm_source=Impact&utm_medium=Affiliates&utm_campaign=2051965&utm_content=Miss%20Crypto%20YT&utm_term=Brombacher%2C%20Deines%2C%20Kretzschmar%2C%20Morgenroth%20GbR&ref=615250356669422741&tag=affiliates&subid1=&subid3=2051965&irgwc=1'
   },
   {
-    id: 'coinbase',
-    name: 'Coinbase',
-    logo: '/logos/coinbase.svg',
-    rating: 4.0,
-    fees: '1,99%',
-    features: ['US-Börse', 'Einfach zu nutzen', 'Gute Sicherheit', '260+ Währungen'],
-    pros: ['Sehr einfach', 'Gute Reputation', 'Mobile App', 'Höchste Sicherheit'],
-    cons: ['Hohe Gebühren', 'Weniger Coins', 'Nicht EU-reguliert'],
-    minDeposit: 'ab 1 Euro',
-    paymentMethods: ['PayPal', 'Mastercard', 'Visa', 'SEPA', 'Sofort'],
-    url: 'https://coinbase-consumer.sjv.io/B0gm7q'
-  },
-  {
-    id: 'mexc',
-    name: 'MEXC',
-    logo: '/logos/mexc.png',
-    rating: 3.85,
-    fees: 'ab 0,1%',
-    features: ['Seychellen', 'Niedrige Gebühren', 'Mobile App', '2000+ Währungen'],
-    pros: ['Niedrige Gebühren', 'Riesige Auswahl', 'Viele Features', 'Globale Präsenz'],
-    cons: ['Komplex für Anfänger', 'Weniger EU-Fokus', 'Regulatory Risiken'],
-    minDeposit: '10,00 €',
-    paymentMethods: ['Visa', 'PayPal', 'Mastercard', 'GiroPay', 'SEPA'],
-    url: 'https://www.mexc.com/acquisition/custom-sign-up?shareCode=mexc-2Xhb8'
-  },
-  {
-    id: 'okx',
-    name: 'OKX',
-    logo: '/logos/bingx.png',
-    rating: 4.0,
-    fees: '0,1%',
-    features: ['Internationale Börse', 'Niedrige Gebühren', 'Futures Trading', '1000+ Währungen'],
-    pros: ['Niedrige Gebühren', 'Große Auswahl', 'Professionelle Features', 'Globale Präsenz'],
-    cons: ['Komplex für Anfänger', 'Nicht EU-reguliert', 'Höhere Mindesteinzahlung'],
-    minDeposit: '50,00 €',
-    paymentMethods: ['Visa', 'Mastercard', 'Bank Transfer', 'Crypto'],
-    url: 'https://bingx.com/invite/OMAEVM/'
-  },
-  {
     id: 'kraken',
     name: 'Kraken',
     logo: '/logos/kraken.png',
@@ -471,10 +432,10 @@ const CryptoKaufenPage = () => {
             textAlign: isMobile ? 'center' : 'left'
           }}>
             Meine <span style={{
-              background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
-              WebkitBackgroundClip: 'text',
-              backgroundClip: 'text',
-              WebkitTextFillColor: 'transparent'
+                  background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
+                  WebkitBackgroundClip: 'text',
+                  backgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent'
             }}>Empfehlungen</span>
           </h2>
           <p style={{
@@ -954,8 +915,8 @@ const CryptoKaufenPage = () => {
             boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
             padding: isMobile ? '2rem' : '3rem',
             textAlign: 'center',
-            width: isMobile ? '100%' : 'auto',
-            maxWidth: isMobile ? '380px' : '600px'
+            width: '100%',
+            maxWidth: '1280px'
           }}>
             <h2 className="mc-section-title" style={{marginBottom: '2rem'}}>
               <span className="mc-hero-gradient">Von MissCrypto empfohlen</span>

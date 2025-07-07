@@ -128,18 +128,18 @@ export default function NewsfeedPage() {
               marginBottom: '3rem'
             }}>
               <span style={{ fontSize: '3rem', marginBottom: '1rem' }}>🚀</span>
-              <h2 style={{
+            <h2 style={{
                 color: '#f8dfa5',
                 fontWeight: 700,
                 fontSize: isMobile ? '2.2rem' : isTablet ? '2.8rem' : '3.2rem',
-                marginBottom: '1.5rem',
+              marginBottom: '1.5rem',
                 textAlign: 'center',
                 letterSpacing: '0.01em',
-              }}>
-                Coming Soon
-              </h2>
-              <p style={{
-                color: '#d1d5db',
+            }}>
+              Coming Soon
+            </h2>
+            <p style={{
+              color: '#d1d5db',
                 fontSize: isMobile ? '1.1rem' : isTablet ? '1.2rem' : '1.3rem',
                 textAlign: 'center',
                 maxWidth: '700px',
@@ -273,7 +273,7 @@ export default function NewsfeedPage() {
               }}>
                 Ich bereite für dich regelmäßig Krypto-Updates auf, die du nicht verpassen solltest: verständlich, verlässlich und mit echtem Mehrwert. Trag dich ein und sei ganz vorne dabei, wenn der Newsfeed startet.
               </p>
-              <ul style={{
+              <ul style={{ 
                 color: '#f8dfa5',
                 fontSize: isMobile ? '1rem' : '1.1rem',
                 marginBottom: '2.5rem',

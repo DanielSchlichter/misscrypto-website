@@ -125,8 +125,8 @@ const DatenschutzPage = () => {
                 fontFamily: 'Raleway, sans-serif'
               }}>
                 <p><strong style={{ color: '#f8dfa5' }}>Brombacher, Deines, Kretzschmar, Morgenroth GbR</strong></p>
-                <p>Lankwitzer Straße 44</p>
-                <p>12107 Berlin</p>
+                <p>Hallandstr. 16</p>
+                <p>13189 Berlin</p>
                 <p style={{ marginTop: '1rem' }}>
                   <strong style={{ color: '#f8dfa5' }}>E-Mail-Adresse des Anbieters:</strong>{' '}
                   <a 

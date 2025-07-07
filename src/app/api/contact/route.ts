@@ -8,19 +8,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: 'Bitte fülle alle Pflichtfelder aus.' }, { status: 400 });
     }
 
-    // SMTP-Daten aus Screenshot
     const transporter = nodemailer.createTransport({
-      host: 'w01a3900.kasserver.com',
+      host: 'w01bd533.kasserver.com',
       port: 587,
       secure: false,
       auth: {
-        user: 'kontakt@schlichter-media.de',
-        pass: '19d396slMalamute',
+        user: 'noreply@misscrypto.de',
+        pass: 'f35eEetwgcjBjw8E43By',
       },
     });
 
     const mailOptions = {
-      from: `MissCrypto Kontakt <kontakt@schlichter-media.de>`,
+      from: `MissCrypto Kontakt <noreply@misscrypto.de>`,
       to: 'info@misscrypto.de',
       subject: `[MissCrypto Kontakt] ${subject}`,
       replyTo: email,

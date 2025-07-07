@@ -30,7 +30,7 @@ const FeaturesSection = () => {
       title: 'Krypto verstehen (YouTube)',
       description: 'Erklärvideos, Tipps & persönliche Einblicke – direkt von MissCrypto.',
       icon: '🎥',
-      href: 'https://www.youtube.com/@MissCrypto',
+      href: 'https://www.youtube.com/@MissCryptoGer',
       target: '_blank',
     },
     {

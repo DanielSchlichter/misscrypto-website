@@ -31,6 +31,7 @@ const exchanges: Exchange[] = [
     currency: 'EUR',
     url: 'https://www.bitpanda.com/de?irclickid=V3QSGnzSyxycT6HTSnRCMTJoUksXvVxdVxomz00&utm_source=Impact&utm_medium=Affiliates&utm_campaign=2051965&utm_content=Miss%20Crypto%20YT&utm_term=Brombacher%2C%20Deines%2C%20Kretzschmar%2C%20Morgenroth%20GbR&ref=615250356669422741&tag=affiliates&subid1=&subid3=2051965&irgwc=1'
   },
+  /*
   {
     id: 'coinbase',
     name: 'Coinbase',
@@ -58,6 +59,7 @@ const exchanges: Exchange[] = [
     currency: 'EUR',
     url: 'https://bingx.com/invite/OMAEVM/'
   },
+  */
   {
     id: 'kraken',
     name: 'Kraken',
