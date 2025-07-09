@@ -30,14 +30,12 @@ CoinGecko API → Netlify Function → Direkte Datei-Updates → Git Repository
 
 ### Netlify Configuration (`netlify.toml`)
 ```toml
-# Geplante Funktionen
-[[plugins]]
-  package = "@netlify/plugin-scheduled-functions"
-
 # Testdaten-Update alle 24 Stunden um 6:00 UTC (direkte Datei-Updates)
 [functions.update-test-data-daily]
   schedule = "0 6 * * *"
 ```
+
+**Hinweis:** Scheduled Functions sind ein nativer Teil von Netlify Platform Primitives und benötigen kein separates Plugin.
 
 ### Umgebungsvariablen
 - Keine speziellen Umgebungsvariablen erforderlich!

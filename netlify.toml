@@ -12,10 +12,6 @@
 [functions]
   external_node_modules = []
 
-# Geplante Funktionen
-[[plugins]]
-  package = "@netlify/plugin-scheduled-functions"
-
 # Testdaten-Update alle 24 Stunden um 6:00 UTC (direkte Datei-Updates)
 [functions.update-test-data-daily]
   schedule = "0 6 * * *"
