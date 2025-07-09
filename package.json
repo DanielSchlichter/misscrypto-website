@@ -10,7 +10,10 @@
     "start": "next start",
     "lint": "next lint",
     "update-crypto": "ts-node src/scripts/update-crypto.ts",
-    "update-1y-data": "ts-node src/scripts/update-1y-data.ts"
+    "update-1y-data": "ts-node src/scripts/update-1y-data.ts",
+    "update-test-data": "node src/scripts/update-test-data.js",
+    "update-test-data-netlify": "curl -X POST https://your-site.netlify.app/.netlify/functions/update-test-data-daily",
+    "test-automated-system": "node src/scripts/test-automated-system.js"
   },
   "dependencies": {
     "apexcharts": "^4.7.0",
