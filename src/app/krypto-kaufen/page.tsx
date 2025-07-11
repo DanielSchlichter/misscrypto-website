@@ -58,6 +58,19 @@ const exchanges: Exchange[] = [
     minDeposit: '1,00 €',
     paymentMethods: ['Visa', 'Mastercard', 'Bank Transfer', 'SEPA'],
     url: 'https://kraken.pxf.io/RGE3yg'
+  },
+  {
+    id: 'bison',
+    name: 'Bison',
+    logo: '/cryptologos/Bison-Logo.svg',
+    rating: 4.0,
+    fees: '1,25%',
+    features: ['Deutschland', 'BaFin-Lizenz', 'Seit 2019', '26+ Währungen'],
+    pros: ['BaFin-reguliert', 'Deutsche Börse', 'Aktien & ETFs', 'Niedrige Mindesteinzahlung'],
+    cons: ['Höhere Gebühren', 'Begrenzte Coin-Auswahl'],
+    minDeposit: '1,00 €',
+    paymentMethods: ['Banküberweisung', 'Visa', 'Mastercard'],
+    url: 'https://bisonapp.com/affiliate/misscrypto/'
   }
 ];
 
@@ -626,7 +639,7 @@ const CryptoKaufenPage = () => {
                         fontSize: '12px',
                         fontWeight: 'bold',
                         color: '#f8dfa5'
-                      }}>+{exchange.id === 'mexc' ? '1500' : exchange.id === 'bitvavo' ? '350' : exchange.id === 'bitpanda' ? '500' : '260'}</div>
+                      }}>+{exchange.id === 'mexc' ? '1500' : exchange.id === 'bitvavo' ? '350' : exchange.id === 'bitpanda' ? '500' : exchange.id === 'bison' ? '100' : '260'}</div>
                     </div>
                   </div>
                 </div>
@@ -700,7 +713,8 @@ const CryptoKaufenPage = () => {
                        exchange.id === 'coinbase' ? 'USA 🇺🇸' :
                        exchange.id === 'mexc' ? 'Seychellen 🇸🇨' :
                        exchange.id === 'okx' ? 'Singapur 🇸🇬' :
-                       exchange.id === 'kraken' ? 'USA 🇺🇸' : 'Global 🌍'}
+                       exchange.id === 'kraken' ? 'USA 🇺🇸' :
+                       exchange.id === 'bison' ? 'Deutschland 🇩🇪' : 'Global 🌍'}
                     </div>
                   </div>
 
@@ -712,7 +726,8 @@ const CryptoKaufenPage = () => {
                        exchange.id === 'coinbase' ? '2012' :
                        exchange.id === 'mexc' ? '2018' :
                        exchange.id === 'okx' ? '2018' :
-                       exchange.id === 'kraken' ? '2011' : '2019'}
+                       exchange.id === 'kraken' ? '2011' :
+                       exchange.id === 'bison' ? '2019' : '2019'}
                     </div>
                   </div>
                 </div>
@@ -789,6 +804,10 @@ const CryptoKaufenPage = () => {
                             'Höchste Sicherheitsstandards seit 2011',
                             'Reguliert und etabliert in den USA',
                             'Starker Fokus auf institutionelle Kunden'
+                          ] : exchange.id === 'bison' ? [
+                            'Deutsche BaFin-Lizenz für höchste Sicherheit',
+                            'Zusätzlich Aktien und ETFs handelbar',
+                            'Sehr niedrige Mindesteinzahlung (1 €)'
                           ] : [
                             'Niedrige Handelsgebühren',
                             'Große Auswahl an Kryptowährungen',
@@ -825,6 +844,9 @@ const CryptoKaufenPage = () => {
                           ] : exchange.id === 'kraken' ? [
                             'Weniger benutzerfreundlich für Anfänger',
                             'Begrenzte Zahlungsmethoden in Europa'
+                          ] : exchange.id === 'bison' ? [
+                            'Höhere Handelsgebühren (1,25%)',
+                            'Begrenzte Krypto-Auswahl (26 Coins)'
                           ] : [
                             'Potentielle Komplexität für Einsteiger',
                             'Variierende regionale Verfügbarkeit'
@@ -884,6 +906,8 @@ const CryptoKaufenPage = () => {
                           'OKX eignet sich für fortgeschrittene Trader, die professionelle Trading-Features und eine große Auswahl an Kryptowährungen (1000+) mit niedrigen Gebühren suchen. Die Plattform bietet Futures, Optionen und andere Derivate.' :
                          exchange.id === 'kraken' ?
                           'Kraken eignet sich für sicherheitsbewusste Trader und institutionelle Anleger. Als eine der ältesten und etabliertesten Börsen (seit 2011) bietet Kraken hohe Sicherheitsstandards und ist in den USA reguliert.' :
+                         exchange.id === 'bison' ?
+                          'Bison eignet sich besonders für deutsche Anleger, die eine BaFin-regulierte Plattform suchen und neben Kryptowährungen auch in Aktien und ETFs investieren möchten. Die App ist sehr benutzerfreundlich, hat aber höhere Gebühren und eine begrenzte Krypto-Auswahl.' :
                           'Diese Börse eignet sich für verschiedene Anlegertypen je nach ihren spezifischen Bedürfnissen.'}
                       </p>
                   </div>

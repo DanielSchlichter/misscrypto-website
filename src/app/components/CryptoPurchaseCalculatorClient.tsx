@@ -68,6 +68,15 @@ const exchanges: Exchange[] = [
     minDeposit: 1,
     currency: 'EUR',
     url: 'https://kraken.pxf.io/RGE3yg'
+  },
+  {
+    id: 'bison',
+    name: 'Bison',
+    logo: '/cryptologos/Bison-Logo.svg',
+    fees: 0.0125, // 1,25%
+    minDeposit: 1,
+    currency: 'EUR',
+    url: 'https://bisonapp.com/affiliate/misscrypto/'
   }
 ];
 
