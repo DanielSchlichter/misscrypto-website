@@ -19,6 +19,12 @@ export const authOptions: AuthOptions = {
         try {
           console.log('🔐 Firebase Login-Versuch:', credentials.email)
           
+          // Prüfe ob Firebase Auth verfügbar ist
+          if (!auth) {
+            console.error('❌ Firebase Auth ist nicht initialisiert');
+            throw new Error('Firebase Auth nicht verfügbar');
+          }
+          
           // Verwende Firebase Authentication
           const userCredential = await signInWithEmailAndPassword(
             auth, 
@@ -90,4 +96,10 @@ export const authOptions: AuthOptions = {
 
 const handler = NextAuth(authOptions)
 
-export { handler as GET, handler as POST } 
+export { handler as GET, handler as POST }
+
+// Fallback für fehlende Umgebungsvariablen
+if (!process.env.NEXTAUTH_SECRET) {
+  console.warn('⚠️ NEXTAUTH_SECRET ist nicht gesetzt! Verwende Fallback-Secret.');
+  process.env.NEXTAUTH_SECRET = 'fallback-secret-for-development-only';
+} 

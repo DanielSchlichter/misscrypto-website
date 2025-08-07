@@ -18,18 +18,27 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+let app;
+try {
+  app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+} catch (error) {
+  console.error('❌ Firebase Initialisierung fehlgeschlagen:', error);
+  // Fallback für Server-Side Rendering
+  if (typeof window === 'undefined') {
+    console.log('🔄 Server-Side: Firebase wird später initialisiert');
+  }
+}
 
 // Initialize Firebase Authentication and get a reference to the service
-export const auth = getAuth(app);
+export const auth = app ? getAuth(app) : null;
 
 // Initialize Cloud Firestore and get a reference to the service
-export const db = getFirestore(app);
+export const db = app ? getFirestore(app) : null;
 
 // Initialize Cloud Storage and get a reference to the service
-export const storage = getStorage(app);
+export const storage = app ? getStorage(app) : null;
 
 // Initialize Analytics (nur im Browser)
-export const analytics = typeof window !== 'undefined' ? getAnalytics(app) : null;
+export const analytics = typeof window !== 'undefined' && app ? getAnalytics(app) : null;
 
 export default app; 
