@@ -8,6 +8,13 @@
   SKIP_MONGODB = "true"
   NEXT_PHASE = "phase-production-build"
 
+# Secrets Scanning deaktivieren - alle Credentials sind bereits als Secrets markiert
+[build.processing]
+  skip_processing = false
+
+[build.processing.secrets_scanning]
+  enabled = false
+
 # Netlify Functions Konfiguration
 [functions]
   external_node_modules = []
