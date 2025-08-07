@@ -1,16 +1,24 @@
-const { MongoClient } = require('mongodb');
+const admin = require('firebase-admin');
 
 // Stablecoins die wir ausschließen wollen
 const stablecoins = ['tether', 'usd-coin', 'binance-usd', 'dai', 'frax', 'trueusd', 'paxos-standard', 'gemini-dollar'];
 
 async function testCryptoUpdate() {
-  const client = new MongoClient(process.env.MONGODB_URI);
-  
   try {
     console.log('Starte Test-Aktualisierung der Krypto-Daten...');
 
-    await client.connect();
-    const db = client.db('misscrypto');
+    // Initialize Firebase Admin if not already initialized
+    if (!admin.apps.length) {
+      admin.initializeApp({
+        credential: admin.credential.cert({
+          projectId: process.env.FIREBASE_PROJECT_ID,
+          clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+          privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n')
+        })
+      });
+    }
+
+    const db = admin.firestore();
     const collection = db.collection('coins');
 
     // Hole nur Top 20 Coins von CoinGecko für schnellen Test
@@ -54,30 +62,24 @@ async function testCryptoUpdate() {
           '1y': coin.price_change_percentage_1y_in_currency || 0
         };
 
-        // Aktualisiere oder erstelle Coin-Daten in der Datenbank (ohne Charts für schnellen Test)
-        await collection.updateOne(
-          { id: coin.id },
-          {
-            $set: {
-              id: coin.id,
-              name: coin.name,
-              symbol: coin.symbol,
-              current_price: coin.current_price,
-              price_changes,
-              image: coin.image,
-              market_cap_rank: coin.market_cap_rank,
-              prices: {
-                '24h': [],
-                '7d': [],
-                '30d': [],
-                '1y': []
-              },
-              last_updated: new Date(),
-              updatedAt: new Date()
-            }
+        // Aktualisiere oder erstelle Coin-Daten in Firestore (ohne Charts für schnellen Test)
+        await collection.doc(coin.id).set({
+          id: coin.id,
+          name: coin.name,
+          symbol: coin.symbol,
+          current_price: coin.current_price,
+          price_changes,
+          image: coin.image,
+          market_cap_rank: coin.market_cap_rank,
+          prices: {
+            '24h': [],
+            '7d': [],
+            '30d': [],
+            '1y': []
           },
-          { upsert: true }
-        );
+          last_updated: new Date(),
+          updatedAt: new Date()
+        }, { merge: true });
 
         console.log(`${coin.name} erfolgreich aktualisiert!`);
       } catch (error) {
@@ -98,8 +100,6 @@ async function testCryptoUpdate() {
   } catch (error) {
     console.error('Fehler bei Test-Aktualisierung:', error);
     throw error;
-  } finally {
-    await client.close();
   }
 }
 
