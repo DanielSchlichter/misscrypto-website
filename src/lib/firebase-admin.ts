@@ -11,8 +11,6 @@ export async function getFirebaseAdmin() {
     // Prüfe ob Firebase Admin bereits initialisiert wurde
     if (admin.apps.length === 0) {
       console.log('🔍 Prüfe Firebase Credentials...');
-      console.log('FIREBASE_PRIVATE_KEY vorhanden:', !!process.env.FIREBASE_PRIVATE_KEY);
-      console.log('FIREBASE_CLIENT_EMAIL vorhanden:', !!process.env.FIREBASE_CLIENT_EMAIL);
       
       if (process.env.FIREBASE_PRIVATE_KEY && process.env.FIREBASE_CLIENT_EMAIL) {
         console.log('🔑 Initialisiere Firebase Admin (Global)...');
@@ -28,7 +26,6 @@ export async function getFirebaseAdmin() {
             auth_uri: "https://accounts.google.com/o/oauth2/auth",
             token_uri: "https://oauth2.googleapis.com/token",
             auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
-            client_x509_cert_url: `https://www.googleapis.com/robot/v1/metadata/x509/${process.env.FIREBASE_CLIENT_EMAIL}`,
             universe_domain: "googleapis.com"
           };
 
@@ -44,9 +41,7 @@ export async function getFirebaseAdmin() {
           throw new Error(`Firebase Admin Initialisierung fehlgeschlagen: ${error}`);
         }
       } else {
-        console.error('❌ Firebase Credentials fehlen:');
-        console.error('- FIREBASE_PRIVATE_KEY:', !!process.env.FIREBASE_PRIVATE_KEY);
-        console.error('- FIREBASE_CLIENT_EMAIL:', !!process.env.FIREBASE_CLIENT_EMAIL);
+        console.error('❌ Firebase Credentials fehlen');
         throw new Error('Firebase Credentials nicht gefunden. Bitte FIREBASE_PRIVATE_KEY und FIREBASE_CLIENT_EMAIL in Netlify Environment Variables hinzufügen.');
       }
     }
