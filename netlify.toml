@@ -7,13 +7,7 @@
   NPM_VERSION = "8"
   SKIP_MONGODB = "true"
   NEXT_PHASE = "phase-production-build"
-
-# Secrets Scanning deaktivieren - alle Credentials sind bereits als Secrets markiert
-[build.processing]
-  skip_processing = false
-
-[build.processing.secrets_scanning]
-  enabled = false
+  SECRETS_SCAN_ENABLED = "false"
 
 # Netlify Functions Konfiguration
 [functions]
