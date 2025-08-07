@@ -1,17 +1,9 @@
-import NextAuth from 'next-auth'
+import NextAuth, { AuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '@/lib/firebase'
 
-// Einfache, sichere Konfiguration ohne Firebase-Abhängigkeiten
-const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET || 'misscrypto-secret-key-2024'
-const NEXTAUTH_URL = process.env.NEXTAUTH_URL || 'https://misscrypto.de'
-
-console.log('🔧 NextAuth Config:', { 
-  url: NEXTAUTH_URL, 
-  hasSecret: !!NEXTAUTH_SECRET,
-  nodeEnv: process.env.NODE_ENV 
-});
-
-const authOptions = {
+export const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -21,31 +13,50 @@ const authOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          console.log('❌ Keine Credentials bereitgestellt')
           return null
         }
 
         try {
-          console.log('🔐 Login-Versuch für:', credentials.email)
+          console.log('🔐 Firebase Login-Versuch:', credentials.email)
           
-          // Einfache Admin-Authentifizierung
-          const adminEmail = process.env.ADMIN_EMAIL || 'admin@misscrypto.de'
-          const adminPassword = process.env.ADMIN_PASSWORD || 'admin123'
+          // Verwende Firebase Authentication
+          const userCredential = await signInWithEmailAndPassword(
+            auth, 
+            credentials.email, 
+            credentials.password
+          )
           
-          if (credentials.email === adminEmail && credentials.password === adminPassword) {
-            console.log('✅ Admin Login erfolgreich!')
-            return {
-              id: 'admin-user',
-              email: adminEmail,
-              name: 'Admin',
-              role: 'admin'
+          const user = userCredential.user
+          
+          console.log('✅ Firebase Login erfolgreich!', user.uid)
+          
+          return {
+            id: user.uid,
+            email: user.email || '',
+            name: user.displayName || 'Admin',
+            role: 'admin' // Alle angemeldeten User sind Admins für jetzt
+          }
+        } catch (error: any) {
+          console.log('❌ Firebase Login-Fehler:', error.message)
+          
+          // Fallback für Entwicklung - erstelle Admin User wenn er nicht existiert
+          if (error.code === 'auth/user-not-found' && process.env.NODE_ENV === 'development') {
+            console.log('🔧 Entwicklung: Verwende lokale Admin-Credentials')
+            
+            const adminEmail = process.env.ADMIN_EMAIL || 'admin@misscrypto.de'
+            const adminPassword = process.env.ADMIN_PASSWORD || 'admin123'
+            
+            if (credentials.email === adminEmail && credentials.password === adminPassword) {
+              console.log('✅ Entwicklung Login erfolgreich!')
+              return {
+                id: 'dev-admin',
+                email: adminEmail,
+                name: 'Dev Admin',
+                role: 'admin'
+              }
             }
           }
           
-          console.log('❌ Ungültige Credentials')
-          return null
-        } catch (error: any) {
-          console.error('❌ Login-Fehler:', error.message)
           return null
         }
       }
@@ -53,6 +64,7 @@ const authOptions = {
   ],
   pages: {
     signIn: '/admin/login',
+    error: '/admin/login', // Redirect to login page on error
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -70,11 +82,11 @@ const authOptions = {
     }
   },
   session: {
-    strategy: 'jwt',
+    strategy: 'jwt' as const,
     maxAge: 24 * 60 * 60, // 24 Stunden
   },
-  secret: NEXTAUTH_SECRET,
-  debug: true // Aktiviere Debug für bessere Fehlererkennung
+  secret: process.env.NEXTAUTH_SECRET || 'your-fallback-secret-key-for-development',
+  debug: process.env.NODE_ENV === 'development', // Debug-Mode für Development
 }
 
 const handler = NextAuth(authOptions)
