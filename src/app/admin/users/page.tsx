@@ -549,15 +549,7 @@ export default function AdminUsersPage() {
                   }}>
                     E-Mail
                   </th>
-                  <th style={{
-                    padding: '1rem',
-                    textAlign: 'left',
-                    color: '#f8dfa5',
-                    fontWeight: '600',
-                    fontSize: '0.875rem'
-                  }}>
-                    Name
-                  </th>
+
                   <th style={{
                     padding: '1rem',
                     textAlign: 'left',
@@ -594,15 +586,7 @@ export default function AdminUsersPage() {
                   }}>
                     Abteilung
                   </th>
-                  <th style={{
-                    padding: '1rem',
-                    textAlign: 'center',
-                    color: '#f8dfa5',
-                    fontWeight: '600',
-                    fontSize: '0.875rem'
-                  }}>
-                    Logins
-                  </th>
+
                   <th style={{
                     padding: '1rem',
                     textAlign: 'center',
@@ -645,12 +629,7 @@ export default function AdminUsersPage() {
                           </span>
                         )}
                       </td>
-                      <td style={{
-                        padding: '1rem',
-                        color: '#d1d5db'
-                      }}>
-                        {user.displayName || '-'}
-                      </td>
+
                       <td style={{
                         padding: '1rem'
                       }}>
@@ -705,22 +684,7 @@ export default function AdminUsersPage() {
                       }}>
                         {user.profile?.department || 'Administration'}
                       </td>
-                      <td style={{
-                        padding: '1rem',
-                        textAlign: 'center',
-                        color: '#d1d5db',
-                        fontSize: '0.875rem'
-                      }}>
-                        <span style={{
-                          padding: '0.25rem 0.5rem',
-                          background: 'rgba(248, 223, 165, 0.1)',
-                          borderRadius: '12px',
-                          fontSize: '0.75rem',
-                          color: '#f8dfa5'
-                        }}>
-                          {user.totalLogins || 0}
-                        </span>
-                      </td>
+
                       <td style={{
                         padding: '1rem',
                         textAlign: 'center'
