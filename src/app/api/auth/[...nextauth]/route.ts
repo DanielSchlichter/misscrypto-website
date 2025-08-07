@@ -3,6 +3,14 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '@/lib/firebase'
 
+// Stelle sicher, dass NEXTAUTH_URL und NEXTAUTH_SECRET gesetzt sind
+const NEXTAUTH_URL = process.env.NEXTAUTH_URL || process.env.VERCEL_URL || 'https://misscrypto.de'
+const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET || 'fallback-secret-misscrypto-2024'
+
+if (!process.env.NEXTAUTH_SECRET) {
+  console.warn('⚠️ NEXTAUTH_SECRET nicht gesetzt, verwende Fallback');
+}
+
 export const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
@@ -45,21 +53,19 @@ export const authOptions: AuthOptions = {
         } catch (error: any) {
           console.log('❌ Firebase Login-Fehler:', error.message)
           
-          // Fallback für Entwicklung - erstelle Admin User wenn er nicht existiert
-          if (error.code === 'auth/user-not-found' && process.env.NODE_ENV === 'development') {
-            console.log('🔧 Entwicklung: Verwende lokale Admin-Credentials')
-            
-            const adminEmail = process.env.ADMIN_EMAIL || 'admin@misscrypto.de'
-            const adminPassword = process.env.ADMIN_PASSWORD || 'admin123'
-            
-            if (credentials.email === adminEmail && credentials.password === adminPassword) {
-              console.log('✅ Entwicklung Login erfolgreich!')
-              return {
-                id: 'dev-admin',
-                email: adminEmail,
-                name: 'Dev Admin',
-                role: 'admin'
-              }
+          // Fallback Admin Login für Produktion und Entwicklung
+          console.log('🔧 Verwende lokale Admin-Credentials als Fallback')
+          
+          const adminEmail = process.env.ADMIN_EMAIL || 'admin@misscrypto.de'
+          const adminPassword = process.env.ADMIN_PASSWORD || 'admin123'
+          
+          if (credentials.email === adminEmail && credentials.password === adminPassword) {
+            console.log('✅ Fallback Login erfolgreich!')
+            return {
+              id: 'fallback-admin',
+              email: adminEmail,
+              name: 'Admin',
+              role: 'admin'
             }
           }
           
@@ -90,16 +96,10 @@ export const authOptions: AuthOptions = {
     strategy: 'jwt' as const,
     maxAge: 24 * 60 * 60, // 24 Stunden
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: NEXTAUTH_SECRET,
   debug: process.env.NODE_ENV === 'development', // Debug-Mode für Development
 }
 
 const handler = NextAuth(authOptions)
 
-export { handler as GET, handler as POST }
-
-// Fallback für fehlende Umgebungsvariablen
-if (!process.env.NEXTAUTH_SECRET) {
-  console.warn('⚠️ NEXTAUTH_SECRET ist nicht gesetzt! Verwende Fallback-Secret.');
-  process.env.NEXTAUTH_SECRET = 'fallback-secret-for-development-only';
-} 
+export { handler as GET, handler as POST } 
