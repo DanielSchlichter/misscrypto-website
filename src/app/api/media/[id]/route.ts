@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]/route';
+import { getFirebaseAdmin } from '../../../../lib/firebase-admin';
 
 export async function DELETE(
   request: NextRequest,
@@ -17,7 +18,8 @@ export async function DELETE(
       );
     }
 
-    const { id } = params;
+    // NextJS 14+ requires awaiting params
+    const { id } = await params;
 
     if (!id) {
       return NextResponse.json(
@@ -26,51 +28,13 @@ export async function DELETE(
       );
     }
 
-    // Dynamic Firebase Admin import
-    const admin = await import('firebase-admin');
-    
-    // Initialize Firebase Admin if not already initialized
-    if (!admin.apps.length) {
-      if (process.env.FIREBASE_PRIVATE_KEY && process.env.FIREBASE_CLIENT_EMAIL) {
-        console.log('🔑 Initialisiere Firebase Admin für Media Delete...');
-        
-        const serviceAccount = {
-          type: "service_account",
-          project_id: "misscrypto-bd419",
-          private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
-          private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-          client_email: process.env.FIREBASE_CLIENT_EMAIL,
-          client_id: process.env.FIREBASE_CLIENT_ID,
-          auth_uri: "https://accounts.google.com/o/oauth2/auth",
-          token_uri: "https://oauth2.googleapis.com/token",
-          auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
-          client_x509_cert_url: `https://www.googleapis.com/robot/v1/metadata/x509/${process.env.FIREBASE_CLIENT_EMAIL}`,
-          universe_domain: "googleapis.com"
-        };
+    console.log(`🗑️ Lösche Media-Datei: ${id}`);
 
-        admin.initializeApp({
-          credential: admin.credential.cert(serviceAccount as any),
-          projectId: 'misscrypto-bd419',
-          storageBucket: 'misscrypto-bd419.firebasestorage.app'
-        });
-        
-        console.log('✅ Firebase Admin für Media Delete erfolgreich initialisiert');
-      } else {
-        return NextResponse.json(
-          { 
-            success: false,
-            error: 'Firebase Credentials nicht gefunden',
-            details: 'FIREBASE_PRIVATE_KEY und FIREBASE_CLIENT_EMAIL sind erforderlich'
-          },
-          { status: 503 }
-        );
-      }
-    }
-
-    const bucket = admin.storage().bucket('misscrypto-bd419.firebasestorage.app');
-    const db = admin.firestore();
+    // Verwende zentralen Firebase Admin Service
+    const { db, bucket } = await getFirebaseAdmin();
 
     // Datei-Metadaten aus Firestore laden
+    console.log(`📄 Lade Metadaten für: ${id}`);
     const mediaDoc = await db.collection('media').doc(id).get();
     
     if (!mediaDoc.exists) {
@@ -81,20 +45,30 @@ export async function DELETE(
     }
 
     const mediaData = mediaDoc.data();
+    console.log(`📄 Metadaten geladen: ${mediaData?.name || 'Unbekannt'}`);
 
-    try {
-      // Datei aus Firebase Storage löschen
-      if (mediaData?.storagePath) {
-        const file = bucket.file(mediaData.storagePath);
-        await file.delete();
-      }
-    } catch (storageError) {
-      console.error('⚠️ Fehler beim Löschen aus Storage (Datei existiert möglicherweise nicht):', storageError);
-      // Wir setzen trotzdem fort, um die Metadaten zu löschen
+    // Parallele Löschung für bessere Performance
+    const deletePromises = [];
+
+    // 1. Datei aus Firebase Storage löschen (falls vorhanden)
+    if (mediaData?.storagePath) {
+      console.log(`🗂️ Lösche aus Storage: ${mediaData.storagePath}`);
+      deletePromises.push(
+        bucket.file(mediaData.storagePath).delete().catch((error) => {
+          console.warn('⚠️ Storage-Löschung fehlgeschlagen (Datei existiert möglicherweise nicht):', error);
+          // Fehler nicht weiterwerfen - Metadaten trotzdem löschen
+        })
+      );
     }
 
-    // Metadaten aus Firestore löschen
-    await db.collection('media').doc(id).delete();
+    // 2. Metadaten aus Firestore löschen
+    console.log(`🗃️ Lösche Metadaten: ${id}`);
+    deletePromises.push(db.collection('media').doc(id).delete());
+
+    // Warte auf alle Löschvorgänge
+    await Promise.all(deletePromises);
+
+    console.log(`✅ Media-Datei erfolgreich gelöscht: ${id}`);
 
     return NextResponse.json({
       success: true,
