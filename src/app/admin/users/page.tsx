@@ -51,6 +51,12 @@ export default function AdminUsersPage() {
   const [isCreating, setIsCreating] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
+  // Passwort-Änderung State
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [newPassword, setNewPassword] = useState('');
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+
   // Form state
   const [newUser, setNewUser] = useState({
     email: '',
@@ -156,6 +162,58 @@ export default function AdminUsersPage() {
     } finally {
       setIsCreating(false);
     }
+  };
+
+  const changePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!selectedUser || !newPassword) {
+      setMessage({ type: 'error', text: 'Passwort ist erforderlich' });
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      setMessage({ type: 'error', text: 'Das Passwort muss mindestens 6 Zeichen lang sein' });
+      return;
+    }
+
+    try {
+      setIsChangingPassword(true);
+      setMessage(null);
+
+      const response = await fetch('/api/users-v2', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          uid: selectedUser.uid,
+          newPassword: newPassword
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setMessage({ type: 'success', text: `Passwort für ${selectedUser.email} erfolgreich geändert!` });
+        setNewPassword('');
+        setSelectedUser(null);
+        setShowPasswordModal(false);
+      } else {
+        setMessage({ type: 'error', text: data.error || 'Fehler beim Ändern des Passworts' });
+      }
+    } catch (error: any) {
+      console.error('Fehler beim Ändern des Passworts:', error);
+      setMessage({ type: 'error', text: 'Fehler beim Ändern des Passworts' });
+    } finally {
+      setIsChangingPassword(false);
+    }
+  };
+
+  const openPasswordModal = (user: User) => {
+    setSelectedUser(user);
+    setNewPassword('');
+    setShowPasswordModal(true);
   };
 
   const deleteUser = async (uid: string, email: string) => {
@@ -667,11 +725,16 @@ export default function AdminUsersPage() {
                         padding: '1rem',
                         textAlign: 'center'
                       }}>
-                        {!isCurrentUser && (
+                        <div style={{
+                          display: 'flex',
+                          gap: '0.5rem',
+                          justifyContent: 'center',
+                          flexWrap: 'wrap'
+                        }}>
                           <button
-                            onClick={() => deleteUser(user.uid, user.email)}
+                            onClick={() => openPasswordModal(user)}
                             style={{
-                              background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+                              background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
                               color: '#ffffff',
                               border: 'none',
                               borderRadius: '8px',
@@ -688,9 +751,33 @@ export default function AdminUsersPage() {
                               e.currentTarget.style.transform = 'scale(1)';
                             }}
                           >
-                            🗑️ Löschen
+                            🔐 Passwort
                           </button>
-                        )}
+                          {!isCurrentUser && (
+                            <button
+                              onClick={() => deleteUser(user.uid, user.email)}
+                              style={{
+                                background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+                                color: '#ffffff',
+                                border: 'none',
+                                borderRadius: '8px',
+                                padding: '0.5rem 1rem',
+                                fontSize: '0.875rem',
+                                cursor: 'pointer',
+                                fontFamily: 'Raleway, sans-serif',
+                                transition: 'all 0.2s ease'
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.transform = 'scale(1.05)';
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.transform = 'scale(1)';
+                              }}
+                            >
+                              🗑️ Löschen
+                            </button>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   );
@@ -700,6 +787,127 @@ export default function AdminUsersPage() {
           )}
         </div>
       </div>
+
+      {/* Password Change Modal */}
+      {showPasswordModal && selectedUser && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0, 0, 0, 0.8)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000,
+          padding: '1rem'
+        }}>
+          <div style={{
+            background: 'rgba(255, 255, 255, 0.05)',
+            backdropFilter: 'blur(20px)',
+            border: '1px solid rgba(248, 223, 165, 0.3)',
+            borderRadius: '20px',
+            padding: '2rem',
+            maxWidth: '500px',
+            width: '100%'
+          }}>
+            <h3 style={{
+              fontSize: '1.5rem',
+              fontWeight: '600',
+              marginBottom: '1rem',
+              color: '#f8dfa5'
+            }}>
+              🔐 Passwort ändern
+            </h3>
+            
+            <p style={{
+              color: '#d1d5db',
+              marginBottom: '1.5rem'
+            }}>
+              Neues Passwort für <strong>{selectedUser.email}</strong> setzen:
+            </p>
+            
+            <form onSubmit={changePassword}>
+              <div style={{ marginBottom: '1.5rem' }}>
+                <label style={{
+                  display: 'block',
+                  marginBottom: '0.5rem',
+                  color: '#d1d5db',
+                  fontSize: '0.875rem'
+                }}>
+                  Neues Passwort *
+                </label>
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  placeholder="Mindestens 6 Zeichen"
+                  required
+                  minLength={6}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem',
+                    borderRadius: '8px',
+                    border: '1px solid rgba(248, 223, 165, 0.3)',
+                    background: 'rgba(0, 0, 0, 0.5)',
+                    color: '#ffffff',
+                    fontSize: '1rem',
+                    fontFamily: 'Raleway, sans-serif'
+                  }}
+                />
+              </div>
+              
+              <div style={{
+                display: 'flex',
+                gap: '1rem',
+                justifyContent: 'flex-end'
+              }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowPasswordModal(false);
+                    setSelectedUser(null);
+                    setNewPassword('');
+                  }}
+                  style={{
+                    background: 'rgba(107, 114, 128, 0.3)',
+                    color: '#d1d5db',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '0.75rem 1.5rem',
+                    fontSize: '1rem',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    fontFamily: 'Raleway, sans-serif'
+                  }}
+                >
+                  Abbrechen
+                </button>
+                <button
+                  type="submit"
+                  disabled={isChangingPassword}
+                  style={{
+                    background: isChangingPassword 
+                      ? 'rgba(34, 197, 94, 0.3)' 
+                      : 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
+                    color: isChangingPassword ? '#666' : '#ffffff',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '0.75rem 1.5rem',
+                    fontSize: '1rem',
+                    fontWeight: '600',
+                    cursor: isChangingPassword ? 'not-allowed' : 'pointer',
+                    fontFamily: 'Raleway, sans-serif'
+                  }}
+                >
+                  {isChangingPassword ? '🔄 Ändere...' : '✅ Passwort ändern'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 } 

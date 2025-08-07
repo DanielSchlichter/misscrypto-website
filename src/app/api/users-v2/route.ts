@@ -3,8 +3,6 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/route';
 import { getFirebaseAdmin } from '../../../lib/firebase-admin';
 
-
-
 // GET - Alle Admin-Benutzer auflisten (optimiert)
 export async function GET() {
   try {
@@ -115,6 +113,71 @@ export async function POST(request: Request) {
       errorMessage = 'Ein Benutzer mit dieser E-Mail-Adresse existiert bereits';
     } else if (error.code === 'auth/invalid-email') {
       errorMessage = 'Ungültige E-Mail-Adresse';
+    } else if (error.code === 'auth/weak-password') {
+      errorMessage = 'Das Passwort ist zu schwach (mindestens 6 Zeichen)';
+    }
+
+    return NextResponse.json(
+      { 
+        error: errorMessage,
+        details: error.message || String(error)
+      },
+      { status: 500 }
+    );
+  }
+}
+
+// PATCH - Passwort eines Benutzers ändern
+export async function PATCH(request: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+    
+    if (!session?.user || (session.user as any).role !== 'admin') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const { uid, newPassword } = body;
+
+    if (!uid || !newPassword) {
+      return NextResponse.json(
+        { error: 'Benutzer-ID und neues Passwort sind erforderlich' },
+        { status: 400 }
+      );
+    }
+
+    if (newPassword.length < 6) {
+      return NextResponse.json(
+        { error: 'Das Passwort muss mindestens 6 Zeichen lang sein' },
+        { status: 400 }
+      );
+    }
+
+    const { auth } = await getFirebaseAdmin();
+
+    // Lade Benutzer-Informationen
+    const userToUpdate = await auth.getUser(uid);
+    
+    console.log(`🔐 Ändere Passwort für Benutzer: ${userToUpdate.email}`);
+
+    // Ändere das Passwort
+    await auth.updateUser(uid, {
+      password: newPassword
+    });
+
+    console.log(`✅ Passwort erfolgreich geändert für: ${userToUpdate.email}`);
+
+    return NextResponse.json({
+      success: true,
+      message: 'Passwort erfolgreich geändert'
+    });
+
+  } catch (error: any) {
+    console.error('❌ Fehler beim Ändern des Passworts:', error);
+    
+    let errorMessage = 'Fehler beim Ändern des Passworts';
+    if (error.code === 'auth/user-not-found') {
+      errorMessage = 'Benutzer nicht gefunden';
     } else if (error.code === 'auth/weak-password') {
       errorMessage = 'Das Passwort ist zu schwach (mindestens 6 Zeichen)';
     }
