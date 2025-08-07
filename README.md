@@ -144,12 +144,16 @@ npx vercel
 
 ### Environment Variables
 ```env
-# MongoDB (optional - fallback data provided)
-MONGODB_URI=mongodb+srv://...
+# Firebase (bereits in der App konfiguriert)
+# Keine zusätzlichen Environment Variables nötig
 
-# Next.js
+# Next.js Auth
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=your-secret-key
+
+# Optional für Entwicklung
+ADMIN_EMAIL=admin@misscrypto.de
+ADMIN_PASSWORD=admin123
 ```
 
 ### Build Settings

@@ -1,4 +1,5 @@
-const { MongoClient } = require('mongodb');
+const { initializeApp } = require('firebase/app');
+const { getFirestore, collection, getDocs, deleteDoc, addDoc, Timestamp } = require('firebase/firestore');
 
 // Stablecoins die wir ausschließen wollen
 const stablecoins = ['tether', 'usd-coin', 'binance-usd', 'dai', 'frax', 'trueusd', 'paxos-standard', 'gemini-dollar'];
@@ -62,15 +63,25 @@ async function processChartData(prices, maxPoints) {
   return prices.map(price => price[1]);
 }
 
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyA6NrfUZcQ7V2tFHq0BVfVBaBRTNT7Pw68",
+  authDomain: "misscrypto-bd419.firebaseapp.com",
+  projectId: "misscrypto-bd419",
+  storageBucket: "misscrypto-bd419.firebasestorage.app",
+  messagingSenderId: "316985351888",
+  appId: "1:316985351888:web:83ac3a6e4bb4743311c8d5",
+  measurementId: "G-DTS6G8HDTE"
+};
+
 async function updateCryptoData() {
-  const client = new MongoClient(process.env.MONGODB_URI);
-  
   try {
     console.log('Starte tägliche Aktualisierung der Krypto-Daten...');
 
-    await client.connect();
-    const db = client.db('misscrypto');
-    const collection = db.collection('coins');
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const coinsCollection = collection(db, 'coins');
 
     // Hole Top 50 Coins von CoinGecko mit Retry
     const marketData = await fetchWithRetry(
@@ -130,11 +141,8 @@ async function updateCryptoData() {
           '1y': coin.price_change_percentage_1y_in_currency || 0
         };
 
-        // Aktualisiere oder erstelle Coin-Daten in der Datenbank
-        await collection.updateOne(
-          { id: coin.id },
-          {
-            $set: {
+        // Speichere Coin-Daten in Firestore
+        await addDoc(coinsCollection, {
               id: coin.id,
               name: coin.name,
               symbol: coin.symbol,
@@ -143,12 +151,9 @@ async function updateCryptoData() {
               image: coin.image,
               market_cap_rank: coin.market_cap_rank,
               prices,
-              last_updated: new Date(),
-              updatedAt: new Date()
-            }
-          },
-          { upsert: true }
-        );
+          last_updated: Timestamp.now(),
+          updatedAt: Timestamp.now()
+        });
 
         console.log(`  ${coin.name} erfolgreich aktualisiert!`);
       } catch (error) {
@@ -165,8 +170,6 @@ async function updateCryptoData() {
   } catch (error) {
     console.error('Fehler bei täglicher Aktualisierung:', error);
     throw error;
-  } finally {
-    await client.close();
   }
 }
 

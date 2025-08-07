@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import CryptoPurchaseCalculator from '../components/CryptoPurchaseCalculator';
+import { useAnalytics } from '../../hooks/useAnalytics';
 
 interface Exchange {
   id: string;
@@ -79,6 +80,7 @@ const CryptoKaufenPage = () => {
   const [activeSection, setActiveSection] = useState<string>('bitpanda-broker');
   const [isInvestTab, setIsInvestTab] = useState<boolean>(false);
   const [screenWidth, setScreenWidth] = useState(0);
+  const { trackExchangeClick } = useAnalytics();
 
   // Responsive breakpoints
   useEffect(() => {
@@ -737,6 +739,7 @@ const CryptoKaufenPage = () => {
                       href={exchange.url}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={() => trackExchangeClick(exchange.name)}
                       style={{
                         display: 'block', 
                         textAlign: 'center', 
@@ -979,6 +982,7 @@ const CryptoKaufenPage = () => {
                 href="https://bitvavo.com/de/affiliate/misscrypto?a=05D0249945_misscryptoweb"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackExchangeClick('Bitvavo')}
                 className="mc-btn-primary"
                 style={{
                   padding: '0.75rem 2rem', 

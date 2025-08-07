@@ -1,4 +1,5 @@
-const { MongoClient } = require('mongodb');
+const { initializeApp } = require('firebase/app');
+const { getFirestore, collection, getDocs, deleteDoc, addDoc, Timestamp } = require('firebase/firestore');
 
 // Importiere die gleiche Logik wie die Scheduled Function
 const stablecoins = ['tether', 'usd-coin', 'binance-usd', 'dai', 'frax', 'trueusd', 'paxos-standard', 'gemini-dollar'];
@@ -34,15 +35,26 @@ async function fetchWithRetry(url, retries = 3, delayMs = 20000) {
   }
 }
 
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyA6NrfUZcQ7V2tFHq0BVfVBaBRTNT7Pw68",
+  authDomain: "misscrypto-bd419.firebaseapp.com",
+  projectId: "misscrypto-bd419",
+  storageBucket: "misscrypto-bd419.firebasestorage.app",
+  messagingSenderId: "316985351888",
+  appId: "1:316985351888:web:83ac3a6e4bb4743311c8d5",
+  measurementId: "G-DTS6G8HDTE"
+};
+
 async function updateCryptoData() {
-  const client = new MongoClient(process.env.MONGODB_URI);
   
   try {
     console.log('Starte manuelle Aktualisierung der Krypto-Daten...');
 
-    await client.connect();
-    const db = client.db('misscrypto');
-    const collection = db.collection('coins');
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+      const coinsCollection = collection(db, 'coins');
 
     // Hole Top 50 Coins von CoinGecko
     const marketData = await fetchWithRetry(

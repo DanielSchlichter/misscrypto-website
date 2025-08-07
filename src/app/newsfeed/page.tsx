@@ -4,8 +4,25 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import NewsletterForm from '../components/NewsletterForm';
 
+interface NewsfeedPost {
+  id: string;
+  title: string;
+  content: string;
+  excerpt: string;
+  category: string;
+  status: string;
+  slug: string;
+  metaTitle: string;
+  metaDescription: string;
+  createdAt: string;
+  publishedAt: string;
+  views: number;
+}
+
 export default function NewsfeedPage() {
   const [screenWidth, setScreenWidth] = useState(0);
+  const [posts, setPosts] = useState<NewsfeedPost[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const handleResize = () => {
@@ -16,6 +33,85 @@ export default function NewsfeedPage() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // Fetch published posts
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch('/api/newsfeed-v2');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success) {
+            // Only show published posts
+            const publishedPosts = data.posts.filter((post: NewsfeedPost) => post.status === 'published');
+            setPosts(publishedPosts);
+          }
+        }
+      } catch (error) {
+        console.error('Fehler beim Laden der Posts:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('de-DE', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  // Function to extract clean text from HTML content for preview
+  const getCleanPreviewText = (htmlContent: string, maxLength: number = 200): string => {
+    if (!htmlContent) return '';
+    
+    // Create a temporary DOM element to parse HTML
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = htmlContent;
+    
+    // Remove all module elements (they contain structured content, not prose)
+    const modules = tempDiv.querySelectorAll('.editable-module, .mc-content-section, .mc-highlight, .mc-statistics, .mc-security, .mc-image');
+    modules.forEach(module => module.remove());
+    
+    // Remove all headings as they shouldn't be in the preview
+    const headings = tempDiv.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    headings.forEach(heading => heading.remove());
+    
+    // Get only text content from paragraphs
+    const paragraphs = tempDiv.querySelectorAll('p');
+    let textContent = '';
+    
+    paragraphs.forEach(p => {
+      const pText = p.textContent?.trim();
+      if (pText && pText.length > 0) {
+        textContent += pText + ' ';
+      }
+    });
+    
+    // If no paragraph text found, get general text content but clean it
+    if (!textContent.trim()) {
+      textContent = tempDiv.textContent || '';
+    }
+    
+    // Clean up the text
+    textContent = textContent
+      .replace(/\s+/g, ' ') // Replace multiple spaces with single space
+      .replace(/\n+/g, ' ') // Replace newlines with space
+      .trim();
+    
+    // Truncate to max length
+    if (textContent.length > maxLength) {
+      textContent = textContent.substring(0, maxLength).trim() + '...';
+    }
+    
+    return textContent || 'Keine Vorschau verfügbar.';
+  };
 
   const isMobile = screenWidth < 768;
   const isTablet = screenWidth >= 768 && screenWidth < 1024;
@@ -53,38 +149,38 @@ export default function NewsfeedPage() {
         }}>
           <div style={{
             fontSize: isMobile ? '3rem' : '4rem',
-            marginBottom: '2rem'
+            marginBottom: '1rem'
           }}>
             📰
           </div>
           
           <h1 style={{
-            fontSize: isMobile ? '3rem' : isTablet ? '4rem' : '5rem',
+            fontSize: isMobile ? '2.5rem' : '3.5rem',
             fontWeight: '700',
-            marginBottom: '2rem',
+            lineHeight: '1.2',
+            marginBottom: '1rem',
             background: 'linear-gradient(135deg, #f8dfa5 0%, #e4b15e 100%)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-            lineHeight: '1.1'
+            backgroundClip: 'text'
           }}>
             Newsfeed
           </h1>
           
           <p style={{
-            fontSize: isMobile ? '1.2rem' : isTablet ? '1.4rem' : '1.5rem',
-            lineHeight: '1.6',
+            fontSize: isMobile ? '1.125rem' : '1.25rem',
             color: '#d1d5db',
-            marginBottom: '3rem',
-            maxWidth: '800px',
-            margin: '0 auto 3rem'
+            lineHeight: '1.6',
+            maxWidth: '600px',
+            margin: '0 auto'
           }}>
-            Ich sammle hier die wichtigsten Krypto-Themen, ordne sie für dich ein – und halte dich auf dem Laufenden.
+            Aktuelle News, Analysen und Insights aus der Welt der Kryptowährungen. 
+            Verständlich erklärt für Einsteiger und Profis.
           </p>
         </div>
       </section>
 
-      {/* Coming Soon Section */}
+      {/* Articles Section */}
       <section style={{
         padding: isMobile ? '2rem 1rem' : isTablet ? '3rem 2rem' : '4rem 2rem',
         position: 'relative'
@@ -93,122 +189,182 @@ export default function NewsfeedPage() {
           maxWidth: '1200px',
           margin: '0 auto'
         }}>
-          {/* Main Coming Soon Card */}
+          {/* Section Header */}
           <div style={{
-            background: 'linear-gradient(135deg, rgba(248, 223, 165, 0.15), rgba(248, 223, 165, 0.08))',
-            backdropFilter: 'blur(15px)',
-            borderRadius: '2rem',
-            padding: isMobile ? '3rem 2rem' : isTablet ? '4rem 3rem' : '5rem 4rem',
-            border: '1px solid rgba(248, 223, 165, 0.3)',
-            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
-            marginBottom: '4rem',
             textAlign: 'center',
-            position: 'relative',
-            overflow: 'hidden'
+            marginBottom: isMobile ? '3rem' : '4rem'
           }}>
-            {/* Background Glow */}
-            <div style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: '400px',
-              height: '400px',
-              background: 'radial-gradient(circle, rgba(248, 223, 165, 0.1) 0%, transparent 70%)',
-              borderRadius: '50%',
-              pointerEvents: 'none'
-            }}></div>
-
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              minHeight: '40vh',
-              marginBottom: '3rem'
-            }}>
-              <span style={{ fontSize: '3rem', marginBottom: '1rem' }}>🚀</span>
             <h2 style={{
-                color: '#f8dfa5',
-                fontWeight: 700,
-                fontSize: isMobile ? '2.2rem' : isTablet ? '2.8rem' : '3.2rem',
-              marginBottom: '1.5rem',
-                textAlign: 'center',
-                letterSpacing: '0.01em',
+              fontSize: isMobile ? '2rem' : '2.5rem',
+              fontWeight: '700',
+              color: '#f8dfa5',
+              marginBottom: '1rem',
+              lineHeight: '1.2'
             }}>
-              Coming Soon
+              Aktuelle Artikel
             </h2>
             <p style={{
               color: '#d1d5db',
-                fontSize: isMobile ? '1.1rem' : isTablet ? '1.2rem' : '1.3rem',
-                textAlign: 'center',
-                maxWidth: '700px',
-                margin: '0 auto 2.5rem',
-                lineHeight: '1.6',
-              }}>
-                Bald findest du hier tagesaktuelle Krypto-News, Einschätzungen und Marktanalysen – verständlich erklärt, zuverlässig ausgewählt.
-              </p>
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: isMobile ? '1fr' : isTablet ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
-                gap: isMobile ? '1.5rem' : '2rem',
-                width: '100%',
-                maxWidth: '900px',
-              }}>
-                <div style={{
-                  background: 'rgba(30, 30, 30, 0.7)',
-                  borderRadius: '1.25rem',
-                  padding: isMobile ? '1.5rem' : '2rem',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  boxShadow: '0 2px 16px 0 rgba(0,0,0,0.10)',
-                }}>
-                  <span style={{ fontSize: '2.2rem', marginBottom: '1rem' }}>📰</span>
-                  <h3 style={{ color: '#f8dfa5', fontWeight: 600, fontSize: '1.3rem', marginBottom: '0.75rem', textAlign: 'center' }}>
-                    News & Berichte
-                  </h3>
-                  <p style={{ color: '#d1d5db', textAlign: 'center', fontSize: '1rem', lineHeight: '1.5' }}>
-                    Bleib auf dem Laufenden mit den wichtigsten Krypto-News – verständlich, aktuell und auf den Punkt gebracht.
-                  </p>
-                </div>
-                <div style={{
-                  background: 'rgba(30, 30, 30, 0.7)',
-                  borderRadius: '1.25rem',
-                  padding: isMobile ? '1.5rem' : '2rem',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  boxShadow: '0 2px 16px 0 rgba(0,0,0,0.10)',
-                }}>
-                  <span style={{ fontSize: '2.2rem', marginBottom: '1rem' }}>📊</span>
-                  <h3 style={{ color: '#f8dfa5', fontWeight: 600, fontSize: '1.3rem', marginBottom: '0.75rem', textAlign: 'center' }}>
-                    Krypto-Analysen
-                  </h3>
-                  <p style={{ color: '#d1d5db', textAlign: 'center', fontSize: '1rem', lineHeight: '1.5' }}>
-                    Fundierte Marktanalysen zu Bitcoin, Ethereum & Co. – mit Einblicken, die dir wirklich weiterhelfen.
-                  </p>
-                </div>
-                <div style={{
-                  background: 'rgba(30, 30, 30, 0.7)',
-                  borderRadius: '1.25rem',
-                  padding: isMobile ? '1.5rem' : '2rem',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  boxShadow: '0 2px 16px 0 rgba(0,0,0,0.10)',
-                }}>
-                  <span style={{ fontSize: '2.2rem', marginBottom: '1rem' }}>🎯</span>
-                  <h3 style={{ color: '#f8dfa5', fontWeight: 600, fontSize: '1.3rem', marginBottom: '0.75rem', textAlign: 'center' }}>
-                    Vergleiche & Einordnungen
-                  </h3>
-                  <p style={{ color: '#d1d5db', textAlign: 'center', fontSize: '1rem', lineHeight: '1.5' }}>
-                    Plattformen, Tools und Trends – geprüft, verglichen und verständlich erklärt.
-                  </p>
-                </div>
+              fontSize: isMobile ? '1.1rem' : '1.2rem',
+              maxWidth: '600px',
+              margin: '0 auto',
+              lineHeight: '1.6'
+            }}>
+              Die neuesten Krypto-News, Analysen und Einschätzungen – verständlich aufbereitet und auf den Punkt gebracht.
+            </p>
+          </div>
+
+          {/* Loading State */}
+          {isLoading && (
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              minHeight: '300px',
+              fontSize: '1.2rem',
+              color: '#d1d5db'
+            }}>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>⏳</div>
+                Artikel werden geladen...
               </div>
             </div>
-          </div>
+          )}
+
+          {/* No Articles */}
+          {!isLoading && posts.length === 0 && (
+            <div style={{
+              background: 'linear-gradient(135deg, rgba(248, 223, 165, 0.15), rgba(248, 223, 165, 0.08))',
+              backdropFilter: 'blur(15px)',
+              borderRadius: '2rem',
+              padding: isMobile ? '3rem 2rem' : '4rem 3rem',
+              border: '1px solid rgba(248, 223, 165, 0.3)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
+              textAlign: 'center'
+            }}>
+              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📝</div>
+              <h3 style={{
+                color: '#f8dfa5',
+                fontSize: isMobile ? '1.8rem' : '2.2rem',
+                fontWeight: '600',
+                marginBottom: '1rem'
+              }}>
+                Noch keine Artikel veröffentlicht
+              </h3>
+              <p style={{
+                color: '#d1d5db',
+                fontSize: '1.1rem',
+                lineHeight: '1.6',
+                maxWidth: '500px',
+                margin: '0 auto'
+              }}>
+                Die ersten Artikel sind in Arbeit. Trag dich in den Newsletter ein, um benachrichtigt zu werden, sobald neue Inhalte verfügbar sind.
+              </p>
+            </div>
+          )}
+
+          {/* Articles Grid */}
+          {!isLoading && posts.length > 0 && (
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: isMobile ? '1fr' : isTablet ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
+              gap: isMobile ? '2rem' : '2.5rem'
+            }}>
+              {posts.map((post) => (
+                <article key={post.id} style={{
+                  background: 'linear-gradient(135deg, rgba(248, 223, 165, 0.08), rgba(248, 223, 165, 0.04))',
+                  backdropFilter: 'blur(15px)',
+                  borderRadius: '1.5rem',
+                  padding: '2rem',
+                  border: '1px solid rgba(248, 223, 165, 0.2)',
+                  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
+                  transition: 'all 0.3s ease',
+                  cursor: 'pointer',
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-5px)';
+                  e.currentTarget.style.boxShadow = '0 8px 30px rgba(0, 0, 0, 0.4)';
+                  e.currentTarget.style.borderColor = 'rgba(248, 223, 165, 0.4)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.3)';
+                  e.currentTarget.style.borderColor = 'rgba(248, 223, 165, 0.2)';
+                }}
+                onClick={() => {
+                  window.location.href = `/newsfeed/${post.slug}`;
+                }}>
+                  {/* Category Badge */}
+                  <div style={{
+                    position: 'absolute',
+                    top: '1rem',
+                    right: '1rem',
+                    background: 'rgba(248, 223, 165, 0.2)',
+                    color: '#f8dfa5',
+                    padding: '0.5rem 1rem',
+                    borderRadius: '1rem',
+                    fontSize: '0.8rem',
+                    fontWeight: '600'
+                  }}>
+                    {post.category}
+                  </div>
+
+                  {/* Content */}
+                  <div style={{ marginTop: '1rem' }}>
+                    <h3 style={{
+                      color: '#f8dfa5',
+                      fontSize: isMobile ? '1.3rem' : '1.5rem',
+                      fontWeight: '600',
+                      marginBottom: '1rem',
+                      lineHeight: '1.3',
+                      paddingRight: '3rem' // Space for category badge
+                    }}>
+                      {post.title}
+                    </h3>
+                    
+                    <p style={{
+                      color: '#d1d5db',
+                      fontSize: '1rem',
+                      lineHeight: '1.6',
+                      marginBottom: '1.5rem',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 3,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden'
+                    }}>
+                      {getCleanPreviewText(post.content) || post.metaDescription || 'Keine Vorschau verfügbar.'}
+                    </p>
+
+                    {/* Meta Info */}
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      color: '#9ca3af',
+                      fontSize: '0.875rem'
+                    }}>
+                      <span>{formatDate(post.publishedAt)}</span>
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem'
+                      }}>
+                        <span>👁️ {post.views || 0}</span>
+                        <span style={{
+                          color: '#f8dfa5',
+                          fontWeight: '500'
+                        }}>
+                          Lesen →
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -246,11 +402,11 @@ export default function NewsfeedPage() {
             {/* Left Column - Text Content */}
             <div>
               <h2 style={{
-                fontSize: isMobile ? '2.5rem' : isTablet ? '3rem' : '3.5rem',
+                fontSize: isMobile ? '2rem' : '2.5rem',
                 fontWeight: '700',
                 color: '#fff',
                 marginBottom: '1.5rem',
-                lineHeight: '1.1',
+                lineHeight: '1.2',
                 textAlign: isMobile ? 'center' : 'left'
               }}>
                 Verpasse{' '}

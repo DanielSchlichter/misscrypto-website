@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
 import { Raleway } from 'next/font/google';
 import "./globals.css";
-import TransparentHeader from './components/TransparentHeader';
-import StickyHeader from './components/StickyHeader';
-import Footer from './components/Footer';
-import CookieBanner from '../components/CookieBanner';
-import CookieManager from '../components/CookieManager';
+import { Providers } from './providers';
+import LayoutWrapper from './components/LayoutWrapper';
 
 const raleway = Raleway({
   subsets: ['latin'],
@@ -28,14 +25,11 @@ export default function RootLayout({
   return (
     <html lang="de">
       <body className={`bg-black text-white antialiased ${raleway.variable}`}>
-        <TransparentHeader />
-        <StickyHeader />
-        <main className="min-h-screen">
-          {children}
-        </main>
-        <Footer />
-        <CookieBanner />
-        <CookieManager />
+        <Providers>
+          <LayoutWrapper>
+            {children}
+          </LayoutWrapper>
+        </Providers>
       </body>
     </html>
   );

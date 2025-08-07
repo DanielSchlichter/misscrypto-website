@@ -1,0 +1,17 @@
+rules_version = '2';
+
+// Firebase Storage Security Rules für MissCrypto Mediathek
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Media-Ordner: Temporär alle Operationen erlauben für Testing
+    match /media/{mediaId} {
+      // Temporär: Alle Operationen erlauben
+      allow read, write, delete: if true;
+    }
+    
+    // Alle anderen Dateien: Temporär alle Operationen erlauben für Testing
+    match /{allPaths=**} {
+      allow read, write, delete: if true;
+    }
+  }
+} 

@@ -1,0 +1,28 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Crypto Coins Collection - Öffentlich lesbar, authentifizierte User können schreiben
+    match /coins/{document} {
+      allow read: if true; // Jeder kann Coins lesen
+      allow write: if request.auth != null; // Alle authentifizierten User können schreiben
+    }
+    
+    // Analytics Collection - Nur authentifizierte User können lesen/schreiben
+    match /analytics/{document} {
+      allow read: if request.auth != null && request.auth.token.role == 'admin';
+      allow create: if true; // Jeder kann Analytics Events erstellen
+      allow update, delete: if request.auth != null && request.auth.token.role == 'admin';
+    }
+    
+    // Newsfeed Collection - Öffentlich lesbar, nur Admins können schreiben
+    match /newsfeed/{document} {
+      allow read: if true; // Jeder kann Newsfeed Posts lesen
+      allow write: if request.auth != null && request.auth.token.role == 'admin';
+    }
+    
+    // Alle anderen Collections - Nur für authentifizierte Admins
+    match /{document=**} {
+      allow read, write: if request.auth != null && request.auth.token.role == 'admin';
+    }
+  }
+} 

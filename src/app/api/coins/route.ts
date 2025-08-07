@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getCryptoCoins } from '@/lib/firestore';
+import { getCryptoCoins, saveCryptoCoins } from '@/lib/firestore';
 
 // Für statischen Export erforderlich
 export const dynamic = 'force-dynamic';
@@ -469,5 +469,46 @@ export async function GET() {
     );
     
     return NextResponse.json(sortedTestCoins);
+  }
+}
+
+// POST-Route für das Speichern von Krypto-Daten
+export async function POST(request: Request) {
+  try {
+    console.log('📥 POST /api/coins - Empfange Krypto-Daten zum Speichern...');
+    
+    const body = await request.json();
+    const { coins } = body;
+    
+    if (!Array.isArray(coins)) {
+      return NextResponse.json(
+        { error: 'Ungültige Daten: coins muss ein Array sein' },
+        { status: 400 }
+      );
+    }
+    
+    console.log(`💾 Speichere ${coins.length} Coins in Firestore...`);
+    
+    // Speichere die Coins in Firestore
+    await saveCryptoCoins(coins);
+    
+    console.log(`✅ ${coins.length} Coins erfolgreich in Firestore gespeichert!`);
+    
+    return NextResponse.json({
+      success: true,
+      message: `${coins.length} Krypto-Daten erfolgreich gespeichert`,
+      count: coins.length,
+      timestamp: new Date().toISOString()
+    });
+    
+  } catch (error: any) {
+    console.error('❌ Fehler beim Speichern der Krypto-Daten:', error);
+    return NextResponse.json(
+      { 
+        error: 'Fehler beim Speichern der Krypto-Daten',
+        details: error.message || String(error)
+      },
+      { status: 500 }
+    );
   }
 } 
