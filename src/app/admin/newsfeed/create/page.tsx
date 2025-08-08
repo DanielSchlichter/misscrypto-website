@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import RichTextEditor from '../../../components/RichTextEditor';
+import RichTextEditor from '../../../components/RichTextEditor/index';
 
 export default function CreateNewsfeedPost() {
   const router = useRouter();

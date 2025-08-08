@@ -55,8 +55,6 @@ export default function RichTextEditor({
     }
   }, [onChange, onMetaGenerated]);
 
-
-
   // Initialize component
   useEffect(() => {
     setMounted(true);
@@ -64,6 +62,15 @@ export default function RichTextEditor({
       setContent(value || '');
     }
   }, [value]);
+
+  // Explicitly sync editor DOM with value/content changes (important for edit mode)
+  useEffect(() => {
+    if (!editorRef.current) return;
+    const targetHtml = value ?? content ?? '';
+    if (editorRef.current.innerHTML !== targetHtml) {
+      editorRef.current.innerHTML = targetHtml;
+    }
+  }, [value, content]);
 
   // Handle clean content change
   useEffect(() => {
@@ -236,10 +243,6 @@ export default function RichTextEditor({
             }
           }}
         />
-
-
-
-
       </div>
 
       {/* Module Sidebar */}
