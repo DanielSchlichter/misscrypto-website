@@ -222,10 +222,12 @@ export default function RichTextEditor({
         {/* Editor */}
         <div
           ref={editorRef}
+          className="wysiwyg-editor"
           contentEditable={true}
           suppressContentEditableWarning={true}
           dangerouslySetInnerHTML={{ __html: content }}
           style={{
+            display: showHtmlView ? 'none' : 'block',
             minHeight: '350px',
             padding: '1.5rem',
             color: '#f8dfa5',
@@ -243,6 +245,33 @@ export default function RichTextEditor({
             }
           }}
         />
+
+        {/* HTML View */}
+        {showHtmlView && (
+          <textarea
+            className="html-editor"
+            value={content}
+            onChange={(e) => {
+              setContent(e.target.value);
+              onChange(e.target.value);
+            }}
+            placeholder="HTML-Code hier bearbeiten..."
+            spellCheck={false}
+            style={{
+              minHeight: '350px',
+              padding: '1.5rem',
+              color: '#f8dfa5',
+              fontSize: '1rem',
+              lineHeight: '1.6',
+              outline: 'none',
+              background: 'transparent',
+              border: 'none',
+              width: '100%',
+              resize: 'vertical',
+              fontFamily: 'monospace'
+            }}
+          />
+        )}
       </div>
 
       {/* Module Sidebar */}
