@@ -256,9 +256,12 @@ body {
   flex-shrink: 0 !important;
 }
 
-.wysiwyg-editor .numbered-heading h2 {
+.wysiwyg-editor .numbered-heading h2,
+.wysiwyg-editor .numbered-heading h3,
+.wysiwyg-editor .numbered-heading h4,
+.wysiwyg-editor .numbered-heading h5,
+.wysiwyg-editor .numbered-heading h6 {
   color: #ffffff !important;
-  font-size: 1.25rem !important;
   font-weight: 700 !important;
   margin: 0 !important;
   background: linear-gradient(135deg, #f8dfa5, #e4b15e) !important;
@@ -266,6 +269,13 @@ body {
   -webkit-text-fill-color: transparent !important;
   background-clip: text !important;
 }
+
+/* Editor heading sizes */
+.wysiwyg-editor .numbered-heading h2 { font-size: 1.25rem !important; }
+.wysiwyg-editor .numbered-heading h3 { font-size: 1.125rem !important; }
+.wysiwyg-editor .numbered-heading h4 { font-size: 1rem !important; }
+.wysiwyg-editor .numbered-heading h5 { font-size: 0.875rem !important; }
+.wysiwyg-editor .numbered-heading h6 { font-size: 0.75rem !important; }
 
 /* Highlight Box Styles */
 .wysiwyg-editor .highlight-box {
@@ -2030,9 +2040,12 @@ div[style*="overflowX: auto"]::-webkit-scrollbar {
 
 .blog-content-wrapper .numbered-heading h1,
 .blog-content-wrapper .numbered-heading h2,
+.blog-content-wrapper .numbered-heading h3,
+.blog-content-wrapper .numbered-heading h4,
+.blog-content-wrapper .numbered-heading h5,
+.blog-content-wrapper .numbered-heading h6,
 .blog-content-wrapper .numbered-heading .mc-heading {
   color: #ffffff;
-  font-size: 1.875rem;
   font-weight: 700;
   margin: 0;
   background: linear-gradient(135deg, #f8dfa5, #e4b15e);
@@ -2040,6 +2053,13 @@ div[style*="overflowX: auto"]::-webkit-scrollbar {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
+/* Heading sizes for numbered headings */
+.blog-content-wrapper .numbered-heading h2 { font-size: 1.875rem; }
+.blog-content-wrapper .numbered-heading h3 { font-size: 1.5rem; }
+.blog-content-wrapper .numbered-heading h4 { font-size: 1.25rem; }
+.blog-content-wrapper .numbered-heading h5 { font-size: 1.125rem; }
+.blog-content-wrapper .numbered-heading h6 { font-size: 1rem; }
 
 /* Highlight Box Styles für Published Content */
 .blog-content-wrapper .highlight-box {

@@ -28,10 +28,11 @@ export const getCleanContentForPublishing = (htmlContent: string): string => {
 export const generateCleanModuleHtml = (type: string, data: any): string => {
   switch (type) {
     case 'heading':
+      const htmlTag = data.htmlTag || 'h2';
       return `
 <section class="numbered-heading mc-content-section" itemScope itemType="https://schema.org/Article">
   <div class="heading-number mc-heading-number">${data.number}</div>
-  <h2 class="heading-title mc-heading-title" itemProp="headline">${data.title}</h2>
+  <${htmlTag} class="heading-title mc-heading-title" itemProp="headline">${data.title}</${htmlTag}>
 </section>`;
     case 'highlight':
       return `
@@ -88,11 +89,12 @@ export const generateModuleHtml = (type: string, data: any, editingModuleId?: st
   
   switch (type) {
     case 'heading':
+      const htmlTag = data.htmlTag || 'h2';
       return `
 <section class="numbered-heading editable-module mc-content-section" data-module-id="${moduleId}" data-module-type="${type}" itemScope itemType="https://schema.org/Article">
   <button type="button" class="delete-module-btn" aria-label="Überschrift löschen">×</button>
   <span class="heading-number" aria-hidden="true">${data.number}</span>
-  <h2 class="mc-heading" itemProp="headline">${data.title}</h2>
+  <${htmlTag} class="mc-heading" itemProp="headline">${data.title}</${htmlTag}>
 </section>`;
     case 'highlight':
       return `

@@ -28,8 +28,9 @@ export interface MediaFile {
 }
 
 export interface HeadingModuleData {
-  text: string;
-  level: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+  number: string;
+  title: string;
+  htmlTag: 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 }
 
 export interface HighlightModuleData {
