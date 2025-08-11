@@ -144,19 +144,7 @@ export default function AdminDashboard() {
     setUpdateMessage(null);
     
     try {
-      // Firebase Auth Login für Firestore Permissions
-      console.log('🔑 Authentifiziere mit Firebase Auth...');
-      const { signInWithEmailAndPassword } = await import('firebase/auth');
-      const { auth } = await import('@/lib/firebase');
-      
-      try {
-        await signInWithEmailAndPassword(auth, 'admin@misscrypto.de', 'admin123');
-        console.log('✅ Firebase Auth erfolgreich');
-      } catch (authError: any) {
-        console.log('⚠️ Firebase Auth fehlgeschlagen, versuche trotzdem...', authError.message);
-      }
-      
-      console.log('🚀 Starte direkte Krypto-Datenaktualisierung...');
+      console.log('🚀 Starte Krypto-Datenaktualisierung...');
       
       // 1. Lade Daten direkt von CoinGecko API
       console.log('📊 Lade Top 50 Coins von CoinGecko...');

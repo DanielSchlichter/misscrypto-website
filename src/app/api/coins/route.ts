@@ -1,4 +1,6 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../auth/[...nextauth]/route';
 import { getCryptoCoins, saveCryptoCoins } from '@/lib/firestore';
 
 // Für statischen Export erforderlich
@@ -473,9 +475,21 @@ export async function GET() {
 }
 
 // POST-Route für das Speichern von Krypto-Daten
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     console.log('📥 POST /api/coins - Empfange Krypto-Daten zum Speichern...');
+    
+    // Check authentication
+    const session = await getServerSession(authOptions);
+    console.log('🔐 Session check:', { 
+      hasSession: !!session, 
+      user: session?.user?.name,
+      role: (session?.user as any)?.role 
+    });
+    
+    if (!session?.user || (session.user as any).role !== 'admin') {
+      return NextResponse.json({ error: 'Unauthorized - Admin access required' }, { status: 401 });
+    }
     
     const body = await request.json();
     const { coins } = body;
