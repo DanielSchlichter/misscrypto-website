@@ -1,6 +1,6 @@
 export interface ModuleData {
   id: string;
-  type: 'heading' | 'highlight' | 'stats' | 'security' | 'image' | 'text';
+  type: 'heading' | 'highlight' | 'stats' | 'security' | 'image';
   data: any;
   htmlStart: number;
   htmlEnd: number;
@@ -13,9 +13,9 @@ export interface RichTextEditorProps {
   onCleanContentChange?: (cleanContent: string) => void;
 }
 
-export type ModuleType = 'heading' | 'highlight' | 'stats' | 'security' | 'image' | 'text';
+export type ModuleType = 'heading' | 'highlight' | 'stats' | 'security' | 'image';
 
-export type ViewType = 'modules' | 'heading' | 'highlight' | 'stats' | 'security' | 'image' | 'text';
+export type ViewType = 'modules' | 'heading' | 'highlight' | 'stats' | 'security' | 'image';
 
 export interface MediaFile {
   id: string;
@@ -60,12 +60,7 @@ export interface ImageModuleData {
   height: number;
 }
 
-export interface TextModuleData {
-  content: string;
-  fontSize?: 'small' | 'medium' | 'large';
-  alignment?: 'left' | 'center' | 'right' | 'justify';
-  color?: string;
-}
+
 
 export interface FloatingToolbarPosition {
   top: number;

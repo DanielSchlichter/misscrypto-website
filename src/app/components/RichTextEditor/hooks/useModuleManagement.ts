@@ -7,7 +7,8 @@ import { extractModuleData } from '../utils/contentUtils';
 export const useModuleManagement = (
   editorRef: React.RefObject<HTMLDivElement | null>,
   handleContentChange?: () => void,
-  heightInputRef?: React.RefObject<HTMLInputElement | null>
+  heightInputRef?: React.RefObject<HTMLInputElement | null>,
+  onOpenSidebar?: () => void
 ) => {
   const [modules, setModules] = useState<ModuleData[]>([]);
   const [currentView, setCurrentView] = useState<ViewType>('modules');
@@ -60,9 +61,14 @@ export const useModuleManagement = (
         if (moduleType === 'image' && heightInputRef?.current) {
           heightInputRef.current.value = (currentData.height || 300).toString();
         }
+        
+        // Open sidebar for module editing
+        if (onOpenSidebar) {
+          onOpenSidebar();
+        }
       }
     }
-  }, [editorRef, handleContentChange]);
+  }, [editorRef, handleContentChange, onOpenSidebar]);
 
   // Insert a new module
   const insertNewModule = useCallback((type?: ViewType, data?: any) => {

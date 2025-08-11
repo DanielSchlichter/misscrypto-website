@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useSession } from 'next-auth/react';
+import { safeFetch, globalErrorHandler } from '../../../lib/error-handler';
 
 interface MediaFile {
   id: string;
@@ -52,15 +53,7 @@ export default function MediaPage() {
       setIsLoading(true);
       console.log(`🚀 Lade Media-Dateien... (Versuch ${retryCount + 1})`);
       
-      // API-Call mit längerem Timeout für Media
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s Timeout für Media
-      
-      const response = await fetch('/api/media', {
-        signal: controller.signal
-      });
-      
-      clearTimeout(timeoutId);
+      const response = await safeFetch('/api/media', {}, 3);
       
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -73,22 +66,13 @@ export default function MediaPage() {
         setMediaFiles(data.files || []);
       } else {
         console.error('Fehler beim Laden der Medien:', data.error);
+        throw new Error(data.error || 'Unbekannter API-Fehler');
       }
     } catch (error: any) {
-      console.error('Fehler beim Laden der Medien:', error);
-      
-      if (error.name === 'AbortError' && retryCount < 2) {
-        console.log(`⏳ Media Retry ${retryCount + 1}/3 nach Timeout...`);
-        setTimeout(() => fetchMedia(retryCount + 1), 2000); // 2s warten vor Retry
-        return;
-      }
-      
-      // Fallback: Leere Liste setzen bei Fehlern
+      globalErrorHandler.handleError(error, 'MediaPage.fetchMedia');
       setMediaFiles([]);
     } finally {
-      if (retryCount === 0) {
-        setIsLoading(false);
-      }
+      setIsLoading(false);
     }
   };
 

@@ -75,8 +75,53 @@ export default function AdminUsersPage() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Benutzer laden
   useEffect(() => {
-    loadUsers();
+    let isMounted = true;
+    
+    const fetchUsers = async () => {
+      try {
+        setIsLoading(true);
+        console.log('🚀 Lade Benutzer... (Versuch 1)');
+        
+        const response = await fetch('/api/users-v2', {
+          headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache'
+          }
+        });
+        
+        if (!isMounted) return;
+        
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          console.log(`✅ ${data.users?.length || 0} Benutzer geladen`);
+          setUsers(data.users || []);
+        } else {
+          console.error('Fehler beim Laden der Benutzer:', data.error);
+        }
+      } catch (error: any) {
+        if (!isMounted) return;
+        
+        console.error('Fehler beim Laden der Benutzer:', error);
+        setUsers([]);
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchUsers();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const isMobile = screenWidth < 768;

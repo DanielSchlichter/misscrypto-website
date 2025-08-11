@@ -36,10 +36,6 @@ export default function RichTextEditor({
   // Refs
   const editorRef = useRef<HTMLDivElement>(null);
 
-  // Custom hooks
-  const moduleManagement = useModuleManagement(editorRef);
-  const mediaLibrary = useMediaLibrary();
-
   // Handle content changes
   const handleContentChange = useCallback(() => {
     if (editorRef.current) {
@@ -55,6 +51,15 @@ export default function RichTextEditor({
     }
   }, [onChange, onMetaGenerated]);
 
+  // Custom hooks
+  const moduleManagement = useModuleManagement(
+    editorRef, 
+    handleContentChange, 
+    undefined, // heightInputRef
+    () => setSidebarOpen(true) // onOpenSidebar callback
+  );
+  const mediaLibrary = useMediaLibrary();
+
   // Initialize component
   useEffect(() => {
     setMounted(true);
@@ -63,14 +68,14 @@ export default function RichTextEditor({
     }
   }, [value]);
 
-  // Explicitly sync editor DOM with value/content changes (important for edit mode)
+  // Sync editor DOM only when value prop changes (important for edit mode)
   useEffect(() => {
-    if (!editorRef.current) return;
-    const targetHtml = value ?? content ?? '';
-    if (editorRef.current.innerHTML !== targetHtml) {
+    if (!mounted || !editorRef.current) return;
+    const targetHtml = value || '';
+    if (value && editorRef.current.innerHTML !== targetHtml) {
       editorRef.current.innerHTML = targetHtml;
     }
-  }, [value, content]);
+  }, [mounted, value]);
 
   // Handle clean content change
   useEffect(() => {
@@ -86,14 +91,28 @@ export default function RichTextEditor({
 
     const editor = editorRef.current;
 
-    // Add module click listener
-    editor.addEventListener('click', moduleManagement.handleModuleClick);
+    // General click handler to open sidebar
+    const handleEditorClick = (event: MouseEvent) => {
+      // First, let module click handler run
+      moduleManagement.handleModuleClick(event);
+      
+      // If no module was clicked, open sidebar for general editing
+      const target = event.target as HTMLElement;
+      const moduleElement = target.closest('.editable-module');
+      
+      if (!moduleElement) {
+        setSidebarOpen(true);
+      }
+    };
+
+    // Add click listener
+    editor.addEventListener('click', handleEditorClick);
 
     // Add input listener for content changes
     editor.addEventListener('input', handleContentChange);
 
     return () => {
-      editor.removeEventListener('click', moduleManagement.handleModuleClick);
+      editor.removeEventListener('click', handleEditorClick);
       editor.removeEventListener('input', handleContentChange);
     };
   }, [mounted, moduleManagement.handleModuleClick, handleContentChange]);
@@ -171,7 +190,7 @@ export default function RichTextEditor({
             fontSize: '0.875rem',
             fontStyle: 'italic'
           }}>
-            📝 Nur Module können hinzugefügt werden
+            📝 Text bearbeiten oder Module hinzufügen
           </div>
           
           <div style={{ 
@@ -225,7 +244,6 @@ export default function RichTextEditor({
           className="wysiwyg-editor"
           contentEditable={true}
           suppressContentEditableWarning={true}
-          dangerouslySetInnerHTML={{ __html: content }}
           style={{
             display: showHtmlView ? 'none' : 'block',
             minHeight: '350px',
@@ -239,12 +257,11 @@ export default function RichTextEditor({
             maxHeight: '600px'
           }}
           onKeyDown={(e) => {
-            // Verhindere normale Texteingabe, aber erlaube Cursor-Bewegung
-            if (e.key.length === 1 || e.key === 'Enter' || e.key === 'Backspace' || e.key === 'Delete') {
-              e.preventDefault();
-            }
+            // Allow normal text input and editing
           }}
-        />
+        >
+          {/* Initial content placeholder - will be replaced by useEffect */}
+        </div>
 
         {/* HTML View */}
         {showHtmlView && (
@@ -284,7 +301,17 @@ export default function RichTextEditor({
           onModuleDataChange={moduleManagement.setModuleData}
           onStartEditing={moduleManagement.startEditing}
           onCancelEditing={moduleManagement.cancelEditing}
-          onSaveModule={moduleManagement.saveModule}
+          onSaveModule={() => {
+            moduleManagement.saveModule();
+            // Sicherstellen, dass der Inhalt nach dem Einfügen sofort synchronisiert wird
+            setTimeout(() => {
+              if (editorRef.current) {
+                const newContent = editorRef.current.innerHTML;
+                setContent(newContent);
+                onChange(newContent);
+              }
+            }, 50);
+          }}
           onClose={() => setSidebarOpen(false)}
           onOpenMediaModal={mediaLibrary.openMediaModal}
           onContentChange={handleContentChange}

@@ -4,7 +4,6 @@ import HighlightModule from './modules/HighlightModule';
 import StatsModule from './modules/StatsModule';
 import SecurityModule from './modules/SecurityModule';
 import ImageModule from './modules/ImageModule';
-import TextModule from './modules/TextModule';
 
 interface ModuleSidebarProps {
   currentView: ViewType;
@@ -104,16 +103,7 @@ export default function ModuleSidebar({
             stopDecrement={stopDecrement}
           />
         );
-      case 'text':
-        return (
-          <TextModule
-            data={moduleData}
-            onChange={onModuleDataChange}
-            editingModuleId={editingModuleId}
-            onSave={onSaveModule}
-            onCancel={onCancelEditing}
-          />
-        );
+
       default:
         return (
           <div style={{ padding: '1.5rem' }}>
@@ -317,43 +307,7 @@ export default function ModuleSidebar({
                 </div>
               </button>
 
-              <button
-                type="button"
-                onClick={() => onStartEditing('text')}
-                style={{
-                  width: '100%',
-                  padding: '1rem',
-                  background: 'rgba(248, 223, 165, 0.1)',
-                  border: '1px solid rgba(248, 223, 165, 0.3)',
-                  borderRadius: '8px',
-                  color: '#f8dfa5',
-                  cursor: 'pointer',
-                  fontSize: '1rem',
-                  textAlign: 'left',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.75rem',
-                  transition: 'all 0.2s ease'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(248, 223, 165, 0.15)';
-                  e.currentTarget.style.borderColor = 'rgba(248, 223, 165, 0.5)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(248, 223, 165, 0.1)';
-                  e.currentTarget.style.borderColor = 'rgba(248, 223, 165, 0.3)';
-                }}
-              >
-                <span style={{ fontSize: '1.5rem' }}>📝</span>
-                <div>
-                  <div style={{ fontWeight: '600', marginBottom: '0.25rem' }}>
-                    Text-Block
-                  </div>
-                  <div style={{ fontSize: '0.875rem', opacity: 0.7 }}>
-                    Einfache Textblöcke mit Formatierung
-                  </div>
-                </div>
-              </button>
+
             </div>
           </div>
         );
@@ -396,8 +350,7 @@ export default function ModuleSidebar({
            currentView === 'highlight' ? '💡 Highlight' :
            currentView === 'stats' ? '📊 Statistik' :
            currentView === 'security' ? '🔒 Sicherheit' :
-           currentView === 'image' ? '🖼️ Bild' :
-           currentView === 'text' ? '📝 Text' : 'Module'}
+           currentView === 'image' ? '🖼️ Bild' : 'Module'}
         </h2>
         <button
           type="button"

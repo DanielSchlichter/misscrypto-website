@@ -76,14 +76,7 @@ export const generateCleanModuleHtml = (type: string, data: any): string => {
   <meta itemProp="height" content="${data.height || 300}" />
   <meta itemProp="encodingFormat" content="${data.url ? data.url.split('.').pop()?.toLowerCase() : 'jpg'}" />
 </figure>`;
-    case 'text':
-      const fontSize = data.fontSize === 'small' ? '0.875rem' : data.fontSize === 'large' ? '1.125rem' : '1rem';
-      const textAlign = data.alignment || 'left';
-      const textColor = data.color || '#f8dfa5';
-      return `
-<div class="text-block mc-text" itemScope itemType="https://schema.org/Text" style="font-size: ${fontSize}; text-align: ${textAlign}; color: ${textColor};">
-  <p class="mc-text-content" itemProp="text">${data.content}</p>
-</div>`;
+
     default:
       return '';
   }
@@ -145,15 +138,7 @@ export const generateModuleHtml = (type: string, data: any, editingModuleId?: st
   <meta itemProp="height" content="${data.height || 300}" />
   <meta itemProp="encodingFormat" content="${data.url ? data.url.split('.').pop()?.toLowerCase() : 'jpg'}" />
 </figure>`;
-    case 'text':
-      const fontSize = data.fontSize === 'small' ? '0.875rem' : data.fontSize === 'large' ? '1.125rem' : '1rem';
-      const textAlign = data.alignment || 'left';
-      const textColor = data.color || '#f8dfa5';
-      return `
-<div class="text-block editable-module mc-text" data-module-id="${moduleId}" data-module-type="${type}" itemScope itemType="https://schema.org/Text" style="font-size: ${fontSize}; text-align: ${textAlign}; color: ${textColor};">
-  <button type="button" class="delete-module-btn" aria-label="Text-Block löschen">×</button>
-  <p class="mc-text-content" itemProp="text">${data.content}</p>
-</div>`;
+
     default:
       return '';
   }
