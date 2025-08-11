@@ -70,7 +70,7 @@ export default function LayoutWrapper({
     <ErrorBoundary>
       <TransparentHeader />
       <StickyHeader />
-      <main className="min-h-screen">
+      <main>
         {children}
       </main>
       <Footer />
