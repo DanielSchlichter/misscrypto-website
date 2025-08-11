@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]/route';
+import { getFirebaseAdmin } from '../../../lib/firebase-admin';
 
 // GET - Einzelnen Post laden
 export async function GET(request: NextRequest) {
@@ -15,47 +16,8 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Dynamic Firebase Admin import
-    const admin = await import('firebase-admin');
-    
-    // Initialize Firebase Admin if not already initialized
-    if (!admin.apps.length) {
-      if (process.env.FIREBASE_PRIVATE_KEY && process.env.FIREBASE_CLIENT_EMAIL) {
-        console.log('🔑 Initialisiere Firebase Admin für Single Post...');
-        
-        const serviceAccount = {
-          type: "service_account",
-          project_id: "misscrypto-bd419",
-          private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
-          private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-          client_email: process.env.FIREBASE_CLIENT_EMAIL,
-          client_id: process.env.FIREBASE_CLIENT_ID,
-          auth_uri: "https://accounts.google.com/o/oauth2/auth",
-          token_uri: "https://oauth2.googleapis.com/token",
-          auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
-          client_x509_cert_url: `https://www.googleapis.com/robot/v1/metadata/x509/${process.env.FIREBASE_CLIENT_EMAIL}`,
-          universe_domain: "googleapis.com"
-        };
-
-        admin.initializeApp({
-          credential: admin.credential.cert(serviceAccount as any),
-          projectId: 'misscrypto-bd419'
-        });
-        
-        console.log('✅ Firebase Admin für Single Post erfolgreich initialisiert');
-      } else {
-        return NextResponse.json(
-          { 
-            error: 'Firebase Credentials nicht gefunden',
-            details: 'FIREBASE_PRIVATE_KEY und FIREBASE_CLIENT_EMAIL sind erforderlich'
-          },
-          { status: 503 }
-        );
-      }
-    }
-
-    // Post aus Firestore laden
-    const db = admin.firestore();
+    // Use centralized Firebase Admin initialization
+    const { admin, db } = await getFirebaseAdmin();
     const doc = await db.collection('newsfeed').doc(id).get();
 
     if (!doc.exists) {
@@ -129,15 +91,8 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // Dynamic Firebase Admin import
-    const admin = await import('firebase-admin');
-
-    if (!admin.apps.length) {
-      return NextResponse.json(
-        { error: 'Firebase Admin nicht initialisiert' },
-        { status: 503 }
-      );
-    }
+    // Use centralized Firebase Admin initialization
+    const { admin, db } = await getFirebaseAdmin();
 
     // Helper functions
     function generateSlug(title: string): string {
@@ -191,7 +146,6 @@ export async function PUT(request: NextRequest) {
     };
 
     // Post in Firestore aktualisieren
-    const db = admin.firestore();
     await db.collection('newsfeed').doc(id).update(updateData);
 
     console.log(`✅ Post aktualisiert: ${id} (${slug})`);

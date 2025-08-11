@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]/route';
+import { getFirebaseAdmin } from '../../../lib/firebase-admin';
 
 export async function POST(request: NextRequest) {
   try {
@@ -57,49 +58,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Dynamic Firebase Admin import
-    const admin = await import('firebase-admin');
-    
-    // Initialize Firebase Admin if not already initialized
-    if (!admin.apps.length) {
-      if (process.env.FIREBASE_PRIVATE_KEY && process.env.FIREBASE_CLIENT_EMAIL) {
-        console.log('🔑 Initialisiere Firebase Admin für Media Upload...');
-        
-        const serviceAccount = {
-          type: "service_account",
-          project_id: "misscrypto-bd419",
-          private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
-          private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-          client_email: process.env.FIREBASE_CLIENT_EMAIL,
-          client_id: process.env.FIREBASE_CLIENT_ID,
-          auth_uri: "https://accounts.google.com/o/oauth2/auth",
-          token_uri: "https://oauth2.googleapis.com/token",
-          auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
-          client_x509_cert_url: `https://www.googleapis.com/robot/v1/metadata/x509/${process.env.FIREBASE_CLIENT_EMAIL}`,
-          universe_domain: "googleapis.com"
-        };
-
-        admin.initializeApp({
-          credential: admin.credential.cert(serviceAccount as any),
-          projectId: 'misscrypto-bd419',
-          storageBucket: 'misscrypto-bd419.firebasestorage.app'
-        });
-        
-        console.log('✅ Firebase Admin für Media Upload erfolgreich initialisiert');
-      } else {
-        return NextResponse.json(
-          { 
-            success: false,
-            error: 'Firebase Credentials nicht gefunden',
-            details: 'FIREBASE_PRIVATE_KEY und FIREBASE_CLIENT_EMAIL sind erforderlich'
-          },
-          { status: 503 }
-        );
-      }
-    }
-
-    const bucket = admin.storage().bucket('misscrypto-bd419.firebasestorage.app');
-    const db = admin.firestore();
+    // Use centralized Firebase Admin initialization
+    const { admin, db, bucket } = await getFirebaseAdmin();
 
     // Eindeutigen Dateinamen generieren
     const timestamp = Date.now();
