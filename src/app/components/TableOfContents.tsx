@@ -73,10 +73,13 @@ export default function TableOfContents({ content, isMobile = false }: TableOfCo
     <div style={{
       width: isMobile ? '100%' : '280px',
       position: isMobile ? 'relative' : 'sticky',
-      top: isMobile ? 'auto' : '120px',
+      top: isMobile ? 'auto' : '2rem', // Reduced from 120px for better positioning
+      zIndex: 10, // Ensure TOC stays above other content
       height: 'fit-content',
       flexShrink: 0,
-      marginBottom: isMobile ? '2rem' : '0'
+      marginBottom: isMobile ? '2rem' : '0',
+      maxHeight: isMobile ? 'none' : 'calc(100vh - 4rem)', // Prevent TOC from being too tall
+      overflowY: isMobile ? 'visible' : 'auto' // Add scrolling if TOC is very long
     }}>
       <div style={{
         background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f172a 50%, #1e293b 75%, #334155 100%)',

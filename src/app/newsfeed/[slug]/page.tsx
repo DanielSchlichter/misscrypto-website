@@ -166,7 +166,8 @@ export default function BlogPost() {
     <div style={{
       minHeight: '100vh',
       background: 'linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #111111 100%)',
-      color: '#ffffff'
+      color: '#ffffff',
+      position: 'relative' // Ensure proper stacking context
     }}>
       {/* SEO Meta Tags */}
       <BlogMetaTags post={post} />
@@ -178,7 +179,8 @@ export default function BlogPost() {
         padding: isMobile ? '4rem 1rem' : '8rem 2rem 3rem 2rem',
         display: 'flex',
         gap: '3rem',
-        alignItems: 'flex-start'
+        alignItems: 'flex-start',
+        minHeight: 'calc(100vh - 8rem)' // Ensure proper height for sticky positioning
       }}>
         {/* Main Article */}
         <main style={{
@@ -271,7 +273,9 @@ export default function BlogPost() {
         {/* Desktop Sidebar with Table of Contents */}
         {!isMobile && (
           <aside style={{
-            flexShrink: 0
+            flexShrink: 0,
+            width: '280px', // Fixed width to match TOC component
+            alignSelf: 'flex-start' // Ensure proper positioning context
           }}>
             <TableOfContents content={post.content} isMobile={false} />
           </aside>
