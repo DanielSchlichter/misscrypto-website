@@ -180,12 +180,13 @@ export default function BlogPost() {
         display: 'flex',
         gap: '3rem',
         alignItems: 'flex-start',
-        minHeight: 'calc(100vh - 8rem)' // Ensure proper height for sticky positioning
+        position: 'relative'
       }}>
         {/* Main Article */}
         <main style={{
           flex: '1',
-          minWidth: '0' // Verhindert Overflow
+          minWidth: '0', // Verhindert Overflow
+          marginRight: isMobile ? '0' : '320px' // Platz für das fixed TOC
         }}>
           {/* Category, Date & Back Link */}
           <div style={{
@@ -270,15 +271,9 @@ export default function BlogPost() {
           </article>
         </main>
 
-        {/* Desktop Sidebar with Table of Contents */}
+        {/* Desktop Table of Contents - Fixed positioned */}
         {!isMobile && (
-          <aside style={{
-            flexShrink: 0,
-            width: '280px', // Fixed width to match TOC component
-            alignSelf: 'flex-start' // Ensure proper positioning context
-          }}>
-            <TableOfContents content={post.content} isMobile={false} />
-          </aside>
+          <TableOfContents content={post.content} isMobile={false} />
         )}
       </div>
 

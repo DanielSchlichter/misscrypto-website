@@ -69,17 +69,83 @@ export default function TableOfContents({ content, isMobile = false }: TableOfCo
     return null;
   }
 
+  if (isMobile) {
+    return (
+      <div style={{
+        width: '100%',
+        position: 'relative',
+        marginBottom: '2rem'
+      }}>
+        <div style={{
+          background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f172a 50%, #1e293b 75%, #334155 100%)',
+          border: '2px solid rgba(248, 223, 165, 0.4)',
+          borderRadius: '12px',
+          padding: '1rem',
+          boxShadow: '0 10px 25px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+        }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            marginBottom: '1rem',
+            paddingBottom: '0.5rem',
+            borderBottom: '1px solid rgba(248, 223, 165, 0.3)'
+          }}>
+            <div style={{ fontSize: '1.2rem' }}>📋</div>
+            <h3 style={{
+              color: '#f8dfa5',
+              fontSize: '1.1rem',
+              fontWeight: '600',
+              margin: 0,
+              background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }}>
+              Inhaltsverzeichnis
+            </h3>
+          </div>
+          <nav>
+            <ul style={{
+              listStyle: 'none',
+              margin: 0,
+              padding: 0
+            }}>
+              {tocItems.map((item, index) => (
+                <li key={item.id} style={{ marginBottom: '0.75rem' }}>
+                  <a
+                    href={`#${item.id}`}
+                    style={{
+                      color: activeSection === item.id ? '#f8dfa5' : '#d1d5db',
+                      textDecoration: 'none',
+                      fontSize: '0.9rem',
+                      lineHeight: '1.4',
+                      display: 'block',
+                      padding: '0.5rem 0 0.5rem 1.5rem',
+                      marginLeft: '-1rem',
+                      borderLeft: `3px solid ${activeSection === item.id ? '#f8dfa5' : 'transparent'}`,
+                      transition: 'all 0.3s ease'
+                    }}
+                  >
+                    {index + 1}. {item.text}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{
-      width: isMobile ? '100%' : '280px',
-      position: isMobile ? 'relative' : 'sticky',
-      top: isMobile ? 'auto' : '2rem', // Reduced from 120px for better positioning
-      zIndex: 10, // Ensure TOC stays above other content
-      height: 'fit-content',
-      flexShrink: 0,
-      marginBottom: isMobile ? '2rem' : '0',
-      maxHeight: isMobile ? 'none' : 'calc(100vh - 4rem)', // Prevent TOC from being too tall
-      overflowY: isMobile ? 'visible' : 'auto' // Add scrolling if TOC is very long
+      position: 'fixed',
+      top: '8rem',
+      right: 'max(2rem, calc((100vw - 1200px) / 2))',
+      width: '280px',
+      zIndex: 1000,
+      maxHeight: 'calc(100vh - 10rem)',
+      overflowY: 'auto'
     }}>
       <div style={{
         background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f172a 50%, #1e293b 75%, #334155 100%)',
