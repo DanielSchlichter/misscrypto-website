@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/route';
-import { getCryptoCoins, saveCryptoCoins } from '@/lib/firestore';
+import { getFirebaseAdmin } from '@/lib/firebase-admin';
+import { getCryptoCoins } from '@/lib/firestore';
 
 // Für statischen Export erforderlich
 export const dynamic = 'force-dynamic';
@@ -503,8 +504,24 @@ export async function POST(request: NextRequest) {
     
     console.log(`💾 Speichere ${coins.length} Coins in Firestore...`);
     
-    // Speichere die Coins in Firestore
-    await saveCryptoCoins(coins);
+    // Use Firebase Admin SDK for server-side operations
+    const { admin, db } = await getFirebaseAdmin();
+    
+    // Clear existing coins
+    console.log('🗑️ Lösche bestehende Coins...');
+    const coinsCollection = db.collection('coins');
+    const existingCoins = await coinsCollection.get();
+    const deletePromises = existingCoins.docs.map(doc => doc.ref.delete());
+    await Promise.all(deletePromises);
+    
+    // Add new coins
+    console.log(`➕ Füge ${coins.length} neue Coins hinzu...`);
+    const addPromises = coins.map(coin => coinsCollection.add({
+      ...coin,
+      last_updated: admin.firestore.FieldValue.serverTimestamp()
+    }));
+    
+    await Promise.all(addPromises);
     
     console.log(`✅ ${coins.length} Coins erfolgreich in Firestore gespeichert!`);
     
