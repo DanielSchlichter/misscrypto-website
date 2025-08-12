@@ -540,11 +540,12 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Top Crypto & Recent Activity */}
+      {/* Top Kryptowährungen und Börsen-Performance nebeneinander */}
       <div style={{
         display: 'grid',
         gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-        gap: '2rem'
+        gap: '2rem',
+        marginBottom: '2rem'
       }}>
         {/* Top Crypto */}
         <div style={{
@@ -639,205 +640,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Quick Actions */}
-        <div style={{
-          background: 'rgba(0, 0, 0, 0.6)',
-          backdropFilter: 'blur(10px)',
-          borderRadius: '1rem',
-          border: '1px solid rgba(248, 223, 165, 0.3)',
-          padding: '1.5rem'
-        }}>
-          <h3 style={{
-            fontSize: '1.25rem',
-            fontWeight: '600',
-            color: '#f8dfa5',
-            marginBottom: '1.5rem',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem'
-          }}>
-            <span style={{ fontSize: '1.5rem' }}>⚡</span>
-            Schnellaktionen
-          </h3>
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1rem'
-          }}>
-            <a
-              href="/admin/newsletter/create"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '1rem',
-                padding: '1rem',
-                background: 'linear-gradient(135deg, rgba(248, 223, 165, 0.1), rgba(228, 177, 94, 0.1))',
-                border: '1px solid rgba(248, 223, 165, 0.3)',
-                borderRadius: '0.75rem',
-                color: '#ffffff',
-                textDecoration: 'none',
-                transition: 'all 0.3s ease'
-              }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.background = 'linear-gradient(135deg, rgba(248, 223, 165, 0.2), rgba(228, 177, 94, 0.2))';
-                e.currentTarget.style.transform = 'translateY(-2px)';
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.background = 'linear-gradient(135deg, rgba(248, 223, 165, 0.1), rgba(228, 177, 94, 0.1))';
-                e.currentTarget.style.transform = 'translateY(0)';
-              }}
-            >
-              <span style={{ fontSize: '1.5rem' }}>✉️</span>
-              <div>
-                <div style={{ fontWeight: '500' }}>Newsletter erstellen</div>
-                <div style={{ fontSize: '0.875rem', color: '#d1d5db' }}>
-                  Neuen Newsletter verfassen und versenden
-                </div>
-              </div>
-            </a>
-
-            <a
-              href="/admin/newsletter"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '1rem',
-                padding: '1rem',
-                background: 'rgba(59, 130, 246, 0.1)',
-                border: '1px solid rgba(59, 130, 246, 0.3)',
-                borderRadius: '0.75rem',
-                color: '#ffffff',
-                textDecoration: 'none',
-                transition: 'all 0.3s ease'
-              }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.background = 'rgba(59, 130, 246, 0.2)';
-                e.currentTarget.style.transform = 'translateY(-2px)';
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.background = 'rgba(59, 130, 246, 0.1)';
-                e.currentTarget.style.transform = 'translateY(0)';
-              }}
-            >
-              <span style={{ fontSize: '1.5rem' }}>📧</span>
-              <div>
-                <div style={{ fontWeight: '500' }}>Newsletter verwalten</div>
-                <div style={{ fontSize: '0.875rem', color: '#d1d5db' }}>
-                  Bestehende Newsletter bearbeiten
-                </div>
-              </div>
-            </a>
-
-            <a
-              href="/admin/stats"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '1rem',
-                padding: '1rem',
-                background: 'rgba(168, 85, 247, 0.1)',
-                border: '1px solid rgba(168, 85, 247, 0.3)',
-                borderRadius: '0.75rem',
-                color: '#ffffff',
-                textDecoration: 'none',
-                transition: 'all 0.3s ease'
-              }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.background = 'rgba(168, 85, 247, 0.2)';
-                e.currentTarget.style.transform = 'translateY(-2px)';
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.background = 'rgba(168, 85, 247, 0.1)';
-                e.currentTarget.style.transform = 'translateY(0)';
-              }}
-            >
-              <span style={{ fontSize: '1.5rem' }}>📈</span>
-              <div>
-                <div style={{ fontWeight: '500' }}>Detaillierte Statistiken</div>
-                <div style={{ fontSize: '0.875rem', color: '#d1d5db' }}>
-                  Ausführliche Analytics ansehen
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      {/* Detailed Analytics */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-        gap: '2rem',
-        marginTop: '2rem'
-      }}>
-        {/* Page Views by Page */}
-        <div style={{
-          background: 'rgba(0, 0, 0, 0.6)',
-          backdropFilter: 'blur(10px)',
-          borderRadius: '1rem',
-          border: '1px solid rgba(248, 223, 165, 0.3)',
-          padding: '1.5rem'
-        }}>
-          <h3 style={{
-            fontSize: '1.25rem',
-            fontWeight: '600',
-            color: '#f8dfa5',
-            marginBottom: '1.5rem',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem'
-          }}>
-            📊 Beliebteste Seiten
-          </h3>
-          <div style={{ 
-            maxHeight: '300px', 
-            overflowY: 'auto',
-            border: '1px solid rgba(248, 223, 165, 0.2)',
-            borderRadius: '8px'
-          }}>
-            {stats?.pageViewsByPage && stats.pageViewsByPage.length > 0 ? (
-              stats.pageViewsByPage.map((page, index) => (
-                <div key={index} style={{
-                  padding: '0.75rem 1rem',
-                  borderBottom: index < stats.pageViewsByPage.length - 1 ? '1px solid rgba(248, 223, 165, 0.1)' : 'none',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
-                }}>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ color: '#ffffff', fontWeight: '500', fontSize: '0.9rem' }}>
-                      {page.page === '/' ? 'Startseite' : 
-                       page.page === '/krypto-kaufen' ? 'Krypto kaufen' :
-                       page.page === '/kontakt' ? 'Kontakt' :
-                       page.page === '/ueber-mich' ? 'Über mich' :
-                       page.page || 'Unbekannt'}
-                    </div>
-                    <div style={{ color: '#9ca3af', fontSize: '0.75rem' }}>
-                      {page.uniqueVisitors} eindeutige Besucher
-                    </div>
-                  </div>
-                  <div style={{
-                    color: '#f8dfa5',
-                    fontWeight: '600',
-                    fontSize: '0.9rem'
-                  }}>
-                    {page.views.toLocaleString()}
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div style={{ 
-                padding: '2rem', 
-                textAlign: 'center', 
-                color: '#9ca3af' 
-              }}>
-                Noch keine Seitenaufrufe aufgezeichnet
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Exchange Clicks */}
+        {/* Börsen-Performance (nach oben verschoben) */}
         <div style={{
           background: 'rgba(0, 0, 0, 0.6)',
           backdropFilter: 'blur(10px)',
@@ -863,7 +666,6 @@ export default function AdminDashboard() {
             borderRadius: '8px'
           }}>
             {(() => {
-              // Alle verfügbaren Börsen definieren
               const allExchanges = [
                 { name: 'Bitvavo', emoji: '🇳🇱', description: 'EU-Lizenz, niedrige Gebühren' },
                 { name: 'Bitpanda', emoji: '🇦🇹', description: 'EU-reguliert, PayPal' },
@@ -875,7 +677,6 @@ export default function AdminDashboard() {
                 { name: 'Binance', emoji: '🌍', description: 'Weltgrößte Börse' }
               ];
 
-              // Merge echte Klicks mit allen Börsen
               const mergedData = allExchanges.map(exchange => {
                 const realData = stats?.exchangeClicks?.find(e => e.exchange === exchange.name);
                 return {
@@ -885,7 +686,6 @@ export default function AdminDashboard() {
                 };
               });
 
-              // Sortiere nach Klicks (höchste zuerst)
               mergedData.sort((a, b) => b.clicks - a.clicks);
 
               return mergedData.map((exchange, index) => (
@@ -947,7 +747,7 @@ export default function AdminDashboard() {
               ));
             })()}
           </div>
-          
+
           {/* Exchange Summary */}
           <div style={{
             marginTop: '1rem',
@@ -972,6 +772,8 @@ export default function AdminDashboard() {
           </div>
         </div>
       </div>
+
+      {/* Detailed Analytics - entfernt, da Börsen-Performance nach oben verschoben */}
     </div>
   );
 }
