@@ -3,18 +3,29 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import PreviewModal from '../../components/PreviewModal';
 
 interface NewsfeedPost {
   id: string;
   title: string;
   content: string;
+  excerpt?: string;
   status: 'draft' | 'published' | 'scheduled';
   publishedAt?: string;
   scheduledAt?: string;
+  createdAt?: string;
+  updatedAt?: string;
   views?: number;
   likes?: number;
   category: string;
   slug?: string;
+  author?: string;
+  featuredImage?: string;
+  seo?: {
+    metaTitle: string;
+    metaDescription: string;
+    keywords: string[];
+  };
 }
 
 export default function NewsfeedOverview() {
@@ -22,6 +33,8 @@ export default function NewsfeedOverview() {
   const [isLoading, setIsLoading] = useState(true);
   const [screenWidth, setScreenWidth] = useState(0);
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
+  const [previewPost, setPreviewPost] = useState<NewsfeedPost | null>(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -67,10 +80,15 @@ export default function NewsfeedOverview() {
           status: post.status,
           publishedAt: post.publishedAt,
           scheduledAt: post.scheduledAt,
+          createdAt: post.createdAt,
+          updatedAt: post.updatedAt,
           views: post.views || 0,
           likes: post.likes || 0,
           category: post.category || 'Bitcoin',
-          slug: post.slug
+          slug: post.slug,
+          author: post.author,
+          featuredImage: post.featuredImage,
+          seo: post.seo
         }));
         
         console.log(`✅ ${convertedPosts.length} Posts geladen`);
@@ -93,9 +111,55 @@ export default function NewsfeedOverview() {
 
   const handleView = (post: NewsfeedPost) => {
     if (post.status === 'published' && post.slug) {
-              window.open(`/newsfeed/${post.slug}`, '_blank');
+      window.open(`/newsfeed/${post.slug}`, '_blank');
     } else {
-      alert('Dieser Post ist noch nicht veröffentlicht oder hat keinen Slug.');
+      // Öffne Preview Modal für Entwürfe
+      setPreviewPost(post);
+      setIsPreviewOpen(true);
+    }
+  };
+
+  const handlePublish = async (postId: string) => {
+    try {
+      console.log('🚀 Veröffentliche Post:', postId);
+      
+      // Zuerst den aktuellen Post laden, um alle Daten zu haben
+      if (!previewPost) {
+        throw new Error('Post-Daten nicht verfügbar');
+      }
+      
+      // Exakt der gleiche API-Call wie im Create/Edit Bereich
+      const response = await fetch(`/api/newsfeed-v2/single?id=${postId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: previewPost.title,
+          content: previewPost.content,
+          category: previewPost.category,
+          status: 'published',
+          metaTitle: previewPost.seo?.metaTitle || previewPost.title,
+          metaDescription: previewPost.seo?.metaDescription || previewPost.excerpt
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        console.log('✅ Post erfolgreich veröffentlicht');
+        alert('Post erfolgreich veröffentlicht!');
+        // Modal schließen und Posts neu laden
+        setIsPreviewOpen(false);
+        setPreviewPost(null);
+        await fetchPosts();
+      } else {
+        console.error('Fehler beim Veröffentlichen:', result.error);
+        alert('Fehler beim Veröffentlichen des Posts: ' + result.error);
+      }
+    } catch (error) {
+      console.error('Fehler beim Veröffentlichen des Posts:', error);
+      alert('Ein unerwarteter Fehler ist aufgetreten.');
     }
   };
 
@@ -469,6 +533,17 @@ export default function NewsfeedOverview() {
           </div>
         )}
       </div>
+
+      {/* Preview Modal */}
+      <PreviewModal
+        post={previewPost}
+        isOpen={isPreviewOpen}
+        onClose={() => {
+          setIsPreviewOpen(false);
+          setPreviewPost(null);
+        }}
+        onPublish={handlePublish}
+      />
     </div>
   );
 } 

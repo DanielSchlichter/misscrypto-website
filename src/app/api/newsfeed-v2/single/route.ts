@@ -84,15 +84,30 @@ export async function PUT(request: NextRequest) {
       metaDescription
     } = body;
 
+    // Für Status-Updates (z.B. Veröffentlichen) sind title/content optional
+    // Falls nur Status geändert wird, laden wir die aktuellen Daten
+    let currentPost = null;
     if (!title || !content) {
+      const doc = await db.collection('newsfeed').doc(id).get();
+      if (!doc.exists) {
+        return NextResponse.json(
+          { error: 'Post nicht gefunden' },
+          { status: 404 }
+        );
+      }
+      currentPost = doc.data();
+    }
+
+    // Verwende entweder die neuen Daten oder die aktuellen
+    const finalTitle = title || currentPost?.title;
+    const finalContent = content || currentPost?.content;
+
+    if (!finalTitle || !finalContent) {
       return NextResponse.json(
         { error: 'Titel und Inhalt sind erforderlich' },
         { status: 400 }
       );
     }
-
-    // Use centralized Firebase Admin initialization
-    const { admin, db } = await getFirebaseAdmin();
 
     // Helper functions
     function generateSlug(title: string): string {
@@ -120,29 +135,29 @@ export async function PUT(request: NextRequest) {
     }
 
     // Generiere aktualisierte Daten
-    const slug = generateSlug(title);
-    const excerpt = generateExcerpt(content);
+    const slug = generateSlug(finalTitle);
+    const excerpt = generateExcerpt(finalContent);
     const baseUrl = 'https://misscrypto.de';
     const fullCanonicalUrl = `${baseUrl}/blog/${slug}`;
 
     // Update-Objekt erstellen
     const updateData = {
-      title,
-      content,
+      title: finalTitle,
+      content: finalContent,
       excerpt,
       slug,
-      category: category || 'Bitcoin',
-      status: status || 'draft',
+      category: category || currentPost?.category || 'Bitcoin',
+      status: status || currentPost?.status || 'draft',
       seo: {
-        metaTitle: metaTitle || title,
+        metaTitle: metaTitle || finalTitle,
         metaDescription: metaDescription || excerpt,
-        keywords: [category || 'Bitcoin', 'Kryptowährung'],
+        keywords: [category || currentPost?.category || 'Bitcoin', 'Kryptowährung'],
         canonicalUrl: fullCanonicalUrl,
-        openGraphImage: '',
+        openGraphImage: currentPost?.seo?.openGraphImage || '',
         twitterCard: 'summary_large_image'
       },
       updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-      publishedAt: status === 'published' ? admin.firestore.FieldValue.serverTimestamp() : null
+      publishedAt: status === 'published' ? admin.firestore.FieldValue.serverTimestamp() : currentPost?.publishedAt
     };
 
     // Post in Firestore aktualisieren
