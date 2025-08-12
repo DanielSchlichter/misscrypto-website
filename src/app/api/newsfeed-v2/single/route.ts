@@ -74,6 +74,9 @@ export async function PUT(request: NextRequest) {
       );
     }
 
+    // Firebase Admin initialisieren, bevor wir db/admin verwenden
+    const { admin, db } = await getFirebaseAdmin();
+
     const body = await request.json();
     const { 
       title, 
