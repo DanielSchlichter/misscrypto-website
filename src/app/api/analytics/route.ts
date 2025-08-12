@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { saveAnalyticsEvent, getAnalyticsData } from '@/lib/firestore';
+import { getFirebaseAdmin } from '@/lib/firebase-admin';
+
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 interface AnalyticsEvent {
   type: 'page_view' | 'exchange_click';
@@ -17,34 +20,23 @@ export async function GET(request: NextRequest) {
     const startDate = searchParams.get('startDate');
     const endDate = searchParams.get('endDate');
 
-    // Bei Build-Zeit oder ohne Firebase: Mock-Daten
-    if (process.env.SKIP_MONGODB === 'true') {
-      console.log('Firebase nicht verfügbar - verwende Mock-Analytics');
-      return NextResponse.json({
-        summary: {
-          totalPageViews: 1234,
-          uniqueVisitors: 567,
-          totalExchangeClicks: 89
-        },
-        pageViews: [
-          { page: '/', views: 654, uniqueVisitors: 432 },
-          { page: '/krypto-kaufen', views: 321, uniqueVisitors: 234 },
-          { page: '/kontakt', views: 123, uniqueVisitors: 89 }
-        ],
-        exchangeClicks: [
-          { exchange: 'Bitvavo', clicks: 45, uniqueVisitors: 34 },
-          { exchange: 'Bitpanda', clicks: 32, uniqueVisitors: 28 },
-          { exchange: 'Coinbase', clicks: 12, uniqueVisitors: 11 }
-        ],
-        recentActivity: []
-      });
-    }
+    // Echte Analytics-Daten mit Firebase Admin laden
+    const { admin, db } = await getFirebaseAdmin();
 
-    // Echte Analytics-Daten aus Firestore laden
-    const analytics = await getAnalyticsData(
-      startDate ? new Date(startDate) : undefined,
-      endDate ? new Date(endDate) : undefined
-    );
+    const start = startDate ? new Date(startDate) : undefined;
+    const end = endDate ? new Date(endDate) : undefined;
+
+    let q: FirebaseFirestore.Query = db.collection('analytics');
+    if (start) {
+      q = q.where('timestamp', '>=', start);
+    }
+    if (end) {
+      q = q.where('timestamp', '<=', end);
+    }
+    q = q.orderBy('timestamp', 'desc');
+
+    const snapshot = await q.get();
+    const analytics = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
     // Analytics-Daten verarbeiten
     let totalPageViews = 0;
@@ -62,7 +54,7 @@ export async function GET(request: NextRequest) {
         totalPageViews++;
 
         // Page Views gruppieren
-        const existingPage = pageViewsByPage.find(p => p.page === event.page);
+          const existingPage = pageViewsByPage.find(p => p.page === event.page);
         if (existingPage) {
           existingPage.views++;
           if (event.sessionId && !existingPage.uniqueVisitors.includes(event.sessionId)) {
@@ -152,25 +144,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const success = await saveAnalyticsEvent({
+    const { admin, db } = await getFirebaseAdmin();
+
+    await db.collection('analytics').add({
       type,
-      page,
-      exchange,
+      page: page || null,
+      exchange: exchange || null,
       sessionId,
-      userAgent: request.headers.get('user-agent') || undefined,
-      ip: request.headers.get('x-forwarded-for') || 
-          request.headers.get('x-real-ip') || 
-          'unknown'
+      userAgent: request.headers.get('user-agent') || null,
+      ip: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || null,
+      timestamp: admin.firestore.FieldValue.serverTimestamp()
     });
 
-    if (success) {
     return NextResponse.json({ success: true });
-    } else {
-      return NextResponse.json(
-        { error: 'Fehler beim Speichern des Analytics-Events' },
-        { status: 500 }
-      );
-    }
   } catch (error) {
     console.error('Analytics POST Fehler:', error);
     return NextResponse.json(
