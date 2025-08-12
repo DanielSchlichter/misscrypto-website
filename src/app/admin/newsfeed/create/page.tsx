@@ -112,14 +112,14 @@ export default function CreateNewsfeedPost() {
         });
       }
 
-      const result = await response.json();
+      const result = await response.json().catch(() => null);
 
-      if (result.success) {
+      if (response.ok && result?.success) {
         alert(isEditing ? 'Post erfolgreich aktualisiert!' : 'Post erfolgreich erstellt!');
         router.push('/admin/newsfeed');
       } else {
-        console.error(`Fehler beim ${isEditing ? 'Aktualisieren' : 'Erstellen'}:`, result.error);
-        alert(`Fehler beim ${isEditing ? 'Aktualisieren' : 'Erstellen'} des Posts: ` + result.error);
+        console.error(`Fehler beim ${isEditing ? 'Aktualisieren' : 'Erstellen'}:`, result || await response.text());
+        alert(`Fehler beim ${isEditing ? 'Aktualisieren' : 'Erstellen'} des Posts.`);
       }
     } catch (error) {
       console.error(`Fehler beim ${isEditing ? 'Aktualisieren' : 'Erstellen'} des Posts:`, error);

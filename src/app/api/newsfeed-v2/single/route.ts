@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]/route';
 import { getFirebaseAdmin } from '@/lib/firebase-admin';
@@ -160,7 +162,9 @@ export async function PUT(request: NextRequest) {
         twitterCard: 'summary_large_image'
       },
       updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-      publishedAt: status === 'published' ? admin.firestore.FieldValue.serverTimestamp() : currentPost?.publishedAt
+      publishedAt: status === 'published' 
+        ? admin.firestore.FieldValue.serverTimestamp() 
+        : null
     };
 
     // Post in Firestore aktualisieren
