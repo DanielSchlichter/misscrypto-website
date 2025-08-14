@@ -50,7 +50,13 @@ export default function WalletsPageClient() {
         margin: '0 auto', 
         padding: isMobile ? '0 1rem' : '0 2rem'
       }}>
-        {/* Wallet Comparison Section - Moved to top */}
+        {/* Why Own Wallet Section */}
+        <WhyOwnWalletSection isMobile={isMobile} isTablet={isTablet} />
+
+        {/* What is Wallet Section */}
+        <WhatIsWalletSection isMobile={isMobile} isTablet={isTablet} />
+
+        {/* Wallet Comparison Section */}
         <WalletComparison isMobile={isMobile} isTablet={isTablet} />
 
         {/* Individual Wallet Feature Highlights */}
@@ -60,13 +66,6 @@ export default function WalletsPageClient() {
 
         {/* MissCrypto Fazit */}
         <MissCryptoFazitSection isMobile={isMobile} isTablet={isTablet} />
-
-        {/* Educational Sections - Moved after Fazit */}
-        {/* Why Own Wallet Section */}
-        <WhyOwnWalletSection isMobile={isMobile} isTablet={isTablet} />
-
-        {/* What is Wallet Section */}
-        <WhatIsWalletSection isMobile={isMobile} isTablet={isTablet} />
 
         {/* Extra Tipp */}
         <ExtraTippSection isMobile={isMobile} isTablet={isTablet} />
