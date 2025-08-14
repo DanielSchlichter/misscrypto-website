@@ -42,7 +42,7 @@ export async function getFirebaseAdmin() {
         }
       } else {
         console.error('❌ Firebase Credentials fehlen');
-        throw new Error('Firebase Credentials nicht gefunden. Bitte FIREBASE_PRIVATE_KEY und FIREBASE_CLIENT_EMAIL in Netlify Environment Variables hinzufügen.');
+        throw new Error('Firebase Credentials nicht gefunden. Bitte FIREBASE_PRIVATE_KEY und FIREBASE_CLIENT_EMAIL in .env.local hinzufügen.');
       }
     }
     

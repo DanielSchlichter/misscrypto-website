@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
     
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status');
-    const limitCount = parseInt(searchParams.get('limit') || '50'); // Erhöhtes Limit für Admin
+    const limitCount = parseInt(searchParams.get('limit') || '50');
 
     // Optimierte Firestore Abfrage
     let query = db.collection('newsfeed').orderBy('createdAt', 'desc');
