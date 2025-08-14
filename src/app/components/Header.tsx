@@ -19,6 +19,7 @@ const Header = () => {
   const navigation = [
     { name: 'Start', href: '/' },
     { name: 'Krypto kaufen', href: '/krypto-kaufen' },
+    { name: 'Newsfeed', href: '/newsfeed' },
   ];
 
   return (

@@ -4,6 +4,7 @@ import Link from 'next/link';
 export const navigationItems = [
   { name: 'Start', href: '/' },
   { name: 'Krypto kaufen', href: '/krypto-kaufen' },
+  { name: 'Newsfeed', href: '/newsfeed' },
 ];
 
 interface NavigationProps {
