@@ -183,6 +183,41 @@ export default function ImageModule({
           />
         </div>
 
+        {/* Bildunterschrift/Caption */}
+        <div className="form-group">
+          <label style={{
+            display: 'block',
+            color: '#f8dfa5',
+            fontSize: '0.875rem',
+            fontWeight: '600',
+            marginBottom: '0.5rem'
+          }}>
+            Bildunterschrift (optional)
+          </label>
+          <input 
+            type="text" 
+            value={data.caption || ''}
+            onChange={(e) => onChange({...data, caption: e.target.value})}
+            placeholder="Quelle, Copyright oder Beschreibung..."
+            style={{
+              width: '100%',
+              padding: '0.75rem',
+              background: '#0a0a0a',
+              border: '1px solid #333',
+              borderRadius: '6px',
+              color: '#f8dfa5',
+              fontSize: '0.875rem'
+            }}
+          />
+          <div style={{
+            fontSize: '0.75rem',
+            color: 'rgba(248, 223, 165, 0.6)',
+            marginTop: '0.5rem'
+          }}>
+            💡 Wird unter dem Bild angezeigt (z.B. für Quellen oder Copyright)
+          </div>
+        </div>
+
         {/* Höhe */}
         <div className="form-group">
           <label style={{

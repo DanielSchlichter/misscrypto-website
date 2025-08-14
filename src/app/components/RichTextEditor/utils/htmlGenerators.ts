@@ -73,6 +73,7 @@ export const generateCleanModuleHtml = (type: string, data: any): string => {
     loading="lazy"
     decoding="async"
   />
+  ${data.caption ? `<figcaption class="mc-image-caption">${data.caption}</figcaption>` : ''}
   <meta itemProp="width" content="100%" />
   <meta itemProp="height" content="${data.height || 300}" />
   <meta itemProp="encodingFormat" content="${data.url ? data.url.split('.').pop()?.toLowerCase() : 'jpg'}" />
@@ -136,6 +137,7 @@ export const generateModuleHtml = (type: string, data: any, editingModuleId?: st
     loading="lazy"
     decoding="async"
   />
+  ${data.caption ? `<figcaption class="mc-image-caption">${data.caption}</figcaption>` : ''}
   <meta itemProp="width" content="100%" />
   <meta itemProp="height" content="${data.height || 300}" />
   <meta itemProp="encodingFormat" content="${data.url ? data.url.split('.').pop()?.toLowerCase() : 'jpg'}" />

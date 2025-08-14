@@ -59,6 +59,7 @@ export interface ImageModuleData {
   url: string;
   alt: string;
   height: number;
+  caption?: string;
 }
 
 
