@@ -164,7 +164,7 @@ export default function NewsfeedPage() {
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text'
           }}>
-            Newsfeed
+            Aktuelle Artikel
           </h1>
           
           <p style={{
@@ -189,30 +189,7 @@ export default function NewsfeedPage() {
           maxWidth: '1200px',
           margin: '0 auto'
         }}>
-          {/* Section Header */}
-          <div style={{
-            textAlign: 'center',
-            marginBottom: isMobile ? '3rem' : '4rem'
-          }}>
-            <h2 style={{
-              fontSize: isMobile ? '2rem' : '2.5rem',
-              fontWeight: '700',
-              color: '#f8dfa5',
-              marginBottom: '1rem',
-              lineHeight: '1.2'
-            }}>
-              Aktuelle Artikel
-            </h2>
-            <p style={{
-              color: '#d1d5db',
-              fontSize: isMobile ? '1.1rem' : '1.2rem',
-              maxWidth: '600px',
-              margin: '0 auto',
-              lineHeight: '1.6'
-            }}>
-              Die neuesten Krypto-News, Analysen und Einschätzungen – verständlich aufbereitet und auf den Punkt gebracht.
-            </p>
-          </div>
+
 
           {/* Loading State */}
           {isLoading && (
