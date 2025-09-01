@@ -19,7 +19,7 @@ const WenLamboCalculator: React.FC<WenLamboCalculatorProps> = ({ isMobile, isTab
     <div style={{
       background: 'linear-gradient(135deg, #000000, #1a1a1a)',
       borderRadius: '16px',
-      padding: isMobile ? '0' : '1rem',
+      padding: '20px',
       border: '1px solid rgba(248, 223, 165, 0.3)',
       position: 'relative',
       overflow: 'hidden'

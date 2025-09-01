@@ -673,6 +673,58 @@ const SparplanRechnerClient = () => {
                 </a>
               </div>
             </div>
+            
+            {/* Mobile CTA Button für Recommended Providers - nur auf mobilen Geräten sichtbar */}
+            {isMobile && (
+              <div style={{
+                background: 'linear-gradient(135deg, rgba(248, 223, 165, 0.1), rgba(228, 177, 94, 0.1))',
+                border: '1px solid rgba(248, 223, 165, 0.3)',
+                borderRadius: '12px',
+                padding: '1.5rem',
+                marginTop: '2rem'
+              }}>
+                <h3 style={{
+                  color: '#f8dfa5',
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  marginBottom: '0.75rem'
+                }}>
+                  📊 Brauchst du mehr Details?
+                </h3>
+                <p style={{
+                  color: '#d1d5db',
+                  fontSize: '0.875rem',
+                  lineHeight: '1.5',
+                  marginBottom: '1rem'
+                }}>
+                  Vergleiche alle Anbieter im Detail und finde den perfekten Broker für deine Bedürfnisse!
+                </p>
+                <a
+                  href="/krypto-kaufen"
+                  style={{
+                    display: 'inline-block',
+                    background: 'linear-gradient(135deg, #e4b15e, #f8dfa5)',
+                    color: '#000000',
+                    padding: '0.75rem 1.25rem',
+                    borderRadius: '8px',
+                    textDecoration: 'none',
+                    fontWeight: '600',
+                    fontSize: '0.875rem',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = '0 8px 20px rgba(248, 223, 165, 0.3)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = 'none';
+                  }}
+                >
+                  Zum ausführlichen Vergleich →
+                </a>
+              </div>
+            )}
           </div>
 
         </div>
@@ -767,119 +819,73 @@ const SparplanRechnerClient = () => {
                 </ul>
               </div>
 
-              {/* CTA Button zu krypto-kaufen */}
-            <div style={{
-                background: 'linear-gradient(135deg, rgba(248, 223, 165, 0.1), rgba(228, 177, 94, 0.1))',
-                border: '1px solid rgba(248, 223, 165, 0.3)',
-                borderRadius: '12px',
-                padding: '1.5rem',
-                marginTop: '2rem'
-          }}>
-            <h3 style={{
-              color: '#f8dfa5',
-                  fontSize: '1.125rem',
-              fontWeight: '600',
-                  marginBottom: '0.75rem'
-            }}>
-                  🚀 Bereit für den nächsten Schritt?
-            </h3>
-            <p style={{
-              color: '#d1d5db',
-                  fontSize: '0.875rem',
-                  lineHeight: '1.5',
-                  marginBottom: '1rem'
-                }}>
-                  Du hast dein Ziel berechnet? Jetzt erfahre, wie du mit dem richtigen Broker startest!
-                </p>
-                <a
-                  href="/krypto-kaufen"
-                  style={{
-                    display: 'inline-block',
-                    background: 'linear-gradient(135deg, #e4b15e, #f8dfa5)',
-                    color: '#000000',
-                    padding: '0.75rem 1.5rem',
-                    borderRadius: '8px',
-                    textDecoration: 'none',
-                    fontWeight: '600',
-                    fontSize: '0.875rem',
-                    transition: 'all 0.3s ease'
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-2px)';
-                    e.currentTarget.style.boxShadow = '0 8px 20px rgba(248, 223, 165, 0.3)';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = 'none';
-                  }}
-                >
-                  Jetzt Krypto kaufen lernen →
-                </a>
-                </div>
+
+                
+
             </div>
 
             {/* Right Side - Calculator */}
             <div style={{
               background: 'linear-gradient(135deg, #1a1a2e, #16213e)',
               borderRadius: '16px',
-              padding: isMobile ? '1.5rem' : '2rem',
+              padding: '0',
               border: '1px solid rgba(248, 223, 165, 0.2)',
               boxShadow: '0 10px 25px rgba(0, 0, 0, 0.3)'
             }}>
               <WenLamboCalculator isMobile={isMobile} isTablet={isTablet} />
             </div>
             
-            {/* Mobile CTA Button für Recommended Providers - nur auf mobilen Geräten sichtbar */}
-            {isMobile && (
-              <div style={{
-                background: 'linear-gradient(135deg, rgba(248, 223, 165, 0.1), rgba(228, 177, 94, 0.1))',
-                border: '1px solid rgba(248, 223, 165, 0.3)',
-                borderRadius: '12px',
-                padding: '1.5rem',
-                marginTop: '2rem'
+            {/* CTA Button zu krypto-kaufen - unter dem Lambo-Rechner */}
+        <div style={{
+              background: 'linear-gradient(135deg, rgba(248, 223, 165, 0.1), rgba(228, 177, 94, 0.1))',
+              border: '1px solid rgba(248, 223, 165, 0.3)',
+              borderRadius: '12px',
+              padding: '1.5rem',
+              marginTop: '2rem'
+          }}>
+            <h3 style={{
+              color: '#f8dfa5',
+                fontSize: '1.125rem',
+              fontWeight: '600',
+                marginBottom: '0.75rem'
+            }}>
+                🚀 Bereit für den nächsten Schritt?
+            </h3>
+            <p style={{
+              color: '#d1d5db',
+                fontSize: '0.875rem',
+                lineHeight: '1.5',
+                marginBottom: '1rem'
               }}>
-                <h3 style={{
-                  color: '#f8dfa5',
-                  fontSize: '1rem',
-                  fontWeight: '600',
-                  marginBottom: '0.75rem'
-                }}>
-                  📊 Brauchst du mehr Details?
-                </h3>
-                <p style={{
-                  color: '#d1d5db',
-                  fontSize: '0.875rem',
-                  lineHeight: '1.5',
-                  marginBottom: '1rem'
-                }}>
-                  Vergleiche alle Anbieter im Detail und finde den perfekten Broker für deine Bedürfnisse!
-                </p>
-                <a
-                  href="/krypto-kaufen"
-                  style={{
-                    display: 'inline-block',
-                    background: 'linear-gradient(135deg, #e4b15e, #f8dfa5)',
-                    color: '#000000',
-                    padding: '0.75rem 1.25rem',
-                    borderRadius: '8px',
-                    textDecoration: 'none',
+                Du hast dein Ziel berechnet? Jetzt erfahre, wie du mit dem richtigen Broker startest!
+              </p>
+              <a
+                href="/krypto-kaufen"
+                style={{
+                  display: 'inline-block',
+                  background: 'linear-gradient(135deg, #e4b15e, #f8dfa5)',
+                  color: '#000000',
+                  padding: '0.75rem 1.5rem',
+                  borderRadius: '8px',
+                  textDecoration: 'none',
                     fontWeight: '600',
                     fontSize: '0.875rem',
-                    transition: 'all 0.3s ease'
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-2px)';
-                    e.currentTarget.style.boxShadow = '0 8px 20px rgba(248, 223, 165, 0.3)';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = 'none';
-                  }}
-                >
-                  Zum ausführlichen Vergleich →
-                </a>
-              </div>
-            )}
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 8px 20px rgba(248, 223, 165, 0.3)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                Jetzt Krypto kaufen lernen →
+              </a>
+                </div>
+            
+
           </div>
         </div>
       </section>

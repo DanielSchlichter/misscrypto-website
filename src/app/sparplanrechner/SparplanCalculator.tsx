@@ -194,7 +194,7 @@ const SparplanCalculator: React.FC<SparplanCalculatorProps> = ({ isMobile, isTab
               WebkitBackgroundClip: 'text',
               backgroundClip: 'text',
               WebkitTextFillColor: 'transparent'
-            }}>Sparplan-Rechner</span>
+            }}>Rechner</span>
           </h2>
           <p style={{
             color: '#d1d5db',
