@@ -584,8 +584,28 @@ export function OfficialShopsSection({ isMobile, isTablet }: SharedSectionsProps
             backdropFilter: 'blur(10px)',
             borderRadius: '0.75rem',
             padding: '1.5rem',
-            textAlign: 'center'
+            textAlign: 'center',
+            position: 'relative'
           }}>
+            {wallet.name === 'Tangem' && (
+              <div style={{
+                position: 'absolute',
+                top: '-0.5rem',
+                right: '-0.5rem',
+                background: 'linear-gradient(135deg, #22c55e, #16a34a)',
+                color: '#ffffff',
+                padding: '0.25rem 0.5rem',
+                borderRadius: '0.5rem',
+                fontSize: '0.625rem',
+                fontWeight: '700',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 2px 8px rgba(34, 197, 94, 0.4)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                zIndex: 10
+              }}>
+                10% RABATT
+              </div>
+            )}
             <h3 style={{
               fontSize: '1.25rem',
               fontWeight: '700',
@@ -617,10 +637,12 @@ export function OfficialShopsSection({ isMobile, isTablet }: SharedSectionsProps
       <div style={{ textAlign: 'center', marginTop: '2rem' }}>
         <p style={{
           color: 'rgba(26, 26, 26, 0.7)',
-          fontSize: '0.875rem'
+          fontSize: '0.875rem',
+          lineHeight: '1.6',
+          maxWidth: '800px',
+          margin: '0 auto'
         }}>
-          💡 Als Amazon-Partner verdiene ich an qualifizierten Verkäufen. 
-          Für dich entstehen keine zusätzlichen Kosten.
+          💡 Die hier aufgeführten Links sind sogenannte Affiliate-Links. Wenn du über diese Links etwas kaufst, erhalte ich eine kleine Provision. Für dich entstehen dabei keine zusätzlichen Kosten – im Gegenteil: Ich versuche mit meinen Partnern exklusive Vorteile wie Rabatte oder Bonusaktionen für dich zu sichern. So unterstützt du meine Arbeit und profitierst selbst. Vielen Dank!
         </p>
       </div>
     </section>

@@ -30,7 +30,7 @@ export const walletData = [
     price: 'ca. 139 €',
     backup: 'Seed Phrase',
     link: 'https://shop.bitbox.swiss/?ref=CroetxKLi2',
-    ideal: 'Bitcoin-Maximalist, Technik-Fan, Open-Source-Verfechter',
+    ideal: 'Bitcoiner, Technik Fan, Open-Source',
     recommendation: 'Technisch, clean, auf Sicherheit fokussiert. Wenn du Bitcoin langfristig sichern willst – oder open source bevorzugst – ist BitBox top.'
   },
   {
@@ -67,7 +67,7 @@ export const faqs = [
   },
   {
     question: 'Was passiert, wenn ich sterbe – kommen meine Angehörigen an die Coins?',
-    answer: 'Ein sensibles, aber wichtiges Thema. Du solltest dafür sorgen, dass jemand aus deiner Familie weiß: wo deine Seed Phrase liegt und wie sie zu nutzen ist. Ich arbeite gerade an einem kleinen Leitfaden zur Krypto-Vererbung.'
+    answer: 'Ein sensibles, aber wichtiges Thema. Du solltest dafür sorgen, dass jemand aus deiner Familie weiß: wo deine Seed Phrase liegt und wie sie zu nutzen ist.'
   },
   {
     question: 'Was passiert, wenn meine Wallet kaputt oder verloren geht?',

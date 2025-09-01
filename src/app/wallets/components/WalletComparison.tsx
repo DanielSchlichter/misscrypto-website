@@ -65,26 +65,32 @@ export default function WalletComparison({ isMobile, isTablet }: WalletCompariso
             flexWrap: 'wrap'
           }}>
             {/* Ledger Preview */}
-            <div style={{
-              position: 'relative',
-              width: isMobile ? '100px' : '180px',
-              height: isMobile ? '100px' : '180px',
-              background: 'linear-gradient(145deg, rgba(34, 197, 94, 0.2), rgba(22, 163, 74, 0.1))',
-              borderRadius: '1rem',
-              padding: '0.75rem',
-              border: '1px solid rgba(34, 197, 94, 0.3)',
-              backdropFilter: 'blur(10px)',
-              transition: 'all 0.3s ease',
-              cursor: 'pointer'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'scale(1.05)';
-              e.currentTarget.style.boxShadow = '0 8px 25px rgba(34, 197, 94, 0.4)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'scale(1)';
-              e.currentTarget.style.boxShadow = 'none';
-            }}>
+            <a 
+              href={walletData[0].link}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                position: 'relative',
+                width: isMobile ? '100px' : '180px',
+                height: isMobile ? '100px' : '180px',
+                background: 'linear-gradient(145deg, rgba(34, 197, 94, 0.2), rgba(22, 163, 74, 0.1))',
+                borderRadius: '1rem',
+                padding: '0.75rem',
+                border: '1px solid rgba(34, 197, 94, 0.3)',
+                backdropFilter: 'blur(10px)',
+                transition: 'all 0.3s ease',
+                cursor: 'pointer',
+                textDecoration: 'none',
+                display: 'block'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.05)';
+                e.currentTarget.style.boxShadow = '0 8px 25px rgba(34, 197, 94, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}>
               <img 
                 src="/images/LNSP_4_COL_1000x1000.png"
                 alt="Ledger Nano S Plus"
@@ -110,29 +116,35 @@ export default function WalletComparison({ isMobile, isTablet }: WalletCompariso
               }}>
                 Ledger
               </div>
-            </div>
+            </a>
 
             {/* BitBox Preview */}
-            <div style={{
-              position: 'relative',
-              width: isMobile ? '100px' : '180px',
-              height: isMobile ? '100px' : '180px',
-              background: 'linear-gradient(145deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.1))',
-              borderRadius: '1rem',
-              padding: '0.75rem',
-              border: '1px solid rgba(59, 130, 246, 0.3)',
-              backdropFilter: 'blur(10px)',
-              transition: 'all 0.3s ease',
-              cursor: 'pointer'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'scale(1.05)';
-              e.currentTarget.style.boxShadow = '0 8px 25px rgba(59, 130, 246, 0.4)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'scale(1)';
-              e.currentTarget.style.boxShadow = 'none';
-            }}>
+            <a 
+              href={walletData[1].link}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                position: 'relative',
+                width: isMobile ? '100px' : '180px',
+                height: isMobile ? '100px' : '180px',
+                background: 'linear-gradient(145deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.1))',
+                borderRadius: '1rem',
+                padding: '0.75rem',
+                border: '1px solid rgba(59, 130, 246, 0.3)',
+                backdropFilter: 'blur(10px)',
+                transition: 'all 0.3s ease',
+                cursor: 'pointer',
+                textDecoration: 'none',
+                display: 'block'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.05)';
+                e.currentTarget.style.boxShadow = '0 8px 25px rgba(59, 130, 246, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}>
               <img 
                 src="/images/fckpntma-rendering00001.jpg"
                 alt="BitBox02 Hardware Wallet"
@@ -158,29 +170,35 @@ export default function WalletComparison({ isMobile, isTablet }: WalletCompariso
               }}>
                 BitBox02
               </div>
-            </div>
+            </a>
 
             {/* Tangem Preview */}
-            <div style={{
-              position: 'relative',
-              width: isMobile ? '100px' : '180px',
-              height: isMobile ? '100px' : '180px',
-              background: 'linear-gradient(145deg, rgba(168, 85, 247, 0.2), rgba(147, 51, 234, 0.1))',
-              borderRadius: '1rem',
-              padding: '0.75rem',
-              border: '1px solid rgba(168, 85, 247, 0.3)',
-              backdropFilter: 'blur(10px)',
-              transition: 'all 0.3s ease',
-              cursor: 'pointer'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'scale(1.05)';
-              e.currentTarget.style.boxShadow = '0 8px 25px rgba(168, 85, 247, 0.4)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'scale(1)';
-              e.currentTarget.style.boxShadow = 'none';
-            }}>
+            <a 
+              href={walletData[2].link}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                position: 'relative',
+                width: isMobile ? '100px' : '180px',
+                height: isMobile ? '100px' : '180px',
+                background: 'linear-gradient(145deg, rgba(168, 85, 247, 0.2), rgba(147, 51, 234, 0.1))',
+                borderRadius: '1rem',
+                padding: '0.75rem',
+                border: '1px solid rgba(168, 85, 247, 0.3)',
+                backdropFilter: 'blur(10px)',
+                transition: 'all 0.3s ease',
+                cursor: 'pointer',
+                textDecoration: 'none',
+                display: 'block'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.05)';
+                e.currentTarget.style.boxShadow = '0 8px 25px rgba(168, 85, 247, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}>
               <img 
                 src="/images/ring-5.png"
                 alt="Tangem Wallet Cards"
@@ -206,7 +224,23 @@ export default function WalletComparison({ isMobile, isTablet }: WalletCompariso
               }}>
                 Tangem
               </div>
-            </div>
+              <div style={{
+                position: 'absolute',
+                top: '-0.5rem',
+                right: '-0.5rem',
+                background: 'linear-gradient(135deg, #22c55e, #16a34a)',
+                color: '#ffffff',
+                padding: '0.25rem 0.5rem',
+                borderRadius: '0.5rem',
+                fontSize: '0.5rem',
+                fontWeight: '700',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 2px 8px rgba(34, 197, 94, 0.4)',
+                border: '1px solid rgba(255, 255, 255, 0.2)'
+              }}>
+                -10% RABATT
+              </div>
+            </a>
           </div>
         </div>
       
@@ -398,6 +432,7 @@ export default function WalletComparison({ isMobile, isTablet }: WalletCompariso
                         {wallet.model}
                       </div>
                     )}
+
                   </th>
                 ))}
               </tr>

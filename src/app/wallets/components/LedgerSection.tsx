@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { CheckCircle, ExternalLink } from 'lucide-react';
 
 interface LedgerSectionProps {
@@ -171,9 +172,12 @@ export default function LedgerSection({ isMobile, isTablet }: LedgerSectionProps
             backdropFilter: 'blur(10px)',
             transform: 'rotate(-3deg)'
           }}>
-            <img 
+            <Image 
               src="/images/LNSP_4_COL_1000x1000.png"
               alt="Ledger Nano S Plus in verschiedenen Farben"
+              width={400}
+              height={300}
+              unoptimized
               style={{
                 width: '100%',
                 height: 'auto',
@@ -224,9 +228,12 @@ export default function LedgerSection({ isMobile, isTablet }: LedgerSectionProps
               pointerEvents: 'none'
             }}></div>
             
-            <img 
+            <Image 
               src="/images/LNX_4_COL_BLACK_1000x1000.png"
               alt="Ledger Nano X - Premium Bitcoin & Crypto Hardware Wallet"
+              width={400}
+              height={300}
+              unoptimized
               style={{
                 width: '100%',
                 height: 'auto',

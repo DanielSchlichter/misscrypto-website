@@ -97,7 +97,7 @@ export default function BitBoxSection({ isMobile, isTablet }: BitBoxSectionProps
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
               <CheckCircle style={{ width: '1.25rem', height: '1.25rem', color: '#10b981' }} />
               <span style={{ color: '#e5e7eb', fontSize: '1rem' }}>
-                <strong>Bitcoin-Only Version:</strong> Speziell für Bitcoin-Maximalisten
+                <strong>Text Neu:</strong> Speziell für Bitcoiner
               </span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
