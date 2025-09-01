@@ -334,9 +334,10 @@ const Footer = () => {
               maxWidth: '800px',
               margin: '0 auto'
             }}>
-              <strong>Risikohinweis:</strong> Der Handel mit Kryptowährungen ist mit hohen Risiken verbunden. 
-              Vergangene Performance ist kein Indikator für zukünftige Ergebnisse. 
-              Investiere nur Geld, dessen Verlust du dir leisten kannst.
+              <strong>Haftungsausschluss</strong><br />
+              Die auf MissCrypto bereitgestellten Inhalte dienen ausschließlich Informations- und Bildungszwecken. Sie stellen keine Anlageberatung, Kauf- oder Verkaufsempfehlung dar. Es wird weder eine Zusicherung zu Kursentwicklungen noch eine Aufforderung zum Handeln ausgesprochen.<br /><br />
+              Investitionen in Kryptowährungen und andere Finanzinstrumente sind mit erheblichen Risiken verbunden und können bis zum vollständigen Verlust des eingesetzten Kapitals führen. Alle Informationen ersetzen keine persönliche, auf individuelle Bedürfnisse zugeschnittene Beratung durch Fachleute.<br /><br />
+              MissCrypto übernimmt keine Gewähr für Aktualität, Richtigkeit, Vollständigkeit oder Angemessenheit der bereitgestellten Inhalte. Eine Haftung für finanzielle Schäden ist ausgeschlossen.
             </p>
           </div>
         </div>

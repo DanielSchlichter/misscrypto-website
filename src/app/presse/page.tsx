@@ -580,20 +580,21 @@ const PressePage = () => {
                   </div>
                   {item.logo && (
                     <div style={{
-                      width: isMobile ? '40px' : '50px',
-                      height: isMobile ? '40px' : '50px',
-                      borderRadius: '8px',
-                      background: 'rgba(255, 255, 255, 0.1)',
+                      width: isMobile ? '60px' : '80px',
+                      height: isMobile ? '60px' : '80px',
+                      borderRadius: '12px',
+                      background: '#ffffff',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      flexShrink: 0
+                      flexShrink: 0,
+                      padding: '0.5rem'
                     }}>
                       <Image
                         src={item.logo}
                         alt={`${item.title} Logo`}
-                        width={isMobile ? 24 : 30}
-                        height={isMobile ? 24 : 30}
+                        width={isMobile ? 40 : 60}
+                        height={isMobile ? 40 : 60}
                         style={{
                           objectFit: 'contain',
                           maxWidth: '100%',
@@ -626,7 +627,7 @@ const PressePage = () => {
                         display: 'inline-flex',
                         alignItems: 'center',
                         gap: '0.5rem',
-                        background: item.color,
+                        background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
                         color: '#000000',
                         padding: isMobile ? '0.75rem 1.25rem' : '0.875rem 1.5rem',
                         borderRadius: '0.75rem',
