@@ -395,7 +395,8 @@ const SparplanRechnerClient = () => {
                       alt="Bitvavo Logo"
                       style={{
                         height: '40px',
-                        objectFit: 'contain'
+                        objectFit: 'contain',
+                        marginBottom: '-20px'
                       }}
                     />
                   </div>

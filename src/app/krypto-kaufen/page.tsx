@@ -27,7 +27,7 @@ const exchanges: Exchange[] = [
     rating: 4.5,
     fees: '0,25%',
     features: ['Niederlande', 'EU-Lizenz', 'BaFin-Lizenz', '350+ Währungen'],
-    pros: ['0,25% Maker/Taker', 'Höchste Funktionalität', 'Maximale Einfachheit', 'Powered by Hyphe'],
+    pros: ['0,25% Maker/Taker', 'Höchste Funktionalität', 'Maximale Einfachheit'],
     cons: ['Weniger Zahlungsmethoden', 'Professioneller Fokus'],
     minDeposit: '1,00 €',
     paymentMethods: ['Mastercard', 'Visa', 'SEPA'],
@@ -579,7 +579,8 @@ const CryptoKaufenPage = () => {
                       style={{
                         height: '40px',
                         maxWidth: exchange.id === 'coinbase' ? '80px' : 'none',
-                        objectFit: 'contain'
+                        objectFit: 'contain',
+                        marginBottom: exchange.id === 'bitvavo' ? '-20px' : '0'
                       }}
                     />
                   </div>
@@ -962,7 +963,7 @@ const CryptoKaufenPage = () => {
                 <img 
                   src="/logos/bitvavo.svg" 
                   alt="Bitvavo Logo" 
-                  style={{height: '60px', width: 'auto'}}
+                  style={{height: '60px', width: 'auto', marginBottom: '-20px'}}
                 />
               </div>
             </div>
@@ -1187,7 +1188,7 @@ const CryptoKaufenPage = () => {
 
                 <div style={{ color: '#d1d5db', fontSize: '1rem', lineHeight: '1.7' }}>
                   <p style={{ marginBottom: '1.5rem' }}>
-                    Bitvavo powered by Hyphe hebt sich als die beste Krypto-Börse in unserem Vergleich hervor, da sie in den wesentlichen Kategorien das beste Gesamtpaket bietet.
+                    Bitvavo hebt sich als die beste Krypto-Börse in unserem Vergleich hervor, da sie in den wesentlichen Kategorien das beste Gesamtpaket bietet.
                   </p>
 
                   {/* Feature Highlight Box */}
@@ -1278,12 +1279,12 @@ const CryptoKaufenPage = () => {
                     <div style={{ fontSize: '2rem' }}>🔐</div>
                     <div>
                       <div style={{ fontWeight: '600', color: '#10b981', marginBottom: '0.25rem' }}>BaFin-Regulierung</div>
-                      <div style={{ fontSize: '0.9rem' }}>Seit August 2024 über Hyphe (BaFin-reguliert) wieder für deutsche Kunden verfügbar</div>
+                      <div style={{ fontSize: '0.9rem' }}>BaFin-reguliert und für deutsche Kunden verfügbar</div>
                     </div>
                   </div>
 
                   <p style={{ marginBottom: '1.5rem' }}>
-                    Mit der Partnerschaft zwischen Bitvavo und Hyphe können deutsche Kunden wieder sicher handeln. Bitvavo liefert die Technologie, Hyphe die deutsche Regulierung.
+                    Durch die BaFin-Regulierung können deutsche Kunden sicher handeln und von der bewährten Bitvavo-Technologie profitieren.
                   </p>
                 </div>
               </section>
