@@ -5,7 +5,7 @@ import Link from 'next/link';
 import HeroSection from '../components/HeroSection';
 import CryptoTicker from '../components/CryptoTicker';
 import FeaturesSection from '../components/FeaturesSection';
-import InvestmentCalculator from '../components/InvestmentCalculator';
+import SparplanCalculator from '../sparplanrechner/SparplanCalculator';
 import NewsletterForm from '../components/NewsletterForm';
 
 const HomePage = () => {
@@ -35,13 +35,13 @@ const HomePage = () => {
       {/* Features Section */}
       <FeaturesSection />
 
-      {/* Investment Calculator */}
+      {/* Sparplan Calculator */}
       <div style={{ 
         maxWidth: '1280px', 
         margin: '0 auto',
         padding: isMobile ? '0 1rem' : '0 2rem'
       }}>
-        <InvestmentCalculator />
+        <SparplanCalculator isMobile={isMobile} isTablet={isTablet} />
       </div>
 
       {/* Newsletter Section */}

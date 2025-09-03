@@ -73,14 +73,14 @@ const HeroSection = () => {
               </Link>
               <button 
                 onClick={() => {
-                  // Scroll zum Investment Calculator (Was wäre wenn Rechner)
-                  const sections = document.querySelectorAll('.mc-section');
+                  // Scroll zum Sparplan Calculator
+                  const sections = document.querySelectorAll('div');
                   let calculatorSection: Element | null = null;
                   
-                  // Finde die Section mit dem "Was wäre wenn" Titel
+                  // Finde die Section mit dem Sparplan Calculator
                   sections.forEach(section => {
                     const title = section.querySelector('h2');
-                    if (title && title.textContent?.includes('Was wäre wenn')) {
+                    if (title && title.textContent?.includes('Sparplan')) {
                       calculatorSection = section;
                     }
                   });
@@ -110,7 +110,7 @@ const HeroSection = () => {
                   opacity: 0.6,
                   pointerEvents: 'none'
                 }}></span>
-                Was wäre wenn Rechner
+                Sparplan Rechner
               </button>
             </div>
           </div>

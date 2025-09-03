@@ -200,8 +200,7 @@ const SparplanCalculator: React.FC<SparplanCalculatorProps> = ({ isMobile, isTab
 
   return (
     <section style={{
-      padding: isMobile ? '2rem 0' : '4rem 0',
-      background: 'linear-gradient(135deg, #111111 0%, #1a1a1a 50%, #111111 100%)'
+      padding: isMobile ? '2rem 0' : '4rem 0'
     }}>
       <div style={{
         maxWidth: '1280px',
@@ -222,7 +221,7 @@ const SparplanCalculator: React.FC<SparplanCalculatorProps> = ({ isMobile, isTab
               WebkitBackgroundClip: 'text',
               backgroundClip: 'text',
               WebkitTextFillColor: 'transparent'
-            }}>Rechner</span>
+            }}>Sparplanrechner</span>
           </h2>
           <p style={{
             color: '#d1d5db',
