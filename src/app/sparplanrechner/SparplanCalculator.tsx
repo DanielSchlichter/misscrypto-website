@@ -108,6 +108,34 @@ const SparplanCalculator: React.FC<SparplanCalculatorProps> = ({ isMobile, isTab
     fetchCoins();
   }, []);
 
+  // Funktion um das richtige Crypto-Symbol zu bekommen
+  const getCryptoSymbol = (cryptoId: string) => {
+    const symbolMap: { [key: string]: string } = {
+      'bitcoin': '₿',
+      'ethereum': 'Ξ',
+      'ripple': '✕', 
+      'solana': '◎',
+      'cardano': '₳',
+      'binancecoin': 'Ⓑ',
+      'avalanche-2': '🔺'
+    };
+    return symbolMap[cryptoId] || '₿';
+  };
+
+  // Funktion um die richtige Crypto-Farbe zu bekommen
+  const getCryptoColor = (cryptoId: string) => {
+    const colorMap: { [key: string]: string } = {
+      'bitcoin': '#F7931A',
+      'ethereum': '#627EEA',
+      'ripple': '#23292F',
+      'solana': '#14F195',
+      'cardano': '#0033AD',
+      'binancecoin': '#F3BA2F',
+      'avalanche-2': '#E84142'
+    };
+    return colorMap[cryptoId] || '#F7931A';
+  };
+
   // Berechnung des Sparplans
   const calculateSparplan = () => {
     setLoading(true);
@@ -488,7 +516,7 @@ const SparplanCalculator: React.FC<SparplanCalculatorProps> = ({ isMobile, isTab
                     marginBottom: '0.5rem'
                   }}>
                     <div style={{
-                      background: '#f97316',
+                      background: getCryptoColor(selectedCrypto),
                       color: 'white',
                       width: '1.5rem',
                       height: '1.5rem',
@@ -499,7 +527,7 @@ const SparplanCalculator: React.FC<SparplanCalculatorProps> = ({ isMobile, isTab
                       fontSize: '0.75rem',
                       fontWeight: 'bold'
                     }}>
-                      ₿
+                      {getCryptoSymbol(selectedCrypto)}
                     </div>
                     <span style={{ color: '#9ca3af', fontSize: '0.875rem' }}>
                       Portfoliowert (Heute)

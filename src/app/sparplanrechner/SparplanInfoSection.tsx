@@ -127,55 +127,6 @@ const SparplanInfoSection: React.FC<SparplanInfoSectionProps> = ({ isMobile, isT
               </div>
             </section>
 
-            <section id="beispiel-1-bitcoin" style={{ marginBottom: '3rem' }}>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '1rem',
-                marginBottom: '2rem'
-              }}>
-                <div style={{
-                  width: isMobile ? '40px' : '60px',
-                  height: isMobile ? '40px' : '60px',
-                  background: 'linear-gradient(135deg, rgb(248, 223, 165), rgb(228, 177, 94))',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: isMobile ? '1.1rem' : '1.5rem',
-                  fontWeight: 'bold',
-                  color: 'rgb(26, 26, 46)'
-                }}>🎯</div>
-                <h2 style={{
-                  color: 'rgb(255, 255, 255)',
-                  fontSize: '1.75rem',
-                  fontWeight: '700',
-                  margin: '0px',
-                  background: 'linear-gradient(135deg, rgb(248, 223, 165), rgb(228, 177, 94))',
-                  WebkitBackgroundClip: 'text',
-                  backgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent'
-                }}>Beispiel: Dein Weg zu 1 Bitcoin</h2>
-              </div>
-              <div style={{
-                color: 'rgb(209, 213, 219)',
-                fontSize: '1rem',
-                lineHeight: '1.7'
-              }}>
-                <p style={{ marginBottom: '1.5rem' }}>
-                  Viele Neueinsteiger im Krypto-Markt denken, dass es längst zu spät ist, um noch Bitcoin zu kaufen. 1 ganzer Bitcoin liegt heute bei sechsstelligen Summen – und wirkt für viele unerreichbar. Doch die gute Nachricht ist: Du musst nicht sofort 1 BTC besitzen. Denn jeder Satoshi zählt.
-                </p>
-                <p style={{ marginBottom: '1.5rem' }}>
-                  Ein Satoshi ist die kleinste Einheit von Bitcoin. Ein Bitcoin besteht aus 100 Millionen Satoshis. Mit einem Krypto-Sparplan kannst du regelmäßig investieren – zum Beispiel 50 €, 100 € oder 500 € im Monat – und dir Monat für Monat mehr Satoshis sichern. Mal sind es weniger, wenn der Kurs hoch ist, mal mehr, wenn der Kurs gefallen ist. Durch den Cost-Average-Effekt (DCA) ergibt sich über die Zeit ein fairer Durchschnittspreis.
-                </p>
-                <p style={{ marginBottom: '1.5rem' }}>
-                  Das Schöne daran: Jeder Kauf bringt dich deinem Ziel näher, egal ob du langfristig 0,01 BTC, 0,1 BTC oder vielleicht sogar 1 ganzen Bitcoin aufbauen möchtest. Mit einem Sparplan sammelst du automatisch Satoshis, ohne dich von kurzfristigen Kursschwankungen stressen zu lassen.
-                </p>
-                <p style={{ marginBottom: '1.5rem' }}>
-                  Die Strategie ist nicht nur einfach und diszipliniert, sondern auch psychologisch entspannend. Du musst nicht versuchen, den perfekten Zeitpunkt zu erwischen – du bist immer investiert. Und am Ende zeigt die Erfahrung: Es sind oft die stetigen, kleinen Schritte, die zu großem Erfolg führen.
-                </p>
-              </div>
-            </section>
 
             <section id="warum-sparplan-sinnvoll" style={{ marginBottom: '3rem' }}>
               <div style={{
