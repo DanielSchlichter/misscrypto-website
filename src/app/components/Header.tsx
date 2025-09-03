@@ -19,6 +19,7 @@ const Header = () => {
   const navigation = [
     { name: 'Start', href: '/' },
     { name: 'Krypto kaufen', href: '/krypto-kaufen' },
+    { name: 'Sparplanrechner', href: '/sparplanrechner' },
     { name: 'Wallets', href: '/wallets' },
     { name: 'Newsfeed', href: '/newsfeed' },
   ];
