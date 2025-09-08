@@ -32,6 +32,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       ? 'Was ist eine Wallet? Krypto sicher verwahren | MissCrypto Lexikon'
       : term.id === 'private-key'
       ? 'Was ist ein Private Key? Krypto-Zugriff verstehen | MissCrypto Lexikon'
+      : term.id === 'token'
+      ? 'Was ist ein Token? Unterschied zu Coin & Anwendung | MissCrypto Lexikon'
+      : term.id === 'altcoin'
+      ? 'Was ist ein Altcoin? Einfach erklärt | MissCrypto Lexikon'
+      : term.id === 'ethereum'
+      ? 'Was ist Ethereum? Smart Contracts & ETH erklärt | MissCrypto Lexikon'
       : `Was ist ${term.title}? Einfach erklärt | Krypto-Lexikon MissCrypto`,
     description: term.id === 'blockchain'
       ? 'Die Blockchain ist das Fundament von Bitcoin und Co. Erfahre hier einfach erklärt, wie sie funktioniert und warum sie als revolutionär gilt.'
@@ -39,6 +45,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       ? 'Eine Wallet ist deine digitale Geldbörse für Bitcoin & Co. Erfahre hier, wie sie funktioniert, welche Arten es gibt und worauf du achten musst.'
       : term.id === 'private-key'
       ? 'Der Private Key ist dein geheimer Zugang zu Bitcoin & Co. Erfahre hier, wie er funktioniert, warum er so wichtig ist – und wie du ihn sicher schützt.'
+      : term.id === 'token'
+      ? 'Ein Token ist eine digitale Einheit auf einer Blockchain. Erfahre hier den Unterschied zu Coins, welche Token-Arten es gibt und wie sie funktionieren.'
+      : term.id === 'altcoin'
+      ? 'Altcoins sind alle Kryptowährungen außer Bitcoin. Erfahre hier, was Altcoins sind, welche Unterschiede es gibt – und worauf du beim Investieren achten solltest.'
+      : term.id === 'ethereum'
+      ? 'Ethereum ist die zweitgrößte Kryptowährung nach Bitcoin – und Grundlage für Smart Contracts, NFTs & DeFi. Erfahre hier, was Ethereum so besonders macht.'
       : term.definition.length > 160 
       ? term.definition.substring(0, 157) + "..." 
       : term.definition,
@@ -52,6 +64,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         ? 'Was ist eine Wallet? Krypto sicher verwahren'
         : term.id === 'private-key'
         ? 'Was ist ein Private Key? Krypto-Zugriff verstehen'
+        : term.id === 'token'
+        ? 'Was ist ein Token? Unterschied zu Coin & Anwendung'
+        : term.id === 'altcoin'
+        ? 'Was ist ein Altcoin? Einfach erklärt'
+        : term.id === 'ethereum'
+        ? 'Was ist Ethereum? Smart Contracts & ETH erklärt'
         : `Was ist ${term.title}? Einfach erklärt`,
       description: term.definition,
       type: "article",
@@ -184,6 +202,12 @@ export default function LexikonTermPage({ params }: PageProps) {
                     ? <>Was ist eine Wallet?<br />Die digitale Geldbörse für Bitcoin & Co.</>
                     : term.id === 'private-key'
                     ? <>Was ist ein Private Key?<br />So schützt du deinen Krypto-Zugang</>
+                    : term.id === 'token'
+                    ? <>Was ist ein Token?<br />Unterschied zu Coin und warum er wichtig ist</>
+                    : term.id === 'altcoin'
+                    ? <>Was ist ein Altcoin?<br />Erklärung und Überblick für Einsteiger</>
+                    : term.id === 'ethereum'
+                    ? <>Was ist Ethereum?<br />Die Plattform für Smart Contracts & Web3</>
                     : `Was ist ${term.title}?`
                   }
                 </span>
@@ -364,6 +388,93 @@ export default function LexikonTermPage({ params }: PageProps) {
                     margin: 0
                   }}>
                     Der bekannteste verlorene Private Key gehört zu einem Briten, der versehentlich eine Festplatte mit über 7.500 BTC wegwarf – heute mehrere Hundert Millionen Euro wert.
+                  </p>
+                </div>
+              )}
+
+              {term.id === 'token' && (
+                <div style={{
+                  marginTop: '3rem',
+                  marginBottom: '3rem',
+                  padding: '2rem',
+                  background: 'linear-gradient(135deg, rgba(248, 223, 165, 0.1), rgba(228, 177, 94, 0.1))',
+                  border: '1px solid rgba(248, 223, 165, 0.3)',
+                  borderRadius: '1rem'
+                }}>
+                  <h3 style={{
+                    fontSize: '1.5rem',
+                    fontWeight: '600',
+                    color: '#f8dfa5',
+                    marginBottom: '1rem',
+                    margin: '0 0 1rem 0'
+                  }}>
+                    Fun Fact 💡
+                  </h3>
+                  <p style={{
+                    fontSize: '1.125rem',
+                    color: '#e5e7eb',
+                    lineHeight: '1.6',
+                    margin: 0
+                  }}>
+                    2017 war das Jahr der sogenannten ICOs („Initial Coin Offerings") – damals wurden Hunderte Token-Projekte mit oft nur einer Idee und Website finanziert. Viele verschwanden wieder – manche wurden Milliardenprojekte.
+                  </p>
+                </div>
+              )}
+
+              {term.id === 'altcoin' && (
+                <div style={{
+                  marginTop: '3rem',
+                  marginBottom: '3rem',
+                  padding: '2rem',
+                  background: 'linear-gradient(135deg, rgba(248, 223, 165, 0.1), rgba(228, 177, 94, 0.1))',
+                  border: '1px solid rgba(248, 223, 165, 0.3)',
+                  borderRadius: '1rem'
+                }}>
+                  <h3 style={{
+                    fontSize: '1.5rem',
+                    fontWeight: '600',
+                    color: '#f8dfa5',
+                    marginBottom: '1rem',
+                    margin: '0 0 1rem 0'
+                  }}>
+                    Fun Fact 💡
+                  </h3>
+                  <p style={{
+                    fontSize: '1.125rem',
+                    color: '#e5e7eb',
+                    lineHeight: '1.6',
+                    margin: 0
+                  }}>
+                    Im Jahr 2013 galten schon Coins wie Litecoin und Peercoin als „Konkurrenz" zu Bitcoin – inzwischen gibt es über 10.000 Altcoins mit ganz unterschiedlichen Zielen und Technologien.
+                  </p>
+                </div>
+              )}
+
+              {term.id === 'ethereum' && (
+                <div style={{
+                  marginTop: '3rem',
+                  marginBottom: '3rem',
+                  padding: '2rem',
+                  background: 'linear-gradient(135deg, rgba(248, 223, 165, 0.1), rgba(228, 177, 94, 0.1))',
+                  border: '1px solid rgba(248, 223, 165, 0.3)',
+                  borderRadius: '1rem'
+                }}>
+                  <h3 style={{
+                    fontSize: '1.5rem',
+                    fontWeight: '600',
+                    color: '#f8dfa5',
+                    marginBottom: '1rem',
+                    margin: '0 0 1rem 0'
+                  }}>
+                    Fun Fact 💡
+                  </h3>
+                  <p style={{
+                    fontSize: '1.125rem',
+                    color: '#e5e7eb',
+                    lineHeight: '1.6',
+                    margin: 0
+                  }}>
+                    Ethereum war ursprünglich nur eine Idee auf einem Whitepaper – finanziert wurde das Projekt durch einen Crowdsale im Jahr 2014, bei dem Investoren ETH zum Startpreis von unter 0,30 $ kaufen konnten.
                   </p>
                 </div>
               )}

@@ -54,6 +54,39 @@ export const lexiconTerms: LexiconTerm[] = [
     relatedTerms: ['wallet', 'blockchain'],
     icon: '🔑',
     lastUpdated: '2024-12-01'
+  },
+  {
+    id: 'token',
+    title: 'Token',
+    slug: 'token',
+    definition: 'Ein Token ist eine digitale Einheit auf einer Blockchain. Erfahre hier den Unterschied zu Coins, welche Token-Arten es gibt und wie sie funktionieren.',
+    extendedExplanation: 'Während Kryptowährungen wie Bitcoin eine eigene Blockchain haben, entstehen Token meist auf bestehenden Blockchains wie Ethereum, Solana oder Avalanche. Sie nutzen also eine vorhandene Infrastruktur, um digitale Werte oder Rechte abzubilden.\n\nEs gibt verschiedene Arten von Token:\n\nUtility Token: Zugang zu einem Produkt oder Dienst (z. B. Chainlink, Uniswap)\n\nSecurity Token: Digitale Form von Aktien oder Beteiligungen (oft reguliert)\n\nGovernance Token: Berechtigung zur Mitbestimmung bei Projekten (z. B. bei DeFi-Protokollen)\n\nNFTs (Non-Fungible Tokens): Einzigartige, nicht austauschbare Token z. B. für digitale Kunst\n\nEin bekannter Standard ist der ERC-20-Token, der auf Ethereum basiert. Viele Altcoins sind ERC-20-Token – darunter auch bekannte Projekte wie USDT, UNI oder AAVE.\n\nWichtig: Ein Token ist nicht gleich ein Coin. Coins wie Bitcoin oder ETH sind das native Geld einer Blockchain. Token dagegen sind eher wie Apps auf einem Betriebssystem – sie nutzen die Blockchain, sind aber nicht ihr Kern.',
+    category: 'Kryptowährungen',
+    relatedTerms: ['blockchain', 'bitcoin', 'altcoin'],
+    icon: '🪙',
+    lastUpdated: '2024-12-01'
+  },
+  {
+    id: 'altcoin',
+    title: 'Altcoin',
+    slug: 'altcoin',
+    definition: 'Altcoins sind alle Kryptowährungen außer Bitcoin. Erfahre hier, was Altcoins sind, welche Unterschiede es gibt – und worauf du beim Investieren achten solltest.',
+    extendedExplanation: 'Altcoin steht für „Alternative Coin" – also jede Kryptowährung außer Bitcoin. Dazu gehören z. B. Ethereum, Solana, XRP oder Cardano.\n\nDer Begriff Altcoin setzt sich aus „Alternative" und „Coin" zusammen – gemeint sind damit alle Kryptowährungen, die nicht Bitcoin sind. Andere verwenden das Kürzel „Altcoin", heute ist es eher ein Sammelbegriff für die riesige Vielfalt am Krypto-Markt.\n\nAltcoins unterscheiden sich in Funktion, Technologie und Anwendungsbereich. Es gibt z. B.:\n\n• Smart-Contract-Plattformen (Ethereum, Solana, Avalanche)\n• Zahlungscoins (Litecoin, Dash)\n• Stablecoins (USDT, USDC – meist Token!)\n• DeFi-Protokolle (Uniswap, Aave)\n• Privacy-Coins (Monero, Zcash)\n• Infrastrukturprojekte (Chainlink, Filecoin)\n\nNicht jeder Altcoin ist ein eigener Coin im technischen Sinne. Viele sind Token auf Ethereum (siehe z. B. ERC-20).\n\nAchtung: Altcoins sind oft volatiler und riskanter als Bitcoin – können aber auch stärker wachsen, wenn sich das Projekt durchsetzt.',
+    category: 'Kryptowährungen',
+    relatedTerms: ['bitcoin', 'token', 'blockchain', 'ethereum'],
+    icon: '🔄',
+    lastUpdated: '2024-12-01'
+  },
+  {
+    id: 'ethereum',
+    title: 'Ethereum',
+    slug: 'ethereum',
+    definition: 'Ethereum ist die zweitgrößte Kryptowährung nach Bitcoin – und Grundlage für Smart Contracts, NFTs & DeFi. Erfahre hier, was Ethereum so besonders macht.',
+    extendedExplanation: 'Ethereum ist eine dezentrale Blockchain-Plattform, die nicht nur Zahlungen ermöglicht, sondern auch sogenannte Smart Contracts und dezentrale Anwendungen (DApps) unterstützt.\n\nEthereum wurde 2015 von dem jungen Entwickler Vitalik Buterin gelauncht. Während Bitcoin das primäre als digitales Geld gedacht ist, bietet Ethereum eine programmierbare Blockchain – das heißt: Entwickler können darauf Anwendungen bauen, die autonom laufen: sogenannte Smart Contracts.\n\nDie native Kryptowährung heißt Ether (ETH). Sie wird verwendet, um Transaktionen zu bezahlen oder mit Anwendungen auf der Plattform zu interagieren. Auf Beispiel: ETH von NFTs oder bei DeFi-Diensten.\n\nEthereum ist das Herzstück vieler Innovationen im Krypto-Sektor:\n\n✅ DeFi-Protokolle (z. B. Uniswap, Aave)\n✅ NFT-Plattformen (z. B. OpenSea)\n✅ DAOs und Governance-Projekte\n✅ Stablecoins wie USDT oder DAI (meist ERC-20-Token)\n\nSeit dem „Merge" im Jahr 2022 verwendet Ethereum kein energieintensives Mining mehr, sondern ein umweltfreundlicheres Verfahren namens Proof of Stake.\n\n[Token](/lexikon/token) – viele Token basieren auf Ethereum\n\n[Altcoin](/lexikon/altcoin) – Ethereum ist der bekannteste Altcoin',
+    category: 'Kryptowährungen',
+    relatedTerms: ['altcoin', 'blockchain', 'token'],
+    icon: '🔷',
+    lastUpdated: '2024-12-01'
   }
 ];
 
