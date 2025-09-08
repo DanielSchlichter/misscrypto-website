@@ -26,6 +26,105 @@ body {
   padding: 0 1rem;
 }
 
+/* Lexicon Styles */
+.lexicon-letter-btn {
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 1.125rem;
+  transition: all 0.2s;
+  border: 2px solid;
+  text-decoration: none;
+}
+
+.lexicon-letter-btn.active {
+  background: linear-gradient(135deg, #f8dfa5, #e4b15e);
+  border-color: #e4b15e;
+  color: #1a1a2e;
+  cursor: pointer;
+}
+
+.lexicon-letter-btn.active:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(248, 223, 165, 0.3);
+}
+
+.lexicon-letter-btn.inactive {
+  background: #1f2937;
+  border-color: #374151;
+  color: #6b7280;
+  cursor: not-allowed;
+}
+
+.lexicon-term-card {
+  display: block;
+  padding: 1.5rem;
+  background: rgba(17, 24, 39, 0.5);
+  backdrop-filter: blur(4px);
+  border: 1px solid #374151;
+  border-radius: 0.75rem;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s;
+}
+
+.lexicon-term-card:hover {
+  border-color: rgba(248, 223, 165, 0.5);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(248, 223, 165, 0.1);
+}
+
+.lexicon-related-card {
+  display: block;
+  padding: 1rem;
+  background: rgba(17, 24, 39, 0.5);
+  backdrop-filter: blur(4px);
+  border: 1px solid #374151;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s;
+}
+
+.lexicon-related-card:hover {
+  border-color: rgba(248, 223, 165, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(248, 223, 165, 0.1);
+}
+
+.lexicon-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.lexicon-nav-btn.primary {
+  background: linear-gradient(135deg, #f8dfa5, #e4b15e);
+  color: #1a1a2e;
+}
+
+.lexicon-nav-btn.primary:hover {
+  background: linear-gradient(135deg, #e4b15e, #d4a04a);
+}
+
+.lexicon-nav-btn.secondary {
+  background: #374151;
+  color: white;
+}
+
+.lexicon-nav-btn.secondary:hover {
+  background: #4b5563;
+}
+
+
 /* Rich Text Editor Styles */
 .rich-text-editor-container {
   border: 1px solid #374151 !important;
