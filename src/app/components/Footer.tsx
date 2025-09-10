@@ -91,6 +91,7 @@ const Footer = () => {
       title: 'Wissen',
       links: [
         { name: 'Sparplanrechner', href: '/sparplanrechner' },
+        { name: 'Krypto-Lexikon', href: '/lexikon' },
         { name: 'Krypto Academy', href: 'https://www.btc-echo.de/academy/schulungen/investieren-in-kryptowahrungen-in-5-schritten/' },
         { name: 'Börsen Vergleich', href: '/krypto-kaufen' },
         { name: 'Wallets', href: '/wallets' },
