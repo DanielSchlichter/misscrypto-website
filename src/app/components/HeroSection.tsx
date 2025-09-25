@@ -6,15 +6,17 @@ import Image from 'next/image';
 
 const HeroSection = () => {
   const [isMobile, setIsMobile] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
     const checkIsMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
 
     checkIsMobile();
     window.addEventListener('resize', checkIsMobile);
-    
+
     return () => {
       window.removeEventListener('resize', checkIsMobile);
     };
@@ -26,9 +28,9 @@ const HeroSection = () => {
         <div style={{
           display: 'grid',
           gridTemplateColumns: '1fr',
-          gap: isMobile ? '1rem' : '2rem',
+          gap: (isClient && isMobile) ? '1rem' : '2rem',
           alignItems: 'center',
-          minHeight: isMobile ? '60vh' : '50vh'
+          minHeight: (isClient && isMobile) ? '60vh' : '50vh'
         }}>
           
           {/* Text Content - Left Side */}
@@ -38,7 +40,7 @@ const HeroSection = () => {
             textAlign: 'left'
           }}>
             <h1 style={{
-              fontSize: isMobile ? '1.5rem' : '2rem',
+              fontSize: (isClient && isMobile) ? '1.5rem' : '2rem',
               fontWeight: 'bold',
               marginBottom: '1.25rem',
               lineHeight: '1.2',
@@ -49,7 +51,7 @@ const HeroSection = () => {
             </h1>
             
             <p style={{
-              fontSize: isMobile ? '1rem' : '1.125rem',
+              fontSize: (isClient && isMobile) ? '1rem' : '1.125rem',
               color: '#d1d5db',
               marginBottom: '2rem',
               lineHeight: '1.6',
@@ -65,8 +67,8 @@ const HeroSection = () => {
                 href="/krypto-kaufen?currency=bitcoin" 
                 className="mc-btn-primary"
                 style={{
-                  fontSize: isMobile ? '0.875rem' : '1rem',
-                  padding: isMobile ? '0.75rem 1.5rem' : '1rem 2rem'
+                  fontSize: (isClient && isMobile) ? '0.875rem' : '1rem',
+                  padding: (isClient && isMobile) ? '0.75rem 1.5rem' : '1rem 2rem'
                 }}
               >
                 Zum Börsenvergleich
@@ -95,8 +97,8 @@ const HeroSection = () => {
                   cursor: 'pointer',
                   position: 'relative',
                   overflow: 'visible',
-                  fontSize: isMobile ? '0.875rem' : '1rem',
-                  padding: isMobile ? '0.75rem 1.5rem' : '1rem 2rem'
+                  fontSize: (isClient && isMobile) ? '0.875rem' : '1rem',
+                  padding: (isClient && isMobile) ? '0.75rem 1.5rem' : '1rem 2rem'
                 }}
               >
                 <span style={{
@@ -123,22 +125,24 @@ const HeroSection = () => {
             justifyContent: 'center',
             alignItems: 'center',
             width: '100%',
-            height: isMobile ? '40vh' : '60vh'
+            height: (isClient && isMobile) ? '40vh' : '60vh'
           }}>
-            <Image
-              src="/logos/Steffi-Landingpage-Bild-scaled-1 2.webp"
-              alt="Steffi - Deine Krypto-Expertin und Mentorin"
-              width={isMobile ? 300 : 500}
-              height={isMobile ? 360 : 600}
-              style={{
-                objectFit: 'cover',
-                objectPosition: 'center 0%',
-                maxHeight: isMobile ? '35vh' : '60vh',
-                width: 'auto',
-                marginBottom: isMobile ? '0px' : '-150px'
-              }}
-              priority
-            />
+            {isClient && (
+              <Image
+                src="/logos/Steffi-Landingpage-Bild-scaled-1 2.webp"
+                alt="Steffi - Deine Krypto-Expertin und Mentorin"
+                width={isMobile ? 300 : 500}
+                height={isMobile ? 360 : 600}
+                style={{
+                  objectFit: 'cover',
+                  objectPosition: 'center 0%',
+                  maxHeight: isMobile ? '35vh' : '60vh',
+                  width: 'auto',
+                  marginBottom: isMobile ? '0px' : '-150px'
+                }}
+                priority
+              />
+            )}
           </div>
         </div>
 
