@@ -9,6 +9,7 @@ const MobileHeader = () => {
   const [isMobileDropdownOpen, setIsMobileDropdownOpen] = useState(false);
 
   const navigationItems = [
+    { name: '📖 Krypto Kompass', href: '/krypto-kompass' },
     { name: 'Sparplanrechner', href: '/sparplanrechner' },
     { name: 'Krypto-Lexikon', href: '/lexikon' },
     { name: 'Wallets', href: '/wallets' },
@@ -137,33 +138,6 @@ const MobileHeader = () => {
             gap: '1rem',
             marginBottom: '1.5rem'
           }}>
-            {/* Start Link */}
-            <Link
-              href="/"
-              onClick={() => setIsMobileMenuOpen(false)}
-              style={{
-                color: '#ffffff',
-                textDecoration: 'none',
-                fontSize: '1.125rem',
-                fontWeight: '500',
-                padding: '0.75rem 1rem',
-                borderRadius: '0.5rem',
-                transition: 'all 0.3s ease',
-                border: '1px solid transparent'
-              }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.background = 'rgba(248, 223, 165, 0.1)';
-                e.currentTarget.style.borderColor = 'rgba(248, 223, 165, 0.3)';
-                e.currentTarget.style.color = '#f8dfa5';
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.background = 'transparent';
-                e.currentTarget.style.borderColor = 'transparent';
-                e.currentTarget.style.color = '#ffffff';
-              }}
-            >
-              Start
-            </Link>
 
             {/* Krypto kaufen Dropdown */}
             <div style={{

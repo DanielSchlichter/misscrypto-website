@@ -46,10 +46,13 @@ const DesktopHeader = ({ isTablet }: DesktopHeaderProps) => {
           alignItems: 'center',
           gap: isTablet ? '1.5rem' : '2rem'
         }}>
-          {/* Start Link */}
+          {/* Krypto Kompass Link - First position */}
           <Link
-            href="/"
+            href="/krypto-kompass"
             style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
               color: '#ffffff',
               textDecoration: 'none',
               fontSize: isTablet ? '0.95rem' : '1rem',
@@ -65,7 +68,7 @@ const DesktopHeader = ({ isTablet }: DesktopHeaderProps) => {
               e.currentTarget.style.color = '#ffffff';
             }}
           >
-            Start
+            📖 Krypto Kompass
           </Link>
 
           {/* Krypto kaufen Dropdown */}
