@@ -735,28 +735,65 @@ const CryptoKaufenPage = () => {
                   </div>
                 </div>
 
-                {/* CTA Button */}
-                    <a
-                      href={exchange.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => trackExchangeClick(exchange.name)}
-                      style={{
-                        display: 'block', 
-                        textAlign: 'center', 
-                    padding: '1rem',
-                    background: 'linear-gradient(135deg, #e4b15e, #f8dfa5)',
-                    color: '#000000',
-                        borderRadius: '8px', 
-                    textDecoration: 'none',
-                    fontWeight: '600',
-                    fontSize: '1rem',
-                    marginBottom: '1.5rem',
-                    transition: 'all 0.3s ease'
-                  }}
-                >
-                  ZUM ANBIETER →
-                </a>
+                {/* Dual CTA Buttons */}
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: '0.75rem',
+                  marginBottom: '1.5rem'
+                }}>
+                  <a
+                    href={exchange.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => trackExchangeClick(exchange.name)}
+                    style={{
+                      display: 'block',
+                      textAlign: 'center',
+                      padding: '1rem',
+                      background: 'linear-gradient(135deg, #e4b15e, #f8dfa5)',
+                      color: '#000000',
+                      borderRadius: '8px',
+                      textDecoration: 'none',
+                      fontWeight: '600',
+                      fontSize: isMobile ? '0.875rem' : '1rem',
+                      transition: 'all 0.3s ease'
+                    }}
+                  >
+                    ZUM ANBIETER →
+                  </a>
+                  <a
+                    href={
+                      exchange.id === 'bitvavo' ? '/bitvavo' :
+                      exchange.id === 'bitpanda' ? '/bitpanda' :
+                      exchange.id === 'kraken' ? '/kraken' :
+                      exchange.id === 'bison' ? '/bison' : '#'
+                    }
+                    style={{
+                      display: 'block',
+                      textAlign: 'center',
+                      padding: '1rem',
+                      background: 'rgba(0, 0, 0, 0.5)',
+                      color: '#f8dfa5',
+                      border: '2px solid rgba(248, 223, 165, 0.3)',
+                      borderRadius: '8px',
+                      textDecoration: 'none',
+                      fontWeight: '600',
+                      fontSize: isMobile ? '0.875rem' : '1rem',
+                      transition: 'all 0.3s ease'
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.borderColor = 'rgba(248, 223, 165, 0.6)';
+                      e.currentTarget.style.background = 'rgba(248, 223, 165, 0.1)';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.borderColor = 'rgba(248, 223, 165, 0.3)';
+                      e.currentTarget.style.background = 'rgba(0, 0, 0, 0.5)';
+                    }}
+                  >
+                    MEHR INFOS →
+                  </a>
+                </div>
 
                 {/* Accordions */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAnalytics } from '../../hooks/useAnalytics';
 
-const BitpandaClient = () => {
+const BitvavoPage = () => {
   const [screenWidth, setScreenWidth] = useState(1024); // Desktop-first für SSR
   const [isClient, setIsClient] = useState(false);
   const { trackExchangeClick } = useAnalytics();
@@ -138,7 +138,7 @@ const BitpandaClient = () => {
                   WebkitBackgroundClip: 'text',
                   backgroundClip: 'text',
                   WebkitTextFillColor: 'transparent'
-                }}>Bitpanda</span> - Österreichs führende Krypto-Börse
+                }}>Bitvavo</span> - Europas führende Krypto-Börse
               </h1>
 
               <p style={{
@@ -151,7 +151,8 @@ const BitpandaClient = () => {
                 maxWidth: 'none',
                 marginBottom: '2rem'
               }}>
-                FMA-reguliert, keine Ein-/Auszahlungsgebühren und über 400 Assets – Bitpanda verbindet Krypto mit klassischen Anlagen in einer benutzerfreundlichen Plattform.
+                MiCA-lizenziert, sicher und benutzerfreundlich – über 4 Millionen Nutzer vertrauen bereits auf Bitvavo.
+                Mit nur 0,25% Gebühren und über 400 Kryptowährungen die ideale Börse für deinen Krypto-Einstieg.
               </p>
 
               {/* CTA Buttons */}
@@ -163,10 +164,10 @@ const BitpandaClient = () => {
                 marginBottom: '2rem'
               }}>
                 <a
-                  href="https://www.bitpanda.com/de?irclickid=V3QSGnzSyxycT6HTSnRCMTJoUksXvVxdVxomz00&utm_source=Impact&utm_medium=Affiliates&utm_campaign=2051965&utm_content=Miss%20Crypto%20YT&utm_term=Brombacher%2C%20Deines%2C%20Kretzschmar%2C%20Morgenroth%20GbR&ref=615250356669422741&tag=affiliates&subid1=&subid3=2051965&irgwc=1"
+                  href="https://bitvavo.com/de/affiliate/misscrypto?a=05D0249945_misscryptoweb"
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => trackExchangeClick('Bitpanda')}
+                  onClick={() => trackExchangeClick('Bitvavo')}
                   style={{
                     display: 'inline-block',
                     padding: '1rem 2rem',
@@ -179,7 +180,7 @@ const BitpandaClient = () => {
                     transition: 'all 0.3s ease'
                   }}
                 >
-                  🚀 Jetzt bei Bitpanda starten
+                  🚀 Jetzt bei Bitvavo starten
                 </a>
               </div>
 
@@ -196,7 +197,7 @@ const BitpandaClient = () => {
               }}>
                 <img
                   src="/logos/Steffi-Landingpage-Bild-scaled-1%202.webp"
-                  alt="MissCrypto Bitpanda"
+                  alt="MissCrypto Bitvavo"
                   style={{
                     objectFit: 'cover',
                     objectPosition: 'center',
@@ -215,7 +216,7 @@ const BitpandaClient = () => {
       {/* Shiny Divider */}
       <div className="shiny-divider"></div>
 
-      {/* Bitpanda Feature Section */}
+      {/* Bitvavo Feature Section */}
       <div style={{
         paddingTop: isMobile ? '1.5rem' : '2rem',
         paddingBottom: isMobile ? '0.75rem' : '1rem'
@@ -238,7 +239,7 @@ const BitpandaClient = () => {
                   WebkitBackgroundClip: 'text',
                   backgroundClip: 'text',
                   WebkitTextFillColor: 'transparent'
-            }}>Bitpanda</span>?
+            }}>Bitvavo</span>?
           </h2>
           <p style={{
             color: '#d1d5db',
@@ -248,7 +249,7 @@ const BitpandaClient = () => {
             textAlign: isMobile ? 'center' : 'left',
             maxWidth: '800px'
           }}>
-            Bitpanda ist eine der bekanntesten Krypto-Börsen Europas und bietet neben Kryptowährungen auch Aktien, ETFs und Edelmetalle.
+            Bitvavo ist eine der größten Krypto-Börsen in Europa und überzeugt durch Sicherheit, niedrige Gebühren und Benutzerfreundlichkeit.
           </p>
         </div>
       </div>
@@ -305,7 +306,7 @@ const BitpandaClient = () => {
                 zIndex: 3,
                 boxShadow: '0 4px 12px rgba(248, 223, 165, 0.3)'
               }}>
-                🏆 FMA-reguliert
+                🏆 MiCA-lizenziert
               </div>
 
               {/* Logo and Crypto Icons */}
@@ -317,11 +318,12 @@ const BitpandaClient = () => {
                   width: 'fit-content'
                 }}>
                   <img
-                    src="/logos/bitpanda.png"
-                    alt="Bitpanda Logo"
+                    src="/logos/bitvavo.svg"
+                    alt="Bitvavo Logo"
                     style={{
                       height: '40px',
-                      objectFit: 'contain'
+                      objectFit: 'contain',
+                      marginBottom: '-20px'
                     }}
                   />
                 </div>
@@ -329,7 +331,7 @@ const BitpandaClient = () => {
                 {/* Crypto Icons */}
                 <div>
                   <div style={{ color: '#9ca3af', fontSize: '0.75rem', marginBottom: '0.5rem', textAlign: 'right' }}>
-                    ASSETS
+                    KRYPTOWÄHRUNGEN
                   </div>
                   <div style={{ display: 'flex', gap: '0.25rem' }}>
                     {/* Bitcoin */}
@@ -358,19 +360,19 @@ const BitpandaClient = () => {
                       fontWeight: 'bold',
                       color: '#ffffff'
                     }}>Ξ</div>
-                    {/* Stocks */}
+                    {/* XRP */}
                     <div style={{
                       width: '24px',
                       height: '24px',
                       borderRadius: '50%',
-                      background: '#4F46E5',
+                      background: '#23292F',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       fontSize: '12px',
                       fontWeight: 'bold',
                       color: '#ffffff'
-                    }}>📈</div>
+                    }}>✕</div>
                     {/* Plus Icon */}
                     <div style={{
                       width: '24px',
@@ -397,35 +399,35 @@ const BitpandaClient = () => {
               }}>
                 <div>
                   <div style={{ color: '#9ca3af', fontSize: isMobile ? '0.75rem' : '0.875rem' }}>Mindesteinzahlung:</div>
-                  <div style={{ color: '#ffffff', fontWeight: '600', fontSize: isMobile ? '0.875rem' : '1rem' }}>10,00 €</div>
+                  <div style={{ color: '#ffffff', fontWeight: '600', fontSize: isMobile ? '0.875rem' : '1rem' }}>1,00 €</div>
                 </div>
 
                 <div>
                   <div style={{ color: '#9ca3af', fontSize: isMobile ? '0.75rem' : '0.875rem' }}>Gebühren:</div>
-                  <div style={{ color: '#ffffff', fontWeight: '600', fontSize: isMobile ? '0.875rem' : '1rem' }}>ab 0,25%</div>
+                  <div style={{ color: '#ffffff', fontWeight: '600', fontSize: isMobile ? '0.875rem' : '1rem' }}>0,25%</div>
                 </div>
 
                 <div>
                   <div style={{ color: '#9ca3af', fontSize: isMobile ? '0.75rem' : '0.875rem' }}>Firmensitz:</div>
                   <div style={{ color: '#ffffff', fontWeight: '600', fontSize: isMobile ? '0.875rem' : '1rem' }}>
-                    Österreich 🇦🇹
+                    Niederlande 🇳🇱
                   </div>
                 </div>
 
                 <div>
                   <div style={{ color: '#9ca3af', fontSize: isMobile ? '0.75rem' : '0.875rem' }}>Gründung:</div>
                   <div style={{ color: '#ffffff', fontWeight: '600', fontSize: isMobile ? '0.875rem' : '1rem' }}>
-                    2014
+                    2018
                   </div>
                 </div>
               </div>
 
               {/* CTA Button */}
               <a
-                href="https://www.bitpanda.com/de?irclickid=V3QSGnzSyxycT6HTSnRCMTJoUksXvVxdVxomz00&utm_source=Impact&utm_medium=Affiliates&utm_campaign=2051965&utm_content=Miss%20Crypto%20YT&utm_term=Brombacher%2C%20Deines%2C%20Kretzschmar%2C%20Morgenroth%20GbR&ref=615250356669422741&tag=affiliates&subid1=&subid3=2051965&irgwc=1"
+                href="https://bitvavo.com/de/affiliate/misscrypto?a=05D0249945_misscryptoweb"
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => trackExchangeClick('Bitpanda')}
+                onClick={() => trackExchangeClick('Bitvavo')}
                 style={{
                   display: 'block',
                   textAlign: 'center',
@@ -459,7 +461,7 @@ const BitpandaClient = () => {
             {/* Main Content */}
             <div style={{ flex: '1', maxWidth: isMobile ? '100%' : '800px' }}>
 
-              <section id="bitpanda-detail" style={{ marginBottom: isMobile ? '2rem' : '3rem' }}>
+              <section id="bitvavo-detail" style={{ marginBottom: isMobile ? '2rem' : '3rem' }}>
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -489,13 +491,13 @@ const BitpandaClient = () => {
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent'
                   }}>
-                    Empfohlene Krypto-Börse: Bitpanda
+                    Empfohlene Krypto-Börse: Bitvavo
                   </h2>
                 </div>
 
                 <div style={{ color: '#d1d5db', fontSize: '1rem', lineHeight: '1.7' }}>
                   <p style={{ marginBottom: '1.5rem' }}>
-                    Bitpanda ist eine der bekanntesten Krypto-Börsen in Europa und hat ihren Hauptsitz in Wien. Gegründet 2014, bietet die Plattform heute weit mehr als nur den Handel mit Kryptowährungen: Neben Bitcoin, Ethereum oder XRP können Anleger auch Aktien, ETFs und Edelmetalle kaufen. Damit ist Bitpanda ein echter All-in-One-Investment-Anbieter, der sich sowohl für Einsteiger als auch für erfahrene Trader eignet.
+                    Bitvavo ist eine der größten Krypto-Börsen Europas mit Sitz in Amsterdam und gilt als Top-Adresse für sichere und günstige Investments in Kryptowährungen. Die Plattform richtet sich sowohl an Einsteiger als auch an professionelle Trader und überzeugt mit niedrigen Gebühren, einer benutzerfreundlichen App und starker Regulierung.
                   </p>
 
                   {/* Feature Highlight Box */}
@@ -521,7 +523,7 @@ const BitpandaClient = () => {
                       💡 HIGHLIGHT
                     </div>
                     <p style={{ margin: 0, fontWeight: '500' }}>
-                      Bitpanda erhebt <strong>keine Ein- und Auszahlungsgebühren</strong> und punktet mit einer besonders einfachen Benutzeroberfläche, die auch Anfängern den Einstieg in die Welt der Kryptowährungen erleichtert.
+                      Bitvavo gehört zu den ersten Börsen in Europa mit einer offiziellen <strong>MiCA-Lizenz</strong>. Damit erfüllt die Plattform die neuen EU-Standards für Krypto-Assets, was höchste Sicherheit, Transparenz und Anlegerschutz garantiert.
                     </p>
                   </div>
 
@@ -536,7 +538,7 @@ const BitpandaClient = () => {
                   </h3>
 
                   <p style={{ marginBottom: '1.5rem' }}>
-                    Bitpanda ist durch die österreichische Finanzmarktaufsichtsbehörde (FMA) als PSD2-Zahlungsdienstleister lizenziert. Damit erfüllt die Plattform strenge europäische Vorgaben und bietet ein hohes Maß an Sicherheit und Transparenz. Kundengelder werden separat verwahrt, digitale Assets sind über Cold Storage abgesichert.
+                    Die Registrierung bei Bitvavo ist unkompliziert und erfolgt über das VideoIdent-Verfahren. Als in Europa regulierte Plattform unterliegt Bitvavo der Aufsicht der niederländischen Zentralbank (DNB) und erfüllt seit 2025 zusätzlich alle Anforderungen der EU-weiten MiCA-Regulierung. Kundengelder werden auf separaten Treuhandkonten verwahrt, digitale Assets sind über Cold Storage abgesichert.
                   </p>
 
                   <h3 style={{
@@ -562,8 +564,8 @@ const BitpandaClient = () => {
                       borderRadius: '8px',
                       padding: '1rem'
                     }}>
-                      <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#f8dfa5', marginBottom: '0.5rem' }}>ab 0,25%</div>
-                      <div style={{ fontSize: '0.9rem', color: '#d1d5db' }}>Handelsgebühren beim Kauf und Verkauf von Kryptowährungen</div>
+                      <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#f8dfa5', marginBottom: '0.5rem' }}>0,25%</div>
+                      <div style={{ fontSize: '0.9rem', color: '#d1d5db' }}>Standard-Handelsgebühren (reduzierbar bis 0,04% bei hohem Volumen)</div>
                     </div>
                     <div style={{
                       background: 'rgba(0, 0, 0, 0.3)',
@@ -572,7 +574,7 @@ const BitpandaClient = () => {
                       padding: '1rem'
                     }}>
                       <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#f8dfa5', marginBottom: '0.5rem' }}>400+</div>
-                      <div style={{ fontSize: '0.9rem', color: '#d1d5db' }}>digitale Assets (Kryptowährungen, Aktien, ETFs, Edelmetalle)</div>
+                      <div style={{ fontSize: '0.9rem', color: '#d1d5db' }}>Kryptowährungen handelbar, darunter Bitcoin, Ethereum, XRP und Solana</div>
                     </div>
                   </div>
 
@@ -584,11 +586,11 @@ const BitpandaClient = () => {
                   }}>
                     <li style={{ marginBottom: '0.5rem', display: 'flex', alignItems: 'center' }}>
                       <span style={{ color: '#f8dfa5', marginRight: '0.5rem' }}>✓</span>
-                      Regulierung durch die FMA in Österreich
+                      MiCA-lizenziert und bei der DNB registriert
                     </li>
                     <li style={{ marginBottom: '0.5rem', display: 'flex', alignItems: 'center' }}>
                       <span style={{ color: '#f8dfa5', marginRight: '0.5rem' }}>✓</span>
-                      Sitz in Wien, europäische Rechts- und Datenschutzstandards
+                      App & Desktop: intuitive Bedienung für Einsteiger, Profi-Features für Trader
                     </li>
                   </ul>
 
@@ -603,11 +605,7 @@ const BitpandaClient = () => {
                   </h3>
 
                   <p style={{ marginBottom: '1.5rem' }}>
-                    Ein wesentlicher Vorteil von Bitpanda ist die große Auswahl: Anleger können nicht nur in Kryptowährungen investieren, sondern auch in klassische Anlageklassen wie Gold, Silber oder globale Aktien. Damit eignet sich die Plattform perfekt für alle, die ihr Portfolio breit diversifizieren wollen.
-                  </p>
-
-                  <p style={{ marginBottom: '1.5rem' }}>
-                    Zudem bietet Bitpanda ein Rewards-Programm, bei dem Nutzer durch den Besitz des hauseigenen BEST-Tokens Gebührenrabatte und weitere Vorteile erhalten. Die intuitive Mobile App rundet das Angebot ab und ermöglicht Investitionen per Smartphone in wenigen Sekunden.
+                    Bitvavo kombiniert eine einfache Nutzeroberfläche mit professionellen Funktionen. Neben klassischem Krypto-Handel bietet die Plattform auch Sparpläne, Staking-Möglichkeiten und eine sehr übersichtliche Gebührenstruktur. Besonders attraktiv ist die Mobile App, mit der sich Käufe und Verkäufe von Kryptowährungen in wenigen Sekunden erledigen lassen.
                   </p>
 
                   <h3 style={{
@@ -621,7 +619,7 @@ const BitpandaClient = () => {
                   </h3>
 
                   <p style={{ marginBottom: '1.5rem' }}>
-                    Bitpanda ist eine ideale Wahl für alle, die eine breit aufgestellte Investment-Plattform suchen, die Krypto mit klassischen Anlageklassen verbindet. Dank Regulierung durch die FMA, einer benutzerfreundlichen App und einer enormen Asset-Auswahl ist Bitpanda besonders für europäische Anleger interessant, die auf Sicherheit und Vielfalt setzen.
+                    Bitvavo ist die erste Wahl für Anleger im europäischen Raum, die Wert auf Regulierung, Sicherheit und niedrige Gebühren legen. Durch die MiCA-Lizenz setzt die Börse neue Maßstäbe und bietet Einsteigern wie Profis eine vertrauenswürdige Umgebung, um in Kryptowährungen zu investieren.
                   </p>
 
                   {/* CTA Section */}
@@ -634,13 +632,13 @@ const BitpandaClient = () => {
                     textAlign: 'center'
                   }}>
                     <div style={{ fontSize: '1.2rem', fontWeight: '600', color: '#10b981', marginBottom: '1rem' }}>
-                      👉 Jetzt Bitpanda testen und starten
+                      👉 Jetzt Bitvavo testen und starten
                     </div>
                     <a
-                      href="https://www.bitpanda.com/de?irclickid=V3QSGnzSyxycT6HTSnRCMTJoUksXvVxdVxomz00&utm_source=Impact&utm_medium=Affiliates&utm_campaign=2051965&utm_content=Miss%20Crypto%20YT&utm_term=Brombacher%2C%20Deines%2C%20Kretzschmar%2C%20Morgenroth%20GbR&ref=615250356669422741&tag=affiliates&subid1=&subid3=2051965&irgwc=1"
+                      href="https://bitvavo.com/de/affiliate/misscrypto?a=05D0249945_misscryptoweb"
                       target="_blank"
                       rel="noopener noreferrer"
-                      onClick={() => trackExchangeClick('Bitpanda')}
+                      onClick={() => trackExchangeClick('Bitvavo')}
                       style={{
                         display: 'inline-block',
                         padding: '0.75rem 1.5rem',
@@ -659,7 +657,7 @@ const BitpandaClient = () => {
                 </div>
               </section>
 
-              <section id="bitpanda-faq" style={{ marginBottom: isMobile ? '2rem' : '3rem' }}>
+              <section id="bitvavo-faq" style={{ marginBottom: isMobile ? '2rem' : '3rem' }}>
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -689,7 +687,7 @@ const BitpandaClient = () => {
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent'
                   }}>
-                    Häufige Fragen zu Bitpanda
+                    Häufige Fragen zu Bitvavo
                   </h2>
                 </div>
 
@@ -713,11 +711,11 @@ const BitpandaClient = () => {
                       gap: '0.5rem',
                       listStyle: 'none'
                     }}>
-                      Ist Bitpanda sicher?
+                      Ist Bitvavo sicher?
                       <span style={{ marginLeft: 'auto', transform: 'rotate(0deg)', transition: 'transform 0.3s' }}>▼</span>
                     </summary>
                     <div style={{ padding: '0 1rem 1rem', color: '#d1d5db', lineHeight: '1.6' }}>
-                      Ja, Bitpanda gilt als eine der sichersten Krypto-Börsen Europas. Die Plattform hat ihren Sitz in Wien und ist durch die österreichische Finanzmarktaufsicht (FMA) als PSD2-Zahlungsdienstleister reguliert. Kundengelder werden getrennt verwahrt, digitale Assets liegen im Cold Storage. Zusätzlich bietet Bitpanda moderne Sicherheitsfunktionen wie Zwei-Faktor-Authentifizierung (2FA) und regelmäßige externe Prüfungen. Durch die klare Regulierung und den Standort in Österreich genießen Nutzer europäische Rechts- und Datenschutzstandards.
+                      Ja, Bitvavo gehört zu den sichersten Krypto-Börsen in Europa. Die Plattform ist bei der niederländischen Zentralbank (DNB) registriert und seit 2025 zusätzlich nach der neuen MiCA-Verordnung in der EU lizenziert. Kundengelder werden getrennt auf Treuhandkonten verwahrt, digitale Assets liegen größtenteils im Cold Storage. Zusätzlich gibt es Schutzmechanismen wie Zwei-Faktor-Authentifizierung (2FA) und Anti-Phishing-Codes. Damit erfüllt Bitvavo höchste Standards für Sicherheit und Transparenz.
                     </div>
                   </details>
 
@@ -737,11 +735,11 @@ const BitpandaClient = () => {
                       gap: '0.5rem',
                       listStyle: 'none'
                     }}>
-                      Welche Gebühren fallen bei Bitpanda an?
+                      Welche Gebühren fallen bei Bitvavo an?
                       <span style={{ marginLeft: 'auto', transform: 'rotate(0deg)', transition: 'transform 0.3s' }}>▼</span>
                     </summary>
                     <div style={{ padding: '0 1rem 1rem', color: '#d1d5db', lineHeight: '1.6' }}>
-                      Bitpanda arbeitet mit fixen Spreads. Beim Kauf oder Verkauf von Kryptowährungen fallen in der Regel 1,49 % an. Für andere Anlageklassen wie Aktien oder Edelmetalle gelten ebenfalls transparente Kostenmodelle. Es gibt keine versteckten Ein- oder Auszahlungsgebühren. Wer den hauseigenen BEST-Token hält, profitiert zudem von Rabatten auf die Handelsgebühren und weiteren Vorteilen im Rewards-Programm.
+                      Bitvavo bietet ein sehr günstiges Gebührenmodell. Die Standard-Handelsgebühren liegen bei 0,25 % für Käufer (Taker) und 0,15 % für Verkäufer (Maker). Mit steigendem Handelsvolumen lassen sich die Gebühren weiter reduzieren – bis auf nur 0,04 %. Ein- und Auszahlungen per SEPA sind kostenlos, was die Plattform besonders attraktiv für Anleger macht, die regelmäßig investieren möchten.
                     </div>
                   </details>
 
@@ -761,11 +759,11 @@ const BitpandaClient = () => {
                       gap: '0.5rem',
                       listStyle: 'none'
                     }}>
-                      Welche Kryptowährungen gibt es bei Bitpanda?
+                      Kann man bei Bitvavo einen Sparplan einrichten?
                       <span style={{ marginLeft: 'auto', transform: 'rotate(0deg)', transition: 'transform 0.3s' }}>▼</span>
                     </summary>
                     <div style={{ padding: '0 1rem 1rem', color: '#d1d5db', lineHeight: '1.6' }}>
-                      Bitpanda bietet eine sehr große Auswahl von über 400 digitalen Assets. Dazu gehören die bekanntesten Kryptowährungen wie Bitcoin (BTC), Ethereum (ETH) oder Ripple (XRP), aber auch kleinere Projekte und viele Trend-Coins. Zusätzlich können Anleger auf Bitpanda auch Aktien, ETFs und Edelmetalle kaufen. Damit ist Bitpanda eine der vielseitigsten Plattformen für europäische Anleger.
+                      Ja, Bitvavo bietet eine einfache Möglichkeit, Sparpläne für Kryptowährungen einzurichten. Nutzer können auswählen, welchen Betrag sie in regelmäßigen Abständen investieren möchten, und die Käufe laufen dann automatisch. Das ist ideal für Dollar-Cost-Averaging (DCA), also den langfristigen Vermögensaufbau durch regelmäßige Investitionen in Bitcoin oder andere Kryptowährungen.
                     </div>
                   </details>
 
@@ -785,11 +783,11 @@ const BitpandaClient = () => {
                       gap: '0.5rem',
                       listStyle: 'none'
                     }}>
-                      Kann man bei Bitpanda einen Sparplan einrichten?
+                      Welche Kryptowährungen gibt es bei Bitvavo?
                       <span style={{ marginLeft: 'auto', transform: 'rotate(0deg)', transition: 'transform 0.3s' }}>▼</span>
                     </summary>
                     <div style={{ padding: '0 1rem 1rem', color: '#d1d5db', lineHeight: '1.6' }}>
-                      Ja, Bitpanda ermöglicht Sparpläne auf Kryptowährungen, Aktien, ETFs und Edelmetalle. Nutzer können einen festen Betrag wählen, der regelmäßig automatisch investiert wird. Die Einrichtung ist unkompliziert und kann per SEPA-Lastschrift laufen. Das macht Bitpanda besonders interessant für Anleger, die langfristig Vermögen aufbauen möchten – egal ob in Bitcoin, Ethereum oder klassische Anlageklassen.
+                      Bei Bitvavo stehen über 400 Kryptowährungen zur Verfügung – darunter die großen Coins wie Bitcoin (BTC), Ethereum (ETH), Ripple (XRP), Solana (SOL) oder Cardano (ADA). Zusätzlich finden Anleger auch viele kleinere Projekte und Trend-Assets. Die große Auswahl macht Bitvavo sowohl für Einsteiger als auch für fortgeschrittene Investoren interessant.
                     </div>
                   </details>
 
@@ -809,11 +807,11 @@ const BitpandaClient = () => {
                       gap: '0.5rem',
                       listStyle: 'none'
                     }}>
-                      Was ist das Bitpanda BEST-Token-Programm?
+                      Was bedeutet die MiCA-Lizenz von Bitvavo?
                       <span style={{ marginLeft: 'auto', transform: 'rotate(0deg)', transition: 'transform 0.3s' }}>▼</span>
                     </summary>
                     <div style={{ padding: '0 1rem 1rem', color: '#d1d5db', lineHeight: '1.6' }}>
-                      Das BEST-Token-Programm ist ein Vorteilssystem für aktive Nutzer. Wer den Bitpanda Ecosystem Token (BEST) hält, erhält Gebührenrabatte beim Handel, Zugang zu exklusiven Vorteilen und kann an regelmäßigen Belohnungen teilnehmen. BEST stärkt die Bindung an die Plattform und lohnt sich vor allem für Anleger, die Bitpanda regelmäßig nutzen.
+                      Die MiCA-Regulierung (Markets in Crypto-Assets) ist seit 2025 der neue EU-Standard für Krypto-Börsen. Mit der MiCA-Lizenz erfüllt Bitvavo die strengsten europäischen Anforderungen in Bezug auf Verbraucherschutz, Transparenz und Sicherheit. Für Anleger bedeutet das: mehr Vertrauen, klare rechtliche Rahmenbedingungen und ein besonders hohes Schutzniveau.
                     </div>
                   </details>
                 </div>
@@ -861,7 +859,7 @@ const BitpandaClient = () => {
                     <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
                       <li style={{ marginBottom: '0.75rem' }}>
                         <a
-                          href="#bitpanda-detail"
+                          href="#bitvavo-detail"
                           style={{
                             color: '#f8dfa5',
                             textDecoration: 'none',
@@ -875,12 +873,12 @@ const BitpandaClient = () => {
                             transition: 'all 0.3s ease'
                           }}
                         >
-                          1. Empfohlene Krypto-Börse: Bitpanda
+                          1. Empfohlene Krypto-Börse: Bitvavo
                         </a>
                       </li>
                       <li style={{ marginBottom: '0.75rem' }}>
                         <a
-                          href="#bitpanda-faq"
+                          href="#bitvavo-faq"
                           style={{
                             color: '#d1d5db',
                             textDecoration: 'none',
@@ -894,7 +892,7 @@ const BitpandaClient = () => {
                             transition: 'all 0.3s ease'
                           }}
                         >
-                          2. Häufige Fragen zu Bitpanda
+                          2. Häufige Fragen zu Bitvavo
                         </a>
                       </li>
                     </ul>
@@ -911,4 +909,4 @@ const BitpandaClient = () => {
   );
 };
 
-export default BitpandaClient;
+export default BitvavoPage;

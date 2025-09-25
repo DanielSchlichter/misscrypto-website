@@ -508,30 +508,67 @@ const CryptoPurchaseCalculatorClient: React.FC<CryptoPurchaseCalculatorClientPro
                               {formatCurrency(result.netAmount)}
                             </span>
                           </div>
-                          <a
-                            href={result.exchange.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{
-                              display: 'block',
-                              textAlign: 'center',
-                              padding: '0.5rem 1rem',
-                              background: result.exchange.id === 'bitvavo' && !result.tooLow ? 
-                                'linear-gradient(135deg, #e4b15e, #f8dfa5)' : 
-                                'rgba(248, 223, 165, 0.2)',
-                              color: result.exchange.id === 'bitvavo' && !result.tooLow ? '#000000' : '#f8dfa5',
-                              borderRadius: '6px',
-                              textDecoration: 'none',
-                              fontSize: '0.875rem',
-                              fontWeight: '600',
-                              border: result.exchange.id === 'bitvavo' && !result.tooLow ? 
-                                'none' : 
-                                '1px solid rgba(248, 223, 165, 0.3)',
-                              transition: 'all 0.3s ease'
-                            }}
-                          >
-                            Zu {result.exchange.name} →
-                          </a>
+                          <div style={{
+                            display: 'grid',
+                            gridTemplateColumns: '1fr 1fr',
+                            gap: '0.5rem'
+                          }}>
+                            <a
+                              href={result.exchange.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                display: 'block',
+                                textAlign: 'center',
+                                padding: '0.5rem 0.5rem',
+                                background: result.exchange.id === 'bitvavo' && !result.tooLow ?
+                                  'linear-gradient(135deg, #e4b15e, #f8dfa5)' :
+                                  'rgba(248, 223, 165, 0.2)',
+                                color: result.exchange.id === 'bitvavo' && !result.tooLow ? '#000000' : '#f8dfa5',
+                                borderRadius: '6px',
+                                textDecoration: 'none',
+                                fontSize: '0.8rem',
+                                fontWeight: '600',
+                                border: result.exchange.id === 'bitvavo' && !result.tooLow ?
+                                  'none' :
+                                  '1px solid rgba(248, 223, 165, 0.3)',
+                                transition: 'all 0.3s ease'
+                              }}
+                            >
+                              ZUM ANBIETER →
+                            </a>
+                            <a
+                              href={
+                                result.exchange.id === 'bitvavo' ? '/bitvavo' :
+                                result.exchange.id === 'bitpanda' ? '/bitpanda' :
+                                result.exchange.id === 'kraken' ? '/kraken' :
+                                result.exchange.id === 'bison' ? '/bison' : '#'
+                              }
+                              style={{
+                                display: 'block',
+                                textAlign: 'center',
+                                padding: '0.5rem 0.5rem',
+                                background: 'rgba(0, 0, 0, 0.5)',
+                                color: '#f8dfa5',
+                                border: '1px solid rgba(248, 223, 165, 0.3)',
+                                borderRadius: '6px',
+                                textDecoration: 'none',
+                                fontSize: '0.8rem',
+                                fontWeight: '600',
+                                transition: 'all 0.3s ease'
+                              }}
+                              onMouseOver={(e) => {
+                                e.currentTarget.style.borderColor = 'rgba(248, 223, 165, 0.6)';
+                                e.currentTarget.style.background = 'rgba(248, 223, 165, 0.1)';
+                              }}
+                              onMouseOut={(e) => {
+                                e.currentTarget.style.borderColor = 'rgba(248, 223, 165, 0.3)';
+                                e.currentTarget.style.background = 'rgba(0, 0, 0, 0.5)';
+                              }}
+                            >
+                              MEHR INFOS →
+                            </a>
+                          </div>
                         </div>
                       )}
                     </div>

@@ -8,6 +8,51 @@ export interface LexiconTerm {
   relatedTerms?: string[];
   icon?: string;
   lastUpdated: string;
+  funFact?: string;
+  customTitle?: string;
+  customSubtitle?: string;
+  prosAndCons?: {
+    pros: string[];
+    cons: string[];
+    prosTitle?: string;
+    consTitle?: string;
+  };
+  comparisons?: {
+    title: string;
+    items: Array<{
+      name: string;
+      description: string;
+    }>;
+  };
+  walletComparison?: {
+    headers: string[];
+    rows: Array<{
+      type: string;
+      values: string[];
+    }>;
+  };
+  recommendations?: Array<{
+    title: string;
+    description: string;
+    link?: string;
+    linkText?: string;
+    icon: string;
+  }>;
+  securityTips?: string[];
+  walletTypes?: {
+    hotWallet: {
+      title: string;
+      description: string;
+      features: string[];
+      icon: string;
+    };
+    coldWallet: {
+      title: string;
+      description: string;
+      features: string[];
+      icon: string;
+    };
+  };
 }
 
 export const lexiconTerms: LexiconTerm[] = [
@@ -20,7 +65,8 @@ export const lexiconTerms: LexiconTerm[] = [
     category: 'Kryptowährungen',
     relatedTerms: ['blockchain', 'wallet'],
     icon: '₿',
-    lastUpdated: '2025-09-17'
+    lastUpdated: '2025-09-17',
+    funFact: 'Hättest du im Jahr 2010 nur 100 € in Bitcoin investiert, wäre dein Investment heute Millionen wert. Damals kostete 1 BTC weniger als 0,01 €.'
   },
   {
     id: 'blockchain',
@@ -31,7 +77,8 @@ export const lexiconTerms: LexiconTerm[] = [
     category: 'Technologie',
     relatedTerms: ['bitcoin', 'wallet'],
     icon: '⛓️',
-    lastUpdated: '2025-09-17'
+    lastUpdated: '2025-09-17',
+    funFact: 'Viele Experten vergleichen die Blockchain mit dem Internet im Jahr 1995: Die Technologie steckt noch in den Anfängen – das Potenzial ist riesig.'
   },
   {
     id: 'wallet',
@@ -42,7 +89,8 @@ export const lexiconTerms: LexiconTerm[] = [
     category: 'Sicherheit',
     relatedTerms: ['bitcoin', 'blockchain', 'private-key'],
     icon: '👛',
-    lastUpdated: '2025-09-17'
+    lastUpdated: '2025-09-17',
+    funFact: 'Viele Menschen denken, ihre Coins würden „in der Wallet liegen". Tatsächlich liegen sie immer auf der Blockchain – die Wallet ist nur dein Schlüssel dorthin.'
   },
   {
     id: 'private-key',
@@ -53,7 +101,8 @@ export const lexiconTerms: LexiconTerm[] = [
     category: 'Sicherheit',
     relatedTerms: ['wallet', 'blockchain'],
     icon: '🔑',
-    lastUpdated: '2025-09-17'
+    lastUpdated: '2025-09-17',
+    funFact: 'Der bekannteste verlorene Private Key gehört zu einem Briten, der versehentlich eine Festplatte mit über 7.500 BTC wegwarf – heute mehrere Hundert Millionen Euro wert.'
   },
   {
     id: 'token',
@@ -64,7 +113,8 @@ export const lexiconTerms: LexiconTerm[] = [
     category: 'Kryptowährungen',
     relatedTerms: ['blockchain', 'bitcoin', 'altcoin'],
     icon: '🪙',
-    lastUpdated: '2025-09-17'
+    lastUpdated: '2025-09-17',
+    funFact: '2017 war das Jahr der sogenannten ICOs („Initial Coin Offerings") – damals wurden Hunderte Token-Projekte mit oft nur einer Idee und Website finanziert. Viele verschwanden wieder – manche wurden Milliardenprojekte.'
   },
   {
     id: 'altcoin',
@@ -75,7 +125,8 @@ export const lexiconTerms: LexiconTerm[] = [
     category: 'Kryptowährungen',
     relatedTerms: ['bitcoin', 'token', 'blockchain', 'ethereum'],
     icon: '🔄',
-    lastUpdated: '2025-09-17'
+    lastUpdated: '2025-09-17',
+    funFact: 'Im Jahr 2013 galten schon Coins wie Litecoin und Peercoin als „Konkurrenz" zu Bitcoin – inzwischen gibt es über 10.000 Altcoins mit ganz unterschiedlichen Zielen und Technologien.'
   },
   {
     id: 'ethereum',
@@ -86,7 +137,8 @@ export const lexiconTerms: LexiconTerm[] = [
     category: 'Kryptowährungen',
     relatedTerms: ['altcoin', 'blockchain', 'token'],
     icon: '🔷',
-    lastUpdated: '2025-09-17'
+    lastUpdated: '2025-09-17',
+    funFact: 'Ethereum war ursprünglich nur eine Idee auf einem Whitepaper – finanziert wurde das Projekt durch einen Crowdsale im Jahr 2014, bei dem Investoren ETH zum Startpreis von unter 0,30 $ kaufen konnten.'
   },
   {
     id: 'hodl',
@@ -97,7 +149,8 @@ export const lexiconTerms: LexiconTerm[] = [
     category: 'Strategie',
     relatedTerms: ['bitcoin', 'altcoin'],
     icon: '💎',
-    lastUpdated: '2025-09-17'
+    lastUpdated: '2025-09-17',
+    funFact: 'Inzwischen gibt es sogar eigene Meme-Coins und NFT-Kollektionen, die sich um den Begriff HODL drehen – und auf Kaffeetassen, Shirts und Tattoos wiederzufinden sind.'
   },
   {
     id: 'nft',
@@ -108,7 +161,8 @@ export const lexiconTerms: LexiconTerm[] = [
     category: 'Technologie',
     relatedTerms: ['token', 'ethereum', 'wallet'],
     icon: '🎨',
-    lastUpdated: '2025-09-17'
+    lastUpdated: '2025-09-17',
+    funFact: 'Das teuerste NFT aller Zeiten („Everydays" von Beeple) wurde 2021 für 69 Millionen Dollar versteigert – über das Auktionshaus Christie\'s.'
   },
   {
     id: 'dex',
@@ -119,7 +173,8 @@ export const lexiconTerms: LexiconTerm[] = [
     category: 'Technologie',
     relatedTerms: ['ethereum', 'token', 'wallet', 'altcoin'],
     icon: '🔄',
-    lastUpdated: '2025-09-17'
+    lastUpdated: '2025-09-17',
+    funFact: 'Der legendäre DeFi-Sommer 2020 begann mit einem DEX: Uniswap wurde zum führenden Handelsplatz für neue Token – ohne zentrale Kontrolle, aber mit Milliardenvolumen.'
   },
   {
     id: 'cex',
@@ -130,7 +185,8 @@ export const lexiconTerms: LexiconTerm[] = [
     category: 'Technologie',
     relatedTerms: ['dex', 'wallet', 'bitcoin'],
     icon: '🏢',
-    lastUpdated: '2025-09-17'
+    lastUpdated: '2025-09-17',
+    funFact: 'Die Insolvenz der Krypto-Börse FTX im Jahr 2022 war eine der größten Pleiten der Branche – und führte zu einem Boom bei Self-Custody-Wallets. Die Lehre: „Not your keys, not your coins."'
   },
   {
     id: 'mining',
@@ -141,7 +197,8 @@ export const lexiconTerms: LexiconTerm[] = [
     category: 'Technologie',
     relatedTerms: ['bitcoin', 'blockchain', 'ethereum'],
     icon: '⛏️',
-    lastUpdated: '2025-09-17'
+    lastUpdated: '2025-09-17',
+    funFact: 'Als Bitcoin 2009 startete, konnte man auf einem ganz normalen Laptop minen. Wer damals eine Stunde „gegraben" hat, bekam 50 BTC – heute über 2 Millionen Euro wert.'
   },
   {
     id: 'staking',
@@ -152,7 +209,8 @@ export const lexiconTerms: LexiconTerm[] = [
     category: 'Technologie',
     relatedTerms: ['ethereum', 'cex', 'wallet'],
     icon: '🔒',
-    lastUpdated: '2025-09-17'
+    lastUpdated: '2025-09-17',
+    funFact: 'Nach dem „Merge" im Jahr 2022 wurde Ethereum von Mining auf Staking umgestellt – und reduzierte den Energieverbrauch des Netzwerks um über 99 %.'
   },
   {
     id: 'defi',
@@ -163,7 +221,8 @@ export const lexiconTerms: LexiconTerm[] = [
     category: 'Technologie',
     relatedTerms: ['ethereum', 'dex', 'staking', 'token'],
     icon: '🏛️',
-    lastUpdated: '2025-09-17'
+    lastUpdated: '2025-09-17',
+    funFact: 'Im sogenannten „DeFi-Sommer" 2020 explodierte das Kapital in dezentralen Anwendungen von unter 1 Mrd. $ auf über 15 Mrd. $ – ausgelöst durch das erste große Yield-Farming-Protokoll: Compound.'
   },
   {
     id: 'seed-phrase',
@@ -174,7 +233,8 @@ export const lexiconTerms: LexiconTerm[] = [
     category: 'Sicherheit',
     relatedTerms: ['wallet', 'private-key', 'bitcoin'],
     icon: '🌱',
-    lastUpdated: '2025-09-17'
+    lastUpdated: '2025-09-17',
+    funFact: 'Manche Krypto-Enthusiasten speichern ihre Seed Phrase in einem Bankschließfach, vergraben sie in der Erde – oder prägen sie in Titanplatten, um Feuer, Wasser und Zeit zu überstehen.'
   },
   {
     id: 'fiat',
@@ -185,7 +245,8 @@ export const lexiconTerms: LexiconTerm[] = [
     category: 'Grundlagen',
     relatedTerms: ['bitcoin', 'blockchain', 'staking'],
     icon: '💶',
-    lastUpdated: '2025-09-17'
+    lastUpdated: '2025-09-17',
+    funFact: 'Vor dem Jahr 1971 war der US-Dollar an Gold gebunden – doch mit der „Nixon-Schock"-Erklärung endete das goldgedeckte System. Seitdem sind alle großen Währungen reines Fiatgeld.'
   },
   {
     id: 'stablecoin',
@@ -196,7 +257,8 @@ export const lexiconTerms: LexiconTerm[] = [
     category: 'Kryptowährungen',
     relatedTerms: ['fiat', 'defi', 'token', 'ethereum'],
     icon: '⚖️',
-    lastUpdated: '2025-09-17'
+    lastUpdated: '2025-09-17',
+    funFact: 'Der Stablecoin USDT (Tether) ist die am häufigsten gehandelte Kryptowährung weltweit – mit mehr täglichem Volumen als Bitcoin.'
   },
   {
     id: 'smart-contract',
@@ -207,7 +269,8 @@ export const lexiconTerms: LexiconTerm[] = [
     category: 'Technologie',
     relatedTerms: ['ethereum', 'defi', 'nft', 'blockchain'],
     icon: '📜',
-    lastUpdated: '2025-09-17'
+    lastUpdated: '2025-09-17',
+    funFact: 'Der Begriff „Smart Contract" wurde schon 1994 vom Kryptographen Nick Szabo geprägt – lange bevor es Blockchains gab.'
   },
   {
     id: 'gas-fee',
@@ -218,7 +281,8 @@ export const lexiconTerms: LexiconTerm[] = [
     category: 'Technologie',
     relatedTerms: ['ethereum', 'smart-contract', 'nft', 'defi'],
     icon: '⛽',
-    lastUpdated: '2025-09-17'
+    lastUpdated: '2025-09-17',
+    funFact: 'In der Spitze der NFT-Mania 2021 zahlten Nutzer teils über 500 € an Gas Fees – nur um ein Bild im JPEG-Format zu „minen".'
   },
   {
     id: 'xrp',
@@ -229,7 +293,203 @@ export const lexiconTerms: LexiconTerm[] = [
     category: 'Kryptowährungen',
     relatedTerms: ['blockchain', 'altcoin', 'stablecoin', 'dex'],
     icon: '💧',
-    lastUpdated: '2025-09-17'
+    lastUpdated: '2025-09-17',
+    funFact: 'Die XRP Ledger war eine der ersten Blockchains mit integrierter dezentraler Börse – lange bevor DEXs wie Uniswap populär wurden.'
+  },
+  {
+    id: 'custodial-vs-non-custodial',
+    title: 'Custodial vs. Non-Custodial',
+    slug: 'custodial-vs-non-custodial',
+    definition: 'Verwahrest du deine Coins selbst – oder überlässt du sie einem Anbieter? Erfahre hier den Unterschied zwischen Custodial und Non-Custodial Wallets und was das für dich bedeutet.',
+    extendedExplanation: 'Custodial bedeutet: ein Anbieter verwaltet deine Kryptowährungen. Non-Custodial bedeutet: du verwaltest deine Coins selbst – inklusive Private Key und Verantwortung.\n\nIm Krypto-Bereich gibt es zwei zentrale Ansätze, wie deine Coins verwahrt werden:\n\n🔶 **Custodial (Fremdverwahrung)**\n• Du nutzt eine Börse oder App, die deine Coins für dich verwahrt\n• Du hast kein Zugriff auf den Private Key\n• Du brauchst nur Benutzername & Passwort (wie beim Online-Banking)\n\nBeispiele: Bitvavo, Binance, Coinbase, Bison App\n\n🔶 **Non-Custodial (Selbstverwahrung)**\n• Du verwahrst deine Coins in einer eigenen Wallet\n• Du bist alleiniger Besitzer des Private Keys oder der Seed Phrase\n\nBeispiele: Ledger, Trezor, MetaMask, XUMM Wallet (für XRP)\n\n💬 **Merksatz:**\nCustodial = wie ein Bankkonto\nNon-Custodial = wie Bargeld unter deinem Kopfkissen',
+    category: 'Sicherheit',
+    relatedTerms: ['private-key', 'wallet', 'seed-phrase'],
+    icon: '🔐',
+    lastUpdated: '2025-09-24',
+    funFact: 'Ich tenne: Bitvavo für tägliche Käufe (custodial), Ledger für langfristige Aufbewahrung (non-custodial) – das Beste aus beiden Welten.',
+    prosAndCons: {
+      pros: [
+        'Custodial: Einfach zu bedienen, perfekt für Einsteiger',
+        'Custodial: Keine Sorge um Private Keys oder Seed Phrases',
+        'Custodial: Schneller Handel und Tausch möglich',
+        'Non-Custodial: Volle Kontrolle über deine Coins',
+        'Non-Custodial: Keine Mittelsmänner, echte Dezentralität',
+        'Non-Custodial: Sicher vor Börsenpleiten und Hacks der Plattform'
+      ],
+      cons: [
+        'Custodial: Abhängigkeit vom Anbieter',
+        'Custodial: Bei Insolvenz oder Hack kannst du alles verlieren',
+        'Custodial: "Not your keys, not your coins" – du besitzt die Coins nicht wirklich',
+        'Non-Custodial: Du bist selbst verantwortlich für Sicherheit',
+        'Non-Custodial: Bei Verlust der Seed Phrase ist alles weg',
+        'Non-Custodial: Technisch anspruchsvoller, steile Lernkurve'
+      ]
+    }
+  },
+  {
+    id: 'rlusd',
+    title: 'RLUSD',
+    slug: 'rlusd',
+    definition: 'RLUSD ist der Stablecoin von Ripple – 1:1 an den US-Dollar gebunden. Erfahre hier, wie RLUSD funktioniert, was ihn besonders macht und wo er eingesetzt wird.',
+    extendedExplanation: 'RLUSD (Ripple USD) ist der neue, offiziell angekündigte Stablecoin von Ripple Labs. Er soll die Vorteile stabiler digitaler Währungen mit regulatorischer Klarheit und Technologie aus dem XRP-Ökosystem kombinieren.\n\nEr basiert auf zwei Blockchains:\n• dem XRP Ledger (XRPL) → schnelle, kostengünstige Transaktionen\n• der Ethereum-Blockchain → Kompatibilität mit DeFi & ERC-20-Standards\n\nDer Coin ist 1:1 durch echte US-Dollar oder gleichwertige Sicherheiten gedeckt und soll vollständig reguliert und transparent verwaltet werden – inklusive regelmäßiger Audit-Berichte.\n\n🔍 **Ziel von RLUSD:**\n• Alternative zu USDT & USDC, aber mit mehr regulatorischer Glaubwürdigkeit\n• Bindeglied zwischen traditionellen Finanzinstituten und Krypto\n• Einsatz in Zahlungsabwicklung, DeFi, Handel, Remittances\n\nRipple selbst spricht von einem „Stablecoin für Institutionen und Nutzer" – mit Fokus auf Compliance, Skalierbarkeit und Interoperabilität.',
+    category: 'Kryptowährungen',
+    relatedTerms: ['xrp', 'stablecoin', 'ethereum', 'defi'],
+    icon: '🏛️',
+    lastUpdated: '2025-09-24',
+    funFact: 'RLUSD ist einer der ersten Stablecoins, der zeitgleich auf Ethereum und dem XRP Ledger gestartet wurde – mit dem Ziel, regulierte Stabilität und maximale Blockchain-Kompatibilität zu verbinden.',
+    comparisons: {
+      title: 'Unterschiede zu anderen Stablecoins',
+      items: [
+        {
+          name: 'USDT (Tether)',
+          description: 'Marktführer mit über 70 Milliarden $ Market Cap. Läuft auf verschiedenen Blockchains, aber oft wegen mangelnder Transparenz und regulatorischer Unsicherheiten kritisiert.'
+        },
+        {
+          name: 'USDC (Circle)',
+          description: 'Regulatorisch besser abgestützt als USDT, vollständig durch US-Dollar gedeckt. Starke Compliance, aber hauptsächlich auf Ethereum und wenigen anderen Chains verfügbar.'
+        },
+        {
+          name: 'RLUSD (Ripple)',
+          description: 'Fokus auf maximale regulatorische Compliance und Multi-Chain-Kompatibilität (XRPL + Ethereum). Besonders für institutionelle Anwender und grenzüberschreitende Zahlungen konzipiert.'
+        }
+      ]
+    }
+  },
+  {
+    id: 'layer-2',
+    title: 'Layer 2',
+    slug: 'layer-2',
+    definition: 'Layer 2 bezeichnet eine zusätzliche Technologieebene, die auf einer bestehenden Blockchain (z. B. Ethereum) aufbaut – um schnellere, günstigere Transaktionen zu ermöglichen.',
+    extendedExplanation: 'Blockchains wie Ethereum sind sicher und dezentral – aber oft langsam und teuer, vor allem bei hoher Auslastung.\n\nLayer-2-Lösungen wurden entwickelt, um genau das zu verbessern:\n👉 Sie lagern Transaktionen von der Hauptkette (Layer 1) auf eine zusätzliche Schicht (Layer 2) aus und führen sie dort günstiger und effizienter aus.\n\nAm Ende werden die Ergebnisse wieder auf Layer 1 „zurückgeschrieben" – inklusive Sicherheit.\n\n🔎 **Bekannte Layer-2-Projekte:**\n\n• **Arbitrum**\n\n• **Optimism**\n\n• **zkSync**\n\n• **Starknet**\n\n• **Polygon** (teilweise Layer 2, teilweise Sidechain)\n\n**Wichtig für Nutzer:**\n\n• Du brauchst oft eine Bridge, um deine Coins von Layer 1 auf Layer 2 zu übertragen\n\n• Die meisten Layer-2-Netzwerke kannst du mit MetaMask & Co ganz normal nutzen',
+    category: 'Technologie',
+    relatedTerms: ['ethereum', 'gas-fee', 'smart-contract', 'defi'],
+    icon: '⚡',
+    lastUpdated: '2025-09-24',
+    funFact: 'Arbitrum verarbeitete 2023 zeitweise mehr Transaktionen als Ethereum selbst – auf einer Schicht, die ursprünglich nur „Hilfe zur Selbsthilfe" sein sollte.',
+    prosAndCons: {
+      pros: [
+        'Deutlich geringere Gas Fees',
+        'Schnellere Transaktionen als Layer 1',
+        'Volle Ethereum-Kompatibilität (Wallets, DApps, Tokens)',
+        'Erhält die Sicherheit der Hauptkette',
+        'Ermöglicht komplexere DeFi-Anwendungen'
+      ],
+      cons: [
+        'Bridge-Risiken beim Transfer zwischen Layer 1 und 2',
+        'Zusätzliche Komplexität für Nutzer',
+        'Teilweise längere Wartezeiten bei Rückübertragungen',
+        'Noch relativ neue Technologie mit unbekannten Langzeitrisiken'
+      ],
+      prosTitle: 'Vorteile',
+      consTitle: 'Wichtig zu wissen'
+    }
+  },
+  {
+    id: 'meme-coin',
+    title: 'Meme Coin',
+    slug: 'meme-coin',
+    definition: 'Meme Coins sind Kryptowährungen, die meist auf Internetwitzen, Popkultur oder viralen Trends basieren – oft ohne technisches Alleinstellungsmerkmal, aber mit viel Community-Power.',
+    extendedExplanation: 'Der Begriff „Meme Coin" beschreibt Coins, die ursprünglich aus Spaß oder Ironie entstanden sind – aber durch virale Verbreitung plötzlich enorme Aufmerksamkeit und Marktkapitalisierung gewinnen können.\n\n**Die bekanntesten Vertreter:**\n\n• **Dogecoin (DOGE)** – gestartet 2013 als Scherz mit dem Shiba-Inu-Hund\n\n• **Shiba Inu (SHIB)** – „Dogecoin-Killer", rein communitygetrieben\n\nMittlerweile gibt es tausende Meme Coins – manche rein spekulativ, andere versuchen, echten Nutzen nachzuliefern (Ökosysteme, Spiele, NFTs). Trotzdem bleibt der Hype oft kurzlebig – und viele Meme Coins verschwinden auch schnell wieder.\n\n**Merkmale:**\n\n• Hohe Volatilität\n\n• Starke Community & Social-Media-Dynamik\n\n• Oft niedrige Einstiegspreise (z. B. 0,00001 €) – aber kein Wertversprechen\n\n• Selten echtes Projekt-Team oder langfristige Roadmap',
+    category: 'Kryptowährungen',
+    relatedTerms: ['bitcoin', 'altcoin', 'token'],
+    icon: '🐕',
+    lastUpdated: '2025-09-24',
+    funFact: 'Dogecoin wurde von Elon Musk mehrfach auf X (Twitter) erwähnt – und stieg 2021 dadurch auf über 80 Milliarden $ Marktkapitalisierung. Der Coin, der als Witz begann, war zeitweise wertvoller als viele DAX-Konzerne.',
+    prosAndCons: {
+      pros: [
+        'Niedrige Einstiegshürden und günstige Preise',
+        'Starke Community-Bindung und Spaßfaktor',
+        'Hohe Volatilität mit Gewinnpotenzial',
+        'Einfach zu verstehen, keine komplexe Technologie',
+        'Viral marketing durch Social Media'
+      ],
+      cons: [
+        'Viele Meme Coins sind Pump & Dump-Projekte',
+        'Zahlreiche Scams mit versteckten Gebühren',
+        'FOMO-Effekt kann zu unüberlegten Investitionen führen',
+        'Meist kein echter Nutzen oder langfristiger Wert',
+        'Extrem hohe Volatilität und Verlustrisiko'
+      ],
+      prosTitle: 'Merkmale',
+      consTitle: 'Risiken'
+    }
+  },
+  {
+    id: 'krypto-sicher-aufbewahren',
+    title: 'Krypto sicher aufbewahren',
+    slug: 'krypto-sicher-aufbewahren',
+    definition: 'Anders als beim Girokonto gibt es in der Krypto-Welt keine Rückbuchung, keinen Bankberater und keine Passwort-zurücksetzen-Funktion. Wer seine Coins sicher verwahren will, muss verstehen: Du bist selbst für deine Sicherheit verantwortlich.',
+    extendedExplanation: 'Um Bitcoin oder Ethereum sicher aufzubewahren, brauchst du eine Wallet. Sie speichert deinen Private Key – also den Zugang zu deinen Coins.\n\nMit dem richtigen Setup ist das einfacher, als viele denken. Hier erfährst du alles über Hot Wallets, Cold Wallets, Hardware Wallets und bewährte Sicherheitspraktiken.',
+    category: 'Sicherheit',
+    relatedTerms: ['wallet', 'private-key', 'seed-phrase'],
+    icon: '🔐',
+    lastUpdated: '2025-09-24',
+    funFact: 'In der Frühzeit von Bitcoin gingen geschätzt 20% aller Coins durch verlorene Private Keys oder vergessene Wallets verloren. Heute wären sie Milliarden wert.',
+    walletTypes: {
+      hotWallet: {
+        title: 'Hot Wallet',
+        description: 'Immer mit dem Internet verbunden',
+        features: [
+          'Einfach und schnell im Alltag',
+          'Ideal für kleine Beträge und häufige Transaktionen',
+          'Beispiele: Mobile Apps, Browser-Erweiterungen, Börsen'
+        ],
+        icon: '🔥'
+      },
+      coldWallet: {
+        title: 'Cold Wallet',
+        description: 'Offline gespeichert',
+        features: [
+          'Höchste Sicherheit für größere Beträge',
+          'Ideal für langfristige Lagerung',
+          'Beispiele: Hardware Wallets, Paper Wallets'
+        ],
+        icon: '❄️'
+      }
+    },
+    walletComparison: {
+      headers: ['Wallet-Typ', 'Geeignet für', 'Sicherheit', 'Alltagstauglichkeit'],
+      rows: [
+        {
+          type: 'Börsen-Wallet',
+          values: ['Einsteiger, kleine Beträge', 'Gering', 'Sehr hoch']
+        },
+        {
+          type: 'Mobile Wallet-App',
+          values: ['Alltag, Sparpläne', 'Mittel', 'Hoch']
+        },
+        {
+          type: 'Hardware Wallet',
+          values: ['Langfristig, große Beträge', 'Hoch', 'Mittel']
+        },
+        {
+          type: 'Paper Wallet',
+          values: ['Langzeitarchivierung', 'Sehr hoch', 'Sehr niedrig']
+        }
+      ]
+    },
+    recommendations: [
+      {
+        title: 'Bitvavo',
+        description: 'Regulierte Börse aus den Niederlanden. Einfach zu bedienen, sehr günstige Gebühren. Perfekt für Einsteiger und Sparpläne.',
+        linkText: 'Jetzt anmelden und 10€ Bonus sichern',
+        icon: '✅'
+      },
+      {
+        title: 'Ledger Hardware Wallet',
+        description: 'Sicherer Speicher für deine Coins. Unterstützt über 5.000 Kryptowährungen. Die Referenz für Cold Storage.',
+        linkText: 'Zum Ledger Nano S+',
+        icon: '✅'
+      }
+    ],
+    securityTips: [
+      'Recovery Phrase auf Papier sichern – niemals digital!',
+      '2-Faktor-Authentifizierung überall aktivieren',
+      'Niemals Private Keys oder Passwörter in der Cloud speichern',
+      'Regelmäßig Wallet-Backups machen',
+      'Vorsicht vor Phishing-Links (besonders bei Wallet-Apps)',
+      'Nur offizielle Quellen für Software & Hardware nutzen'
+    ]
   }
 ];
 

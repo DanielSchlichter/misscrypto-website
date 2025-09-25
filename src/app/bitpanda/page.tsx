@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import BitpandaClient from './BitpandaClient'
+import BitpandaModular from './BitpandaModular'
 
 export const metadata: Metadata = {
   title: 'Bitpanda Review 2025: Österreichs führende Krypto-Börse im Test | MissCrypto',
@@ -12,5 +12,5 @@ export const metadata: Metadata = {
 }
 
 export default function BitpandaPage() {
-  return <BitpandaClient />
+  return <BitpandaModular />
 }
