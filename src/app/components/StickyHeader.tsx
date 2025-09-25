@@ -44,6 +44,57 @@ const StickyHeader = () => {
   const isMobile = screenWidth < 768;
   const isTablet = screenWidth >= 768 && screenWidth < 1024;
 
+  const filteredNavigationItems = [
+    { name: '📖 Krypto Kompass', href: '/krypto-kompass' },
+    { name: 'Sparplanrechner', href: '/sparplanrechner' },
+    { name: 'Krypto-Lexikon', href: '/lexikon' },
+    { name: 'Wallets', href: '/wallets' },
+    { name: 'Newsfeed', href: '/newsfeed' }
+  ];
+
+  const exchanges = [
+    {
+      name: 'Bitvavo',
+      href: '/bitvavo',
+      icon: '🇳🇱',
+      color: '#3B82F6',
+      highlight: 'BaFin-reguliert',
+      fees: '0,25%'
+    },
+    {
+      name: 'Bitpanda',
+      href: '/bitpanda',
+      icon: '🇦🇹',
+      color: '#10B981',
+      highlight: 'EU-reguliert',
+      fees: '1,49%'
+    },
+    {
+      name: 'Kraken',
+      href: '/kraken',
+      icon: '🐙',
+      color: '#8B5CF6',
+      highlight: 'Seit 2011',
+      fees: '0,25%'
+    },
+    {
+      name: 'Bison',
+      href: '/bison',
+      icon: '🦬',
+      color: '#73CDDD',
+      highlight: 'Deutsche Börse',
+      fees: '1,25%'
+    },
+    {
+      name: 'Bybit',
+      href: '/bybit',
+      icon: '🚀',
+      color: '#F7A602',
+      highlight: 'MiCA-konform',
+      fees: '0,25%'
+    }
+  ];
+
   if (!isVisible) return null;
 
   return (
@@ -87,9 +138,9 @@ const StickyHeader = () => {
             alignItems: 'center',
             gap: isTablet ? '1.5rem' : '2rem'
           }}>
-            {/* Start Link */}
+            {/* Krypto Kompass - First */}
             <Link
-              href="/"
+              href="/krypto-kompass"
               style={{
                 color: '#ffffff',
                 textDecoration: 'none',
@@ -106,7 +157,7 @@ const StickyHeader = () => {
                 e.currentTarget.style.color = '#ffffff';
               }}
             >
-              Start
+              📖 Krypto Kompass
             </Link>
 
             {/* Krypto kaufen Dropdown */}

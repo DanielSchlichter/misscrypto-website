@@ -18,11 +18,54 @@ const Header = () => {
   }, []);
 
   const navigation = [
-    { name: 'Start', href: '/' },
+    { name: '📖 Krypto Kompass', href: '/krypto-kompass' },
     { name: 'Sparplanrechner', href: '/sparplanrechner' },
     { name: 'Krypto-Lexikon', href: '/lexikon' },
     { name: 'Wallets', href: '/wallets' },
     { name: 'Newsfeed', href: '/newsfeed' },
+  ];
+
+  const exchanges = [
+    {
+      name: 'Bitvavo',
+      href: '/bitvavo',
+      icon: '🇳🇱',
+      color: '#3B82F6',
+      highlight: 'BaFin-reguliert',
+      fees: '0,25%'
+    },
+    {
+      name: 'Bitpanda',
+      href: '/bitpanda',
+      icon: '🇦🇹',
+      color: '#10B981',
+      highlight: 'EU-reguliert',
+      fees: '1,49%'
+    },
+    {
+      name: 'Kraken',
+      href: '/kraken',
+      icon: '🐙',
+      color: '#8B5CF6',
+      highlight: 'Seit 2011',
+      fees: '0,25%'
+    },
+    {
+      name: 'Bison',
+      href: '/bison',
+      icon: '🦬',
+      color: '#73CDDD',
+      highlight: 'Deutsche Börse',
+      fees: '1,25%'
+    },
+    {
+      name: 'Bybit',
+      href: '/bybit',
+      icon: '🚀',
+      color: '#F7A602',
+      highlight: 'MiCA-konform',
+      fees: '0,25%'
+    }
   ];
 
 
@@ -39,9 +82,9 @@ const Header = () => {
 
         {/* Desktop Navigation */}
         <nav className="mc-nav">
-          {/* Start Link */}
-          <Link href="/" className="mc-nav-link">
-            Start
+          {/* Krypto Kompass - First */}
+          <Link href="/krypto-kompass" className="mc-nav-link">
+            📖 Krypto Kompass
           </Link>
 
           {/* Krypto kaufen Dropdown */}
