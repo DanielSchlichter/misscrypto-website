@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useAnalytics } from '@/hooks/useAnalytics';
 import { HeroSection } from './components/HeroSection';
 import { WhyBybitSection } from './components/WhyBybitSection';
 import { FeaturesSection } from './components/FeaturesSection';
@@ -12,7 +11,6 @@ import { ConclusionSection } from './components/ConclusionSection';
 export default function BybitModular() {
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
-  const { trackEvent } = useAnalytics();
 
   useEffect(() => {
     const checkDevice = () => {
@@ -26,11 +24,7 @@ export default function BybitModular() {
   }, []);
 
   const handleBybitClick = () => {
-    trackEvent('bybit_cta_click', {
-      section: 'bybit_page',
-      button_type: 'affiliate_link'
-    });
-    window.open('https://partner.bybit.com/b/misscrypto', '_blank');
+    window.open('https://partner.bybit.com/b/MISSCRYPTODE', '_blank');
   };
 
   return (
