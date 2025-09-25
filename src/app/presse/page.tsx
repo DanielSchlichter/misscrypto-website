@@ -5,9 +5,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 const PressePage = () => {
-  const [screenWidth, setScreenWidth] = useState<number>(0);
+  const [screenWidth, setScreenWidth] = useState<number>(typeof window !== 'undefined' ? window.innerWidth : 1024);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
     const handleResize = () => {
       setScreenWidth(window.innerWidth);
     };
@@ -17,8 +19,8 @@ const PressePage = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const isMobile = screenWidth < 768;
-  const isTablet = screenWidth >= 768 && screenWidth < 1024;
+  const isMobile = isClient ? screenWidth < 768 : false;
+  const isTablet = isClient ? (screenWidth >= 768 && screenWidth < 1024) : false;
 
   const pressItems = [
     {
@@ -80,6 +82,16 @@ const PressePage = () => {
       url: "#",
       category: "Buchvorwort",
       logo: "/logos/blockchain-millionaer.jpg"
+    },
+    {
+      id: 7,
+      title: "Finance Summit",
+      date: "2024",
+      description: "Business Insider Finance Summit Berlin - Die wichtigste Konferenz für Finance und Investment in Deutschland.",
+      color: "linear-gradient(135deg, #3b82f6, #1e40af)",
+      url: "https://hs.businessinsider.de/de/de/summit/finance-summit-berlin",
+      category: "Summit",
+      logo: "/logos/business-insider.png"
     }
   ];
 
@@ -94,8 +106,8 @@ const PressePage = () => {
         position: 'relative', 
         overflow: 'hidden', 
         zIndex: 10, 
-        paddingTop: isMobile ? '6rem' : isTablet ? '7rem' : '8rem',
-        paddingBottom: isMobile ? '2rem' : isTablet ? '3rem' : '4rem'
+        paddingTop: isClient && isMobile ? '6rem' : isClient && isTablet ? '7rem' : '8rem',
+        paddingBottom: isClient && isMobile ? '2rem' : isClient && isTablet ? '3rem' : '4rem'
       }}>
         {/* Background Pattern */}
         <div style={{
@@ -110,21 +122,21 @@ const PressePage = () => {
 
         <div style={{ position: 'relative', zIndex: 2 }}>
           <div style={{
-            display: isMobile ? 'flex' : 'grid',
-            flexDirection: isMobile ? 'column' : undefined,
-            gridTemplateColumns: isMobile ? undefined : 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: isMobile ? '2rem' : isTablet ? '3rem' : '4rem',
-            alignItems: isMobile ? 'stretch' : 'center',
+            display: isClient && isMobile ? 'flex' : 'grid',
+            flexDirection: isClient && isMobile ? 'column' : undefined,
+            gridTemplateColumns: isClient && isMobile ? undefined : 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: isClient && isMobile ? '2rem' : isClient && isTablet ? '3rem' : '4rem',
+            alignItems: isClient && isMobile ? 'stretch' : 'center',
             maxWidth: '1280px',
             margin: '0 auto',
-            padding: isMobile ? '0 1rem' : isTablet ? '0 1.5rem' : '0 2rem'
+            padding: isClient && isMobile ? '0 1rem' : isClient && isTablet ? '0 1.5rem' : '0 2rem'
           }}>
             
             {/* Left Column - Text Content */}
-            <div style={{ order: isMobile ? 2 : 0 }}>
+            <div style={{ order: isClient && isMobile ? 2 : 0 }}>
               <div style={{
                 color: '#f8dfa5',
-                fontSize: isMobile ? '1rem' : isTablet ? '1.075rem' : '1.125rem',
+                fontSize: isClient && isMobile ? '1rem' : isClient && isTablet ? '1.075rem' : '1.125rem',
                 fontWeight: '600',
                 marginBottom: '0.75rem',
                 textTransform: 'uppercase',
@@ -134,7 +146,7 @@ const PressePage = () => {
               </div>
               
               <h1 style={{
-                fontSize: isMobile ? '2rem' : isTablet ? '2.5rem' : '3rem',
+                fontSize: isClient && isMobile ? '2rem' : isClient && isTablet ? '2.5rem' : '3rem',
                 fontWeight: 'bold',
                 marginBottom: '1.5rem',
                 lineHeight: '1.2',
@@ -152,9 +164,9 @@ const PressePage = () => {
               </h1>
               
               <div style={{
-                fontSize: isMobile ? '1rem' : isTablet ? '1.075rem' : '1.125rem',
+                fontSize: isClient && isMobile ? '1rem' : isClient && isTablet ? '1.075rem' : '1.125rem',
                 color: '#d1d5db',
-                marginBottom: isMobile ? '2rem' : '2rem',
+                marginBottom: isClient && isMobile ? '2rem' : '2rem',
                 lineHeight: '1.6'
               }}>
                 <p style={{ marginBottom: '1.5rem' }}>
@@ -167,15 +179,15 @@ const PressePage = () => {
                 
                 <div style={{
                   display: 'flex',
-                  justifyContent: isMobile ? 'center' : 'flex-start',
+                  justifyContent: isClient && isMobile ? 'center' : 'flex-start',
                   alignItems: 'center',
                   marginTop: '2rem'
                 }}>
                   <Image
                     src="/logos/Logweiß.png"
                     alt="MissCrypto Logo"
-                    width={isMobile ? 150 : 200}
-                    height={isMobile ? 75 : 100}
+                    width={isClient && isMobile ? 150 : 200}
+                    height={isClient && isMobile ? 75 : 100}
                     style={{
                       objectFit: 'contain'
                     }}
@@ -187,19 +199,19 @@ const PressePage = () => {
             {/* Right Column - Contact Form */}
             <div style={{
               background: 'rgba(0, 0, 0, 0.4)',
-              borderRadius: isMobile ? '1rem' : '1.5rem',
-              padding: isMobile ? '1.5rem' : isTablet ? '2rem' : '2.5rem',
+              borderRadius: isClient && isMobile ? '1rem' : '1.5rem',
+              padding: isClient && isMobile ? '1.5rem' : isClient && isTablet ? '2rem' : '2.5rem',
               border: '1px solid rgba(248, 223, 165, 0.3)',
               boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
               backdropFilter: 'blur(20px)',
-              order: isMobile ? 1 : 0
+              order: isClient && isMobile ? 1 : 0
             }}>
               <h3 style={{
-                fontSize: isMobile ? '1.25rem' : isTablet ? '1.375rem' : '1.5rem',
+                fontSize: isClient && isMobile ? '1.25rem' : isClient && isTablet ? '1.375rem' : '1.5rem',
                 fontWeight: '600',
                 color: '#f8dfa5',
                 marginBottom: '2rem',
-                textAlign: isMobile ? 'center' : 'left'
+                textAlign: isClient && isMobile ? 'center' : 'left'
               }}>
                 Ich freue mich auf deine Nachricht.
               </h3>
@@ -210,7 +222,7 @@ const PressePage = () => {
                     display: 'block',
                     marginBottom: '0.5rem',
                     color: '#f8dfa5',
-                    fontSize: isMobile ? '0.8rem' : '0.875rem',
+                    fontSize: isClient && isMobile ? '0.8rem' : '0.875rem',
                     fontWeight: '500',
                     textAlign: 'left'
                   }}>
@@ -223,12 +235,12 @@ const PressePage = () => {
                     required
                     style={{
                       width: '100%',
-                      padding: isMobile ? '0.875rem' : '1rem',
+                      padding: isClient && isMobile ? '0.875rem' : '1rem',
                       borderRadius: '0.75rem',
                       border: '1px solid rgba(248, 223, 165, 0.3)',
                       background: 'rgba(0, 0, 0, 0.2)',
                       color: '#ffffff',
-                      fontSize: isMobile ? '0.9rem' : '1rem',
+                      fontSize: isClient && isMobile ? '0.9rem' : '1rem',
                       transition: 'all 0.3s ease',
                       minHeight: '44px',
                       boxSizing: 'border-box'
@@ -246,9 +258,9 @@ const PressePage = () => {
                 
                 {/* E-Mail und Telefon - Mobile: Untereinander, Desktop: Nebeneinander */}
                 <div style={{ 
-                  display: isMobile ? 'flex' : 'grid',
-                  flexDirection: isMobile ? 'column' : undefined,
-                  gridTemplateColumns: isMobile ? undefined : '1fr 1fr',
+                  display: isClient && isMobile ? 'flex' : 'grid',
+                  flexDirection: isClient && isMobile ? 'column' : undefined,
+                  gridTemplateColumns: isClient && isMobile ? undefined : '1fr 1fr',
                   gap: '1rem'
                 }}>
                   <div>
@@ -256,7 +268,7 @@ const PressePage = () => {
                       display: 'block',
                       marginBottom: '0.5rem',
                       color: '#f8dfa5',
-                      fontSize: isMobile ? '0.8rem' : '0.875rem',
+                      fontSize: isClient && isMobile ? '0.8rem' : '0.875rem',
                       fontWeight: '500',
                       textAlign: 'left'
                     }}>
@@ -269,12 +281,12 @@ const PressePage = () => {
                       required
                       style={{
                         width: '100%',
-                        padding: isMobile ? '0.875rem' : '1rem',
+                        padding: isClient && isMobile ? '0.875rem' : '1rem',
                         borderRadius: '0.75rem',
                         border: '1px solid rgba(248, 223, 165, 0.3)',
                         background: 'rgba(0, 0, 0, 0.2)',
                         color: '#ffffff',
-                        fontSize: isMobile ? '0.9rem' : '1rem',
+                        fontSize: isClient && isMobile ? '0.9rem' : '1rem',
                         transition: 'all 0.3s ease',
                         minHeight: '44px',
                         boxSizing: 'border-box'
@@ -295,7 +307,7 @@ const PressePage = () => {
                       display: 'block',
                       marginBottom: '0.5rem',
                       color: '#f8dfa5',
-                      fontSize: isMobile ? '0.8rem' : '0.875rem',
+                      fontSize: isClient && isMobile ? '0.8rem' : '0.875rem',
                       fontWeight: '500',
                       textAlign: 'left'
                     }}>
@@ -307,12 +319,12 @@ const PressePage = () => {
                       placeholder="+49 123 456789"
                       style={{
                         width: '100%',
-                        padding: isMobile ? '0.875rem' : '1rem',
+                        padding: isClient && isMobile ? '0.875rem' : '1rem',
                         borderRadius: '0.75rem',
                         border: '1px solid rgba(248, 223, 165, 0.3)',
                         background: 'rgba(0, 0, 0, 0.2)',
                         color: '#ffffff',
-                        fontSize: isMobile ? '0.9rem' : '1rem',
+                        fontSize: isClient && isMobile ? '0.9rem' : '1rem',
                         transition: 'all 0.3s ease',
                         minHeight: '44px',
                         boxSizing: 'border-box'
@@ -334,7 +346,7 @@ const PressePage = () => {
                     display: 'block',
                     marginBottom: '0.5rem',
                     color: '#f8dfa5',
-                    fontSize: isMobile ? '0.8rem' : '0.875rem',
+                    fontSize: isClient && isMobile ? '0.8rem' : '0.875rem',
                     fontWeight: '500',
                     textAlign: 'left'
                   }}>
@@ -347,12 +359,12 @@ const PressePage = () => {
                     required
                     style={{
                       width: '100%',
-                      padding: isMobile ? '0.875rem' : '1rem',
+                      padding: isClient && isMobile ? '0.875rem' : '1rem',
                       borderRadius: '0.75rem',
                       border: '1px solid rgba(248, 223, 165, 0.3)',
                       background: 'rgba(0, 0, 0, 0.2)',
                       color: '#ffffff',
-                      fontSize: isMobile ? '0.9rem' : '1rem',
+                      fontSize: isClient && isMobile ? '0.9rem' : '1rem',
                       transition: 'all 0.3s ease',
                       minHeight: '44px',
                       boxSizing: 'border-box'
@@ -373,7 +385,7 @@ const PressePage = () => {
                     display: 'block',
                     marginBottom: '0.5rem',
                     color: '#f8dfa5',
-                    fontSize: isMobile ? '0.8rem' : '0.875rem',
+                    fontSize: isClient && isMobile ? '0.8rem' : '0.875rem',
                     fontWeight: '500',
                     textAlign: 'left'
                   }}>
@@ -381,21 +393,21 @@ const PressePage = () => {
                   </label>
                   <textarea
                     id="press-message"
-                    rows={isMobile ? 4 : 5}
+                    rows={isClient && isMobile ? 4 : 5}
                     placeholder="Deine Nachricht an mich..."
                     required
                     style={{
                       width: '100%',
-                      padding: isMobile ? '0.875rem' : '1rem',
+                      padding: isClient && isMobile ? '0.875rem' : '1rem',
                       borderRadius: '0.75rem',
                       border: '1px solid rgba(248, 223, 165, 0.3)',
                       background: 'rgba(0, 0, 0, 0.2)',
                       color: '#ffffff',
-                      fontSize: isMobile ? '0.9rem' : '1rem',
+                      fontSize: isClient && isMobile ? '0.9rem' : '1rem',
                       transition: 'all 0.3s ease',
                       boxSizing: 'border-box',
                       resize: 'vertical',
-                      minHeight: isMobile ? '100px' : '120px',
+                      minHeight: isClient && isMobile ? '100px' : '120px',
                       fontFamily: 'Raleway, sans-serif'
                     }}
                     onFocus={(e) => {
@@ -422,13 +434,13 @@ const PressePage = () => {
                     style={{
                       marginTop: '0.25rem',
                       accentColor: '#f8dfa5',
-                      transform: isMobile ? 'scale(1.1)' : 'scale(1.2)'
+                      transform: isClient && isMobile ? 'scale(1.1)' : 'scale(1.2)'
                     }}
                   />
                   <label
                     htmlFor="press-datenschutz"
                     style={{
-                      fontSize: isMobile ? '0.8rem' : '0.875rem',
+                      fontSize: isClient && isMobile ? '0.8rem' : '0.875rem',
                       color: '#9ca3af',
                       lineHeight: '1.4'
                     }}
@@ -449,12 +461,12 @@ const PressePage = () => {
                   type="submit"
                   style={{
                     width: '100%',
-                    padding: isMobile ? '0.875rem' : '1rem',
+                    padding: isClient && isMobile ? '0.875rem' : '1rem',
                     borderRadius: '0.75rem',
                     border: 'none',
                     background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
                     color: '#000000',
-                    fontSize: isMobile ? '0.95rem' : '1rem',
+                    fontSize: isClient && isMobile ? '0.95rem' : '1rem',
                     fontWeight: '600',
                     cursor: 'pointer',
                     transition: 'all 0.3s ease',
@@ -479,20 +491,20 @@ const PressePage = () => {
 
       {/* Press Articles Section */}
       <section style={{ 
-        padding: isMobile ? '4rem 0' : isTablet ? '5rem 0' : '6rem 0',
+        padding: isClient && isMobile ? '4rem 0' : isClient && isTablet ? '5rem 0' : '6rem 0',
         background: 'linear-gradient(135deg, #1a1a1a 0%, #111111 50%, #1a1a1a 100%)'
       }}>
         <div style={{
           maxWidth: '1280px',
           margin: '0 auto',
-          padding: isMobile ? '0 1rem' : isTablet ? '0 1.5rem' : '0 2rem'
+          padding: isClient && isMobile ? '0 1rem' : isClient && isTablet ? '0 1.5rem' : '0 2rem'
         }}>
           <div style={{
             textAlign: 'center',
-            marginBottom: isMobile ? '3rem' : '4rem'
+            marginBottom: isClient && isMobile ? '3rem' : '4rem'
           }}>
             <h2 style={{
-              fontSize: isMobile ? '2rem' : isTablet ? '2.5rem' : '2.75rem',
+              fontSize: isClient && isMobile ? '2rem' : isClient && isTablet ? '2.5rem' : '2.75rem',
               fontWeight: '500',
               marginBottom: '1rem',
               color: '#ffffff',
@@ -506,7 +518,7 @@ const PressePage = () => {
               }}>Auftritte</span>
             </h2>
             <p style={{
-              fontSize: isMobile ? '1rem' : '1.125rem',
+              fontSize: isClient && isMobile ? '1rem' : '1.125rem',
               color: '#d1d5db',
               maxWidth: '600px',
               margin: '0 auto',
@@ -518,15 +530,15 @@ const PressePage = () => {
 
           <div style={{
             display: 'grid',
-            gridTemplateColumns: isMobile ? '1fr' : isTablet ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
-            gap: isMobile ? '2rem' : '2.5rem',
+            gridTemplateColumns: isClient && isMobile ? '1fr' : isClient && isTablet ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
+            gap: isClient && isMobile ? '2rem' : '2.5rem',
             gridAutoRows: '1fr'
           }}>
             {pressItems.map((item) => (
               <article key={item.id} style={{
                 background: 'rgba(0, 0, 0, 0.4)',
                 borderRadius: '1.5rem',
-                padding: isMobile ? '1.5rem' : '2rem',
+                padding: isClient && isMobile ? '1.5rem' : '2rem',
                 border: '1px solid rgba(248, 223, 165, 0.3)',
                 backdropFilter: 'blur(10px)',
                 boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
@@ -545,7 +557,7 @@ const PressePage = () => {
                 }}>
                   <div style={{ flex: '1' }}>
                     <h3 style={{
-                      fontSize: isMobile ? '1.125rem' : '1.25rem',
+                      fontSize: isClient && isMobile ? '1.125rem' : '1.25rem',
                       fontWeight: '600',
                       color: '#ffffff',
                       marginBottom: '0.5rem',
@@ -560,14 +572,14 @@ const PressePage = () => {
                       flexWrap: 'wrap'
                     }}>
                       <span style={{
-                        fontSize: isMobile ? '0.8rem' : '0.875rem',
+                        fontSize: isClient && isMobile ? '0.8rem' : '0.875rem',
                         color: '#9ca3af',
                         fontWeight: '500'
                       }}>
                         {item.date}
                       </span>
                       <span style={{
-                        fontSize: isMobile ? '0.75rem' : '0.8rem',
+                        fontSize: isClient && isMobile ? '0.75rem' : '0.8rem',
                         color: '#f8dfa5',
                         background: 'rgba(248, 223, 165, 0.1)',
                         padding: '0.25rem 0.75rem',
@@ -580,8 +592,8 @@ const PressePage = () => {
                   </div>
                   {item.logo && (
                     <div style={{
-                      width: isMobile ? '60px' : '80px',
-                      height: isMobile ? '60px' : '80px',
+                      width: isClient && isMobile ? '60px' : '80px',
+                      height: isClient && isMobile ? '60px' : '80px',
                       borderRadius: '12px',
                       background: '#ffffff',
                       display: 'flex',
@@ -593,8 +605,8 @@ const PressePage = () => {
                       <Image
                         src={item.logo}
                         alt={`${item.title} Logo`}
-                        width={isMobile ? 40 : 60}
-                        height={isMobile ? 40 : 60}
+                        width={isClient && isMobile ? 40 : 60}
+                        height={isClient && isMobile ? 40 : 60}
                         style={{
                           objectFit: 'contain',
                           maxWidth: '100%',
@@ -610,7 +622,7 @@ const PressePage = () => {
                   <p style={{
                     color: '#d1d5db',
                     lineHeight: '1.6',
-                    fontSize: isMobile ? '0.9rem' : '1rem',
+                    fontSize: isClient && isMobile ? '0.9rem' : '1rem',
                     marginBottom: '1.5rem',
                     flex: '1'
                   }}>
@@ -629,10 +641,10 @@ const PressePage = () => {
                         gap: '0.5rem',
                         background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
                         color: '#000000',
-                        padding: isMobile ? '0.75rem 1.25rem' : '0.875rem 1.5rem',
+                        padding: isClient && isMobile ? '0.75rem 1.25rem' : '0.875rem 1.5rem',
                         borderRadius: '0.75rem',
                         fontWeight: '600',
-                        fontSize: isMobile ? '0.875rem' : '0.95rem',
+                        fontSize: isClient && isMobile ? '0.875rem' : '0.95rem',
                         textDecoration: 'none',
                         transition: 'all 0.3s ease',
                         width: 'fit-content',
@@ -660,20 +672,20 @@ const PressePage = () => {
 
       {/* CTA Section */}
       <section style={{
-        padding: isMobile ? '4rem 0' : isTablet ? '5rem 0' : '6rem 0',
+        padding: isClient && isMobile ? '4rem 0' : isClient && isTablet ? '5rem 0' : '6rem 0',
         background: 'linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%)',
         position: 'relative'
       }}>
         <div style={{ 
           maxWidth: '1280px', 
           margin: '0 auto', 
-          padding: isMobile ? '0 1rem' : isTablet ? '0 1.5rem' : '0 2rem'
+          padding: isClient && isMobile ? '0 1rem' : isClient && isTablet ? '0 1.5rem' : '0 2rem'
         }}>
           <div style={{
             background: 'linear-gradient(135deg, rgba(228, 177, 94, 0.15), rgba(248, 223, 165, 0.08), rgba(228, 177, 94, 0.15))',
             backdropFilter: 'blur(10px)',
             borderRadius: '1.5rem',
-            padding: isMobile ? '3rem 2rem' : isTablet ? '3.5rem 3rem' : '4rem',
+            padding: isClient && isMobile ? '3rem 2rem' : isClient && isTablet ? '3.5rem 3rem' : '4rem',
             textAlign: 'center',
             border: '1px solid rgba(228, 177, 94, 0.3)',
             boxShadow: '0 4px 15px rgba(248, 223, 165, 0.1)',
@@ -681,7 +693,7 @@ const PressePage = () => {
             overflow: 'hidden'
           }}>
             <h2 style={{
-              fontSize: isMobile ? '1.75rem' : isTablet ? '2.25rem' : '2.5rem',
+              fontSize: isClient && isMobile ? '1.75rem' : isClient && isTablet ? '2.25rem' : '2.5rem',
               fontWeight: '500',
               marginBottom: '1rem',
               color: '#ffffff',
@@ -698,7 +710,7 @@ const PressePage = () => {
               </span>
             </h2>
             <p style={{
-              fontSize: isMobile ? '1rem' : isTablet ? '1.125rem' : '1.25rem',
+              fontSize: isClient && isMobile ? '1rem' : isClient && isTablet ? '1.125rem' : '1.25rem',
               color: '#d1d5db',
               marginBottom: '2rem',
               lineHeight: '1.6',
@@ -716,10 +728,10 @@ const PressePage = () => {
                 style={{
                   background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
                   color: '#000000',
-                  padding: isMobile ? '1rem 2.5rem' : isTablet ? '1.125rem 2.75rem' : '1.25rem 3rem',
+                  padding: isClient && isMobile ? '1rem 2.5rem' : isClient && isTablet ? '1.125rem 2.75rem' : '1.25rem 3rem',
                   borderRadius: '0.75rem',
                   fontWeight: '600',
-                  fontSize: isMobile ? '1rem' : isTablet ? '1.075rem' : '1.125rem',
+                  fontSize: isClient && isMobile ? '1rem' : isClient && isTablet ? '1.075rem' : '1.125rem',
                   transition: 'all 0.3s ease',
                   textDecoration: 'none',
                   boxShadow: '0 4px 15px rgba(248, 223, 165, 0.3)',
