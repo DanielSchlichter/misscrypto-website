@@ -45,7 +45,7 @@ const ImageModal: React.FC<ImageModalProps> = ({ src, alt, isOpen, onClose }) =>
         justifyContent: 'center',
         zIndex: 99999,
         cursor: 'zoom-out',
-        padding: '2rem',
+        padding: '0',
         backdropFilter: 'blur(10px)'
       }}
     >
@@ -98,11 +98,11 @@ const ImageModal: React.FC<ImageModalProps> = ({ src, alt, isOpen, onClose }) =>
         alt={alt}
         onClick={(e) => e.stopPropagation()}
         style={{
-          maxWidth: '90vw',
-          maxHeight: '90vh',
-          objectFit: 'contain',
-          borderRadius: '8px',
-          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)'
+          width: '100%',
+          height: '100%',
+          maxWidth: '100vw',
+          maxHeight: '100vh',
+          objectFit: 'contain'
         }}
       />
     </div>

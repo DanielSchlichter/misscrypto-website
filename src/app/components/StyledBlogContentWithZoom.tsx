@@ -52,9 +52,14 @@ export default function StyledBlogContentWithZoom({ content }: StyledBlogContent
         }
       });
 
-      // Add zoom functionality to all images
+      // Check if images are already wrapped
       const images = contentRef.current.querySelectorAll('img');
       images.forEach((img) => {
+        // Skip if already wrapped
+        if (img.parentElement?.classList.contains('image-zoom-wrapper')) {
+          return;
+        }
+
         // Create wrapper for image
         const wrapper = document.createElement('div');
         wrapper.className = 'image-zoom-wrapper';
@@ -93,38 +98,31 @@ export default function StyledBlogContentWithZoom({ content }: StyledBlogContent
         }
 
         // Add hover effect
-        wrapper.addEventListener('mouseenter', () => {
+        const handleMouseEnter = () => {
           zoomIcon.style.display = 'flex';
-        });
+        };
 
-        wrapper.addEventListener('mouseleave', () => {
+        const handleMouseLeave = () => {
           zoomIcon.style.display = 'none';
-        });
+        };
 
         // Add click handler
-        wrapper.addEventListener('click', () => {
+        const handleClick = () => {
           setModalImage({
             src: img.src,
             alt: img.alt || ''
           });
-        });
+        };
+
+        wrapper.addEventListener('mouseenter', handleMouseEnter);
+        wrapper.addEventListener('mouseleave', handleMouseLeave);
+        wrapper.addEventListener('click', handleClick);
+
+        // Store handlers for cleanup
+        (wrapper as any)._handlers = { handleMouseEnter, handleMouseLeave, handleClick };
       });
     }
-
-    // Cleanup function
-    return () => {
-      if (contentRef.current) {
-        const wrappers = contentRef.current.querySelectorAll('.image-zoom-wrapper');
-        wrappers.forEach((wrapper) => {
-          const img = wrapper.querySelector('img');
-          if (img && wrapper.parentNode) {
-            wrapper.parentNode.insertBefore(img, wrapper);
-            wrapper.remove();
-          }
-        });
-      }
-    };
-  }, [cleanContent]);
+  }, [cleanContent, setModalImage]);
 
   return (
     <>
