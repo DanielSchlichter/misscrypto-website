@@ -80,11 +80,11 @@ const Footer = () => {
     invest: {
       title: 'Investieren',
       links: [
-        { name: 'Bitcoin kaufen', href: '/krypto-kaufen?currency=bitcoin' },
-        { name: 'Ethereum kaufen', href: '/krypto-kaufen?currency=ethereum' },
-        { name: 'BNB kaufen', href: '/krypto-kaufen?currency=bnb' },
-        { name: 'Solana kaufen', href: '/krypto-kaufen?currency=solana' },
-        { name: 'XRP kaufen', href: '/krypto-kaufen?currency=xrp' },
+        { name: 'Bitvavo', href: '/bitvavo' },
+        { name: 'Bitpanda', href: '/bitpanda' },
+        { name: 'Kraken', href: '/kraken' },
+        { name: 'Bison', href: '/bison' },
+        { name: 'Bybit', href: '/bybit' },
       ]
     },
     knowledge: {

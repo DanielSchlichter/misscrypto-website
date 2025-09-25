@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Logo from './Logo';
-import { navigationItems } from './Navigation';
+import KryptoKaufenDropdown from './KryptoKaufenDropdown';
 
 const StickyHeader = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -87,29 +87,116 @@ const StickyHeader = () => {
             alignItems: 'center',
             gap: isTablet ? '1.5rem' : '2rem'
           }}>
-            {navigationItems.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                style={{
-                  color: '#ffffff',
-                  textDecoration: 'none',
-                  fontSize: isTablet ? '0.95rem' : '1rem',
-                  fontWeight: '500',
-                  padding: '0.5rem 0',
-                  position: 'relative',
-                  transition: 'all 0.3s ease'
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.color = '#f8dfa5';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.color = '#ffffff';
-                }}
-              >
-                {item.name}
-              </Link>
-            ))}
+            {/* Start Link */}
+            <Link
+              href="/"
+              style={{
+                color: '#ffffff',
+                textDecoration: 'none',
+                fontSize: isTablet ? '0.95rem' : '1rem',
+                fontWeight: '500',
+                padding: '0.5rem 0',
+                position: 'relative',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.color = '#f8dfa5';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.color = '#ffffff';
+              }}
+            >
+              Start
+            </Link>
+
+            {/* Krypto kaufen Dropdown */}
+            <KryptoKaufenDropdown
+              isTablet={isTablet}
+              textColor="#ffffff"
+              hoverColor="#f8dfa5"
+            />
+
+            {/* Rest of Navigation Links */}
+            <Link
+              href="/sparplanrechner"
+              style={{
+                color: '#ffffff',
+                textDecoration: 'none',
+                fontSize: isTablet ? '0.95rem' : '1rem',
+                fontWeight: '500',
+                padding: '0.5rem 0',
+                position: 'relative',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.color = '#f8dfa5';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.color = '#ffffff';
+              }}
+            >
+              Sparplanrechner
+            </Link>
+            <Link
+              href="/lexikon"
+              style={{
+                color: '#ffffff',
+                textDecoration: 'none',
+                fontSize: isTablet ? '0.95rem' : '1rem',
+                fontWeight: '500',
+                padding: '0.5rem 0',
+                position: 'relative',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.color = '#f8dfa5';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.color = '#ffffff';
+              }}
+            >
+              Krypto-Lexikon
+            </Link>
+            <Link
+              href="/wallets"
+              style={{
+                color: '#ffffff',
+                textDecoration: 'none',
+                fontSize: isTablet ? '0.95rem' : '1rem',
+                fontWeight: '500',
+                padding: '0.5rem 0',
+                position: 'relative',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.color = '#f8dfa5';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.color = '#ffffff';
+              }}
+            >
+              Wallets
+            </Link>
+            <Link
+              href="/newsfeed"
+              style={{
+                color: '#ffffff',
+                textDecoration: 'none',
+                fontSize: isTablet ? '0.95rem' : '1rem',
+                fontWeight: '500',
+                padding: '0.5rem 0',
+                position: 'relative',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.color = '#f8dfa5';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.color = '#ffffff';
+              }}
+            >
+              Newsfeed
+            </Link>
           </nav>
         )}
 
@@ -199,7 +286,7 @@ const StickyHeader = () => {
             gap: '1rem',
             marginBottom: '1.5rem'
           }}>
-            {navigationItems.map((item) => (
+            {filteredNavigationItems.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
@@ -228,6 +315,93 @@ const StickyHeader = () => {
                 {item.name}
               </Link>
             ))}
+
+            {/* Mobile Krypto Kaufen Section */}
+            <div style={{
+              marginTop: '0.5rem',
+              paddingTop: '1rem',
+              borderTop: '1px solid rgba(248, 223, 165, 0.2)'
+            }}>
+              <div style={{
+                color: '#f8dfa5',
+                fontSize: '1rem',
+                fontWeight: '600',
+                marginBottom: '1rem',
+                paddingLeft: '1rem'
+              }}>
+                Krypto kaufen
+              </div>
+
+              {exchanges.map((exchange) => (
+                <Link
+                  key={exchange.name}
+                  href={exchange.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    paddingLeft: '2rem',
+                    paddingRight: '1rem',
+                    paddingTop: '0.75rem',
+                    paddingBottom: '0.75rem',
+                    borderLeft: `3px solid ${exchange.color}40`,
+                    color: '#ffffff',
+                    textDecoration: 'none',
+                    fontSize: '1rem',
+                    fontWeight: '500',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.background = 'rgba(248, 223, 165, 0.1)';
+                    e.currentTarget.style.borderLeftColor = `${exchange.color}80`;
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.background = 'transparent';
+                    e.currentTarget.style.borderLeftColor = `${exchange.color}40`;
+                  }}
+                >
+                  <span style={{ fontSize: '1.25rem' }}>{exchange.icon}</span>
+                  <div>
+                    <div style={{ color: exchange.color, fontWeight: '600' }}>
+                      {exchange.name}
+                    </div>
+                    <div style={{
+                      color: 'rgba(255, 255, 255, 0.6)',
+                      fontSize: '0.75rem',
+                      marginTop: '0.125rem'
+                    }}>
+                      {exchange.highlight} • {exchange.fees}
+                    </div>
+                  </div>
+                </Link>
+              ))}
+
+              <Link
+                href="/krypto-kaufen"
+                onClick={() => setIsMobileMenuOpen(false)}
+                style={{
+                  marginTop: '0.5rem',
+                  paddingLeft: '2rem',
+                  paddingRight: '1rem',
+                  paddingTop: '0.75rem',
+                  paddingBottom: '0.75rem',
+                  color: '#f8dfa5',
+                  fontWeight: '600',
+                  textDecoration: 'none',
+                  fontSize: '1rem',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.background = 'rgba(248, 223, 165, 0.1)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.background = 'transparent';
+                }}
+              >
+                📊 Alle Börsen vergleichen
+              </Link>
+            </div>
           </nav>
 
           {/* Mobile CTA Button */}

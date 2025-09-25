@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Logo from './Logo';
-import { navigationItems } from './Navigation';
+import KryptoKaufenDropdown from './KryptoKaufenDropdown';
 
 const TransparentHeader = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -65,29 +65,116 @@ const TransparentHeader = () => {
             alignItems: 'center',
             gap: isTablet ? '1.5rem' : '2rem'
           }}>
-            {navigationItems.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                style={{
-                  color: '#ffffff',
-                  textDecoration: 'none',
-                  fontSize: isTablet ? '0.95rem' : '1rem',
-                  fontWeight: '500',
-                  padding: '0.5rem 0',
-                  position: 'relative',
-                  transition: 'all 0.3s ease'
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.color = '#f8dfa5';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.color = '#ffffff';
-                }}
-              >
-                {item.name}
-              </Link>
-            ))}
+            {/* Start Link */}
+            <Link
+              href="/"
+              style={{
+                color: '#ffffff',
+                textDecoration: 'none',
+                fontSize: isTablet ? '0.95rem' : '1rem',
+                fontWeight: '500',
+                padding: '0.5rem 0',
+                position: 'relative',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.color = '#f8dfa5';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.color = '#ffffff';
+              }}
+            >
+              Start
+            </Link>
+
+            {/* Krypto kaufen Dropdown */}
+            <KryptoKaufenDropdown
+              isTablet={isTablet}
+              textColor="#ffffff"
+              hoverColor="#f8dfa5"
+            />
+
+            {/* Rest of Navigation Links */}
+            <Link
+              href="/sparplanrechner"
+              style={{
+                color: '#ffffff',
+                textDecoration: 'none',
+                fontSize: isTablet ? '0.95rem' : '1rem',
+                fontWeight: '500',
+                padding: '0.5rem 0',
+                position: 'relative',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.color = '#f8dfa5';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.color = '#ffffff';
+              }}
+            >
+              Sparplanrechner
+            </Link>
+            <Link
+              href="/lexikon"
+              style={{
+                color: '#ffffff',
+                textDecoration: 'none',
+                fontSize: isTablet ? '0.95rem' : '1rem',
+                fontWeight: '500',
+                padding: '0.5rem 0',
+                position: 'relative',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.color = '#f8dfa5';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.color = '#ffffff';
+              }}
+            >
+              Krypto-Lexikon
+            </Link>
+            <Link
+              href="/wallets"
+              style={{
+                color: '#ffffff',
+                textDecoration: 'none',
+                fontSize: isTablet ? '0.95rem' : '1rem',
+                fontWeight: '500',
+                padding: '0.5rem 0',
+                position: 'relative',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.color = '#f8dfa5';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.color = '#ffffff';
+              }}
+            >
+              Wallets
+            </Link>
+            <Link
+              href="/newsfeed"
+              style={{
+                color: '#ffffff',
+                textDecoration: 'none',
+                fontSize: isTablet ? '0.95rem' : '1rem',
+                fontWeight: '500',
+                padding: '0.5rem 0',
+                position: 'relative',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.color = '#f8dfa5';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.color = '#ffffff';
+              }}
+            >
+              Newsfeed
+            </Link>
           </nav>
         )}
 

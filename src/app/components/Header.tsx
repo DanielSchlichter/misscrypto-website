@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import KryptoKaufenDropdown from './KryptoKaufenDropdown';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -18,12 +19,12 @@ const Header = () => {
 
   const navigation = [
     { name: 'Start', href: '/' },
-    { name: 'Krypto kaufen', href: '/krypto-kaufen' },
     { name: 'Sparplanrechner', href: '/sparplanrechner' },
     { name: 'Krypto-Lexikon', href: '/lexikon' },
     { name: 'Wallets', href: '/wallets' },
     { name: 'Newsfeed', href: '/newsfeed' },
   ];
+
 
   return (
     <header className={`mc-header ${isScrolled ? 'mc-scrolled' : ''}`}>
@@ -38,11 +39,27 @@ const Header = () => {
 
         {/* Desktop Navigation */}
         <nav className="mc-nav">
-          {navigation.map((item) => (
-            <Link key={item.name} href={item.href} className="mc-nav-link">
-              {item.name}
-            </Link>
-          ))}
+          {/* Start Link */}
+          <Link href="/" className="mc-nav-link">
+            Start
+          </Link>
+
+          {/* Krypto kaufen Dropdown */}
+          <KryptoKaufenDropdown />
+
+          {/* Rest of Navigation Links */}
+          <Link href="/sparplanrechner" className="mc-nav-link">
+            Sparplanrechner
+          </Link>
+          <Link href="/lexikon" className="mc-nav-link">
+            Krypto-Lexikon
+          </Link>
+          <Link href="/wallets" className="mc-nav-link">
+            Wallets
+          </Link>
+          <Link href="/newsfeed" className="mc-nav-link">
+            Newsfeed
+          </Link>
         </nav>
 
         {/* CTA Button */}
@@ -82,6 +99,67 @@ const Header = () => {
                 {item.name}
               </Link>
             ))}
+
+            {/* Mobile Krypto Kaufen Section */}
+            <div style={{
+              marginTop: '1rem',
+              paddingTop: '1rem',
+              borderTop: '1px solid rgba(248, 223, 165, 0.2)'
+            }}>
+              <div style={{
+                color: '#f8dfa5',
+                fontSize: '1rem',
+                fontWeight: '600',
+                marginBottom: '1rem',
+                paddingLeft: '1rem'
+              }}>
+                Krypto kaufen
+              </div>
+
+              {exchanges.map((exchange) => (
+                <Link
+                  key={exchange.name}
+                  href={exchange.href}
+                  className="mc-mobile-nav-link"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    paddingLeft: '2rem',
+                    borderLeft: `3px solid ${exchange.color}40`
+                  }}
+                >
+                  <span style={{ fontSize: '1.25rem' }}>{exchange.icon}</span>
+                  <div>
+                    <div style={{ color: exchange.color, fontWeight: '600' }}>
+                      {exchange.name}
+                    </div>
+                    <div style={{
+                      color: 'rgba(255, 255, 255, 0.6)',
+                      fontSize: '0.75rem',
+                      marginTop: '0.125rem'
+                    }}>
+                      {exchange.highlight} • {exchange.fees}
+                    </div>
+                  </div>
+                </Link>
+              ))}
+
+              <Link
+                href="/krypto-kaufen"
+                className="mc-mobile-nav-link"
+                onClick={() => setIsMobileMenuOpen(false)}
+                style={{
+                  marginTop: '0.5rem',
+                  paddingLeft: '2rem',
+                  color: '#f8dfa5',
+                  fontWeight: '600'
+                }}
+              >
+                📊 Alle Börsen vergleichen
+              </Link>
+            </div>
           </nav>
           <div className="mc-mobile-cta">
             <Link href="/krypto-kaufen?currency=bitcoin" className="mc-cta-button" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
