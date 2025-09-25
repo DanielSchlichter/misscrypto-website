@@ -42,6 +42,7 @@ export default function StyledBlogContentWithZoom({ content }: StyledBlogContent
     return getCleanContentForPublishing(content);
   }, [content]);
 
+  // Add image click handlers
   useEffect(() => {
     if (contentRef.current) {
       // Füge IDs zu Überschriften hinzu für Inhaltsverzeichnis
@@ -98,31 +99,51 @@ export default function StyledBlogContentWithZoom({ content }: StyledBlogContent
         }
 
         // Add hover effect
-        const handleMouseEnter = () => {
+        wrapper.addEventListener('mouseenter', () => {
           zoomIcon.style.display = 'flex';
-        };
+        });
 
-        const handleMouseLeave = () => {
+        wrapper.addEventListener('mouseleave', () => {
           zoomIcon.style.display = 'none';
+        });
+
+        // Store image data on the element for click handler
+        (wrapper as any)._imageData = {
+          src: img.src,
+          alt: img.alt || ''
         };
-
-        // Add click handler
-        const handleClick = () => {
-          setModalImage({
-            src: img.src,
-            alt: img.alt || ''
-          });
-        };
-
-        wrapper.addEventListener('mouseenter', handleMouseEnter);
-        wrapper.addEventListener('mouseleave', handleMouseLeave);
-        wrapper.addEventListener('click', handleClick);
-
-        // Store handlers for cleanup
-        (wrapper as any)._handlers = { handleMouseEnter, handleMouseLeave, handleClick };
       });
     }
-  }, [cleanContent, setModalImage]);
+  }, [cleanContent]);
+
+  // Add click event listener separately
+  useEffect(() => {
+    const handleImageClick = (e: MouseEvent) => {
+      const wrapper = (e.currentTarget as HTMLElement);
+      if (wrapper.classList.contains('image-zoom-wrapper')) {
+        const imageData = (wrapper as any)._imageData;
+        if (imageData) {
+          setModalImage({
+            src: imageData.src,
+            alt: imageData.alt
+          });
+        }
+      }
+    };
+
+    if (contentRef.current) {
+      const wrappers = contentRef.current.querySelectorAll('.image-zoom-wrapper');
+      wrappers.forEach(wrapper => {
+        wrapper.addEventListener('click', handleImageClick);
+      });
+
+      return () => {
+        wrappers.forEach(wrapper => {
+          wrapper.removeEventListener('click', handleImageClick);
+        });
+      };
+    }
+  }, [cleanContent]);
 
   return (
     <>
