@@ -2282,6 +2282,29 @@ div[style*="overflowX: auto"]::-webkit-scrollbar {
   border: 1px solid rgba(248, 223, 165, 0.2);
 }
 
+/* Alle Bilder im Blog Content */
+.blog-content-wrapper img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid rgba(248, 223, 165, 0.2);
+  display: block;
+  margin: 1rem 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Image Zoom Wrapper Hover Effect */
+.image-zoom-wrapper:hover img {
+  transform: scale(1.02);
+  box-shadow: 0 10px 30px rgba(248, 223, 165, 0.2);
+}
+
+.zoom-icon {
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
 .blog-content-wrapper .mc-image-caption {
   text-align: left;
   font-size: 0.75rem;

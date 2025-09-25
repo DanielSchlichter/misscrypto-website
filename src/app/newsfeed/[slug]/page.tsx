@@ -5,7 +5,7 @@ import { useParams, notFound } from 'next/navigation';
 import Link from 'next/link';
 import BlogMetaTags from '../../components/BlogMetaTags';
 import TableOfContents from '../../components/TableOfContents';
-import StyledBlogContent from '../../components/StyledBlogContent';
+import StyledBlogContentWithZoom from '../../components/StyledBlogContentWithZoom';
 
 interface BlogPost {
   _id: string;
@@ -267,7 +267,7 @@ export default function BlogPost() {
           <article style={{
             marginBottom: '3rem'
           }}>
-            <StyledBlogContent content={post.content} />
+            <StyledBlogContentWithZoom content={post.content} />
           </article>
         </main>
 
