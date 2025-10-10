@@ -514,7 +514,7 @@ function AdminLayoutContent({
 
       {/* Main Content */}
       <div style={{
-        marginLeft: 0,
+        marginLeft: 300,
         marginTop: isMobile ? '80px' : 0,
         minHeight: '100vh',
         padding: isMobile ? '1rem' : '2rem',
