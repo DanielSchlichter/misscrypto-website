@@ -29,6 +29,9 @@ export default function MediaPage() {
   const [screenWidth, setScreenWidth] = useState(0);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeletingBulk, setIsDeletingBulk] = useState(false);
+  const [showWebPModal, setShowWebPModal] = useState(false);
+  const [isConverting, setIsConverting] = useState(false);
+  const [keepOriginal, setKeepOriginal] = useState(true);
 
   useEffect(() => {
     const handleResize = () => {
@@ -50,20 +53,39 @@ export default function MediaPage() {
 
   const fetchMedia = async (retryCount = 0) => {
     try {
+      // Check if data is already cached in sessionStorage
+      const cachedData = sessionStorage.getItem('mediaData');
+      const cacheTime = sessionStorage.getItem('mediaCacheTime');
+
+      // Use cache if it's less than 5 minutes old
+      if (cachedData && cacheTime) {
+        const age = Date.now() - parseInt(cacheTime);
+        if (age < 300000) { // 5 minutes
+          console.log('🖼️ Using cached media data');
+          setMediaFiles(JSON.parse(cachedData));
+          setIsLoading(false);
+          return;
+        }
+      }
+
       setIsLoading(true);
-      console.log(`🚀 Lade Media-Dateien... (Versuch ${retryCount + 1})`);
-      
+      console.log(`🚀 Loading fresh media files... (Attempt ${retryCount + 1})`);
+
       const response = await safeFetch('/api/media', {}, 3);
-      
+
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
-      
+
       const data = await response.json();
-      
+
       if (data.success) {
-        console.log(`✅ ${data.files?.length || 0} Media-Dateien geladen`);
+        console.log(`✅ ${data.files?.length || 0} Media-Dateien geladen und gecacht`);
         setMediaFiles(data.files || []);
+
+        // Cache the data
+        sessionStorage.setItem('mediaData', JSON.stringify(data.files || []));
+        sessionStorage.setItem('mediaCacheTime', Date.now().toString());
       } else {
         console.error('Fehler beim Laden der Medien:', data.error);
         throw new Error(data.error || 'Unbekannter API-Fehler');
@@ -135,7 +157,9 @@ export default function MediaPage() {
         }
       }
 
-      // Medien neu laden
+      // Cache invalidieren und Medien neu laden
+      sessionStorage.removeItem('mediaData');
+      sessionStorage.removeItem('mediaCacheTime');
       await fetchMedia();
       
       // File input zurücksetzen
@@ -165,6 +189,9 @@ export default function MediaPage() {
       if (result.success) {
         setMediaFiles(mediaFiles.filter(file => file.id !== fileId));
         setSelectedFiles(selectedFiles.filter(file => file.id !== fileId));
+        // Cache invalidieren
+        sessionStorage.removeItem('mediaData');
+        sessionStorage.removeItem('mediaCacheTime');
       } else {
         throw new Error(result.error || 'Löschen fehlgeschlagen');
       }
@@ -185,6 +212,77 @@ export default function MediaPage() {
   const copyToClipboard = (url: string) => {
     navigator.clipboard.writeText(url);
     alert('URL in Zwischenablage kopiert!');
+  };
+
+  const handleWebPConversion = async () => {
+    if (selectedFiles.length === 0) return;
+
+    // Nur Bilder konvertieren
+    const imagesToConvert = selectedFiles.filter(file =>
+      file.type === 'image' && !file.mimeType.includes('webp')
+    );
+
+    if (imagesToConvert.length === 0) {
+      alert('Keine konvertierbaren Bilder ausgewählt. WebP-Dateien werden übersprungen.');
+      return;
+    }
+
+    setIsConverting(true);
+    let successCount = 0;
+    let errorCount = 0;
+
+    try {
+      for (const file of imagesToConvert) {
+        try {
+          const response = await fetch('/api/media/convert-webp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              fileId: file.id,
+              fileName: file.name,
+              fileUrl: file.url,
+              keepOriginal: keepOriginal
+            })
+          });
+
+          if (response.ok) {
+            const result = await response.json();
+            console.log(`✅ Konvertiert: ${file.name} -> WebP`);
+            successCount++;
+
+            // Neue WebP-Datei zur Liste hinzufügen
+            if (result.newFile) {
+              setMediaFiles(prev => [...prev, result.newFile]);
+            }
+
+            // Original entfernen wenn gewünscht
+            if (!keepOriginal) {
+              setMediaFiles(prev => prev.filter(f => f.id !== file.id));
+            }
+          } else {
+            errorCount++;
+            console.error(`Fehler bei Konvertierung von ${file.name}`);
+          }
+        } catch (error) {
+          errorCount++;
+          console.error(`Fehler bei Konvertierung von ${file.name}:`, error);
+        }
+      }
+
+      alert(`Konvertierung abgeschlossen!\n✅ Erfolgreich: ${successCount}\n❌ Fehler: ${errorCount}`);
+      setSelectedFiles([]);
+      setShowWebPModal(false);
+
+      // Cache invalidieren und Liste neu laden
+      sessionStorage.removeItem('mediaData');
+      sessionStorage.removeItem('mediaCacheTime');
+      await fetchMedia();
+    } catch (error) {
+      console.error('Fehler bei WebP-Konvertierung:', error);
+      alert('Fehler bei der WebP-Konvertierung');
+    } finally {
+      setIsConverting(false);
+    }
   };
 
   const handleBulkDelete = async () => {
@@ -227,7 +325,9 @@ export default function MediaPage() {
         alert(`${successCount} Datei(en) gelöscht, ${errorCount} Fehler aufgetreten.`);
       }
 
-      // Medien neu laden für Konsistenz
+      // Cache invalidieren und Medien neu laden für Konsistenz
+      sessionStorage.removeItem('mediaData');
+      sessionStorage.removeItem('mediaCacheTime');
       await fetchMedia();
 
     } catch (error) {
@@ -259,26 +359,169 @@ export default function MediaPage() {
         background: 'linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #111111 100%)',
         color: '#ffffff',
         padding: isMobile ? '1rem' : '2rem',
-        fontFamily: 'Raleway, sans-serif',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
+        fontFamily: 'Raleway, sans-serif'
       }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ 
-            fontSize: '3rem',
-            marginBottom: '1rem',
-            animation: 'spin 1s linear infinite' 
-          }}>📁</div>
-          <p style={{ marginBottom: '0.5rem' }}>Mediathek wird geladen...</p>
-          <p style={{ fontSize: '0.875rem', color: '#9ca3af' }}>
-            Dies kann beim ersten Aufruf etwas dauern
-          </p>
+        {/* Header Skeleton */}
+        <div style={{ marginBottom: '2rem' }}>
+          <div style={{
+            height: '2.5rem',
+            width: '180px',
+            background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+            backgroundSize: '200% 100%',
+            animation: 'shimmer 1.5s infinite',
+            borderRadius: '0.5rem',
+            marginBottom: '0.5rem'
+          }} />
+          <div style={{
+            height: '1.1rem',
+            width: '300px',
+            background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+            backgroundSize: '200% 100%',
+            animation: 'shimmer 1.5s infinite',
+            borderRadius: '0.5rem'
+          }} />
         </div>
+
+        {/* Upload Area Skeleton */}
+        <div style={{
+          background: 'rgba(255, 255, 255, 0.05)',
+          border: '2px dashed rgba(248, 223, 165, 0.3)',
+          borderRadius: '1rem',
+          padding: '3rem 2rem',
+          textAlign: 'center',
+          marginBottom: '2rem'
+        }}>
+          <div style={{
+            height: '3rem',
+            width: '3rem',
+            background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+            backgroundSize: '200% 100%',
+            animation: 'shimmer 1.5s infinite',
+            borderRadius: '0.5rem',
+            margin: '0 auto 1rem'
+          }} />
+          <div style={{
+            height: '1.1rem',
+            width: '250px',
+            background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+            backgroundSize: '200% 100%',
+            animation: 'shimmer 1.5s infinite',
+            borderRadius: '0.5rem',
+            margin: '0 auto 0.5rem'
+          }} />
+          <div style={{
+            height: '0.875rem',
+            width: '400px',
+            background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+            backgroundSize: '200% 100%',
+            animation: 'shimmer 1.5s infinite',
+            borderRadius: '0.5rem',
+            margin: '0 auto'
+          }} />
+        </div>
+
+        {/* Filter Bar Skeleton */}
+        <div style={{
+          display: 'flex',
+          flexDirection: isMobile ? 'column' : 'row',
+          gap: '1rem',
+          marginBottom: '2rem',
+          alignItems: isMobile ? 'stretch' : 'center',
+          justifyContent: 'space-between'
+        }}>
+          <div style={{
+            display: 'flex',
+            gap: '1rem',
+            flexDirection: isMobile ? 'column' : 'row'
+          }}>
+            <div style={{
+              height: '44px',
+              width: isMobile ? '100%' : '300px',
+              background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+              backgroundSize: '200% 100%',
+              animation: 'shimmer 1.5s infinite',
+              borderRadius: '0.5rem'
+            }} />
+            <div style={{
+              height: '44px',
+              width: '150px',
+              background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+              backgroundSize: '200% 100%',
+              animation: 'shimmer 1.5s infinite',
+              borderRadius: '0.5rem'
+            }} />
+          </div>
+          <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <div style={{
+              height: '44px',
+              width: '44px',
+              background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+              backgroundSize: '200% 100%',
+              animation: 'shimmer 1.5s infinite',
+              borderRadius: '0.5rem'
+            }} />
+            <div style={{
+              height: '44px',
+              width: '44px',
+              background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+              backgroundSize: '200% 100%',
+              animation: 'shimmer 1.5s infinite',
+              borderRadius: '0.5rem'
+            }} />
+          </div>
+        </div>
+
+        {/* Media Grid Skeleton */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: isMobile
+            ? 'repeat(auto-fill, minmax(150px, 1fr))'
+            : 'repeat(auto-fill, minmax(200px, 1fr))',
+          gap: '1rem'
+        }}>
+          {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
+            <div key={i} style={{
+              background: 'rgba(255, 255, 255, 0.05)',
+              border: '1px solid rgba(248, 223, 165, 0.2)',
+              borderRadius: '0.75rem',
+              overflow: 'hidden'
+            }}>
+              {/* Image placeholder */}
+              <div style={{
+                aspectRatio: '1',
+                background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+                backgroundSize: '200% 100%',
+                animation: 'shimmer 1.5s infinite'
+              }} />
+
+              {/* Info area */}
+              <div style={{ padding: '0.75rem' }}>
+                <div style={{
+                  height: '14px',
+                  width: '80%',
+                  background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+                  backgroundSize: '200% 100%',
+                  animation: 'shimmer 1.5s infinite',
+                  borderRadius: '0.5rem',
+                  marginBottom: '0.25rem'
+                }} />
+                <div style={{
+                  height: '12px',
+                  width: '50%',
+                  background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+                  backgroundSize: '200% 100%',
+                  animation: 'shimmer 1.5s infinite',
+                  borderRadius: '0.5rem'
+                }} />
+              </div>
+            </div>
+          ))}
+        </div>
+
         <style jsx>{`
-          @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+          @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
           }
         `}</style>
       </div>
@@ -746,7 +989,22 @@ export default function MediaPage() {
           >
             URLs kopieren
           </button>
-          
+
+          <button
+            onClick={() => setShowWebPModal(true)}
+            style={{
+              background: 'rgba(34, 197, 94, 0.1)',
+              border: '1px solid rgba(34, 197, 94, 0.3)',
+              borderRadius: '0.5rem',
+              color: '#22c55e',
+              padding: '0.5rem 1rem',
+              cursor: 'pointer',
+              fontSize: '0.875rem'
+            }}
+          >
+            🔄 WebP konvertieren
+          </button>
+
           <button
             onClick={() => setShowDeleteModal(true)}
             style={{
@@ -776,6 +1034,130 @@ export default function MediaPage() {
           >
             Abwählen
           </button>
+        </div>
+      )}
+
+      {/* WebP Konvertierungs-Modal */}
+      {showWebPModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0, 0, 0, 0.8)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 2000
+        }}>
+          <div style={{
+            background: 'rgba(0, 0, 0, 0.95)',
+            backdropFilter: 'blur(20px)',
+            border: '1px solid rgba(34, 197, 94, 0.3)',
+            borderRadius: '1rem',
+            padding: '2rem',
+            maxWidth: '500px',
+            width: '90%'
+          }}>
+            <h3 style={{
+              fontSize: '1.5rem',
+              fontWeight: '600',
+              marginBottom: '1rem',
+              color: '#22c55e'
+            }}>
+              WebP Konvertierung
+            </h3>
+
+            <p style={{
+              color: '#d1d5db',
+              marginBottom: '1.5rem',
+              lineHeight: '1.5'
+            }}>
+              {selectedFiles.filter(f => f.type === 'image' && !f.mimeType.includes('webp')).length} Bild(er)
+              werden zu WebP konvertiert.
+            </p>
+
+            <div style={{
+              background: 'rgba(34, 197, 94, 0.1)',
+              border: '1px solid rgba(34, 197, 94, 0.2)',
+              borderRadius: '0.5rem',
+              padding: '1rem',
+              marginBottom: '1.5rem'
+            }}>
+              <label style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                cursor: 'pointer',
+                color: '#d1d5db'
+              }}>
+                <input
+                  type="checkbox"
+                  checked={keepOriginal}
+                  onChange={(e) => setKeepOriginal(e.target.checked)}
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    cursor: 'pointer'
+                  }}
+                />
+                <span>Original-Dateien behalten</span>
+              </label>
+              <p style={{
+                color: '#9ca3af',
+                fontSize: '0.875rem',
+                margin: '0.5rem 0 0 2rem'
+              }}>
+                {keepOriginal
+                  ? 'Die Original-Dateien bleiben erhalten, WebP-Versionen werden zusätzlich erstellt.'
+                  : 'Die Original-Dateien werden nach der Konvertierung gelöscht.'}
+              </p>
+            </div>
+
+            <div style={{
+              display: 'flex',
+              gap: '1rem',
+              justifyContent: 'flex-end'
+            }}>
+              <button
+                onClick={() => setShowWebPModal(false)}
+                disabled={isConverting}
+                style={{
+                  background: 'rgba(156, 163, 175, 0.1)',
+                  border: '1px solid rgba(156, 163, 175, 0.3)',
+                  borderRadius: '0.5rem',
+                  color: '#9ca3af',
+                  padding: '0.75rem 1.5rem',
+                  cursor: isConverting ? 'not-allowed' : 'pointer',
+                  fontSize: '0.875rem',
+                  opacity: isConverting ? 0.5 : 1
+                }}
+              >
+                Abbrechen
+              </button>
+
+              <button
+                onClick={handleWebPConversion}
+                disabled={isConverting}
+                style={{
+                  background: isConverting
+                    ? 'rgba(156, 163, 175, 0.2)'
+                    : 'linear-gradient(135deg, #22c55e, #16a34a)',
+                  border: 'none',
+                  borderRadius: '0.5rem',
+                  color: '#ffffff',
+                  padding: '0.75rem 1.5rem',
+                  cursor: isConverting ? 'not-allowed' : 'pointer',
+                  fontSize: '0.875rem',
+                  fontWeight: '600',
+                  opacity: isConverting ? 0.7 : 1
+                }}
+              >
+                {isConverting ? '🔄 Konvertiere...' : '✅ Konvertieren'}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

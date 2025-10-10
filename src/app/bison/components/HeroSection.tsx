@@ -210,7 +210,7 @@ export const HeroSection = ({ isMobile, isTablet, onBisonClick }: HeroSectionPro
                   fontWeight: '700',
                   fontSize: '1rem',
                   marginBottom: '0.25rem'
-                }}>32 Kryptowährungen</div>
+                }}>40 Kryptowährungen</div>
                 <div style={{
                   color: 'rgba(156, 163, 175, 0.8)',
                   fontSize: '0.9rem',

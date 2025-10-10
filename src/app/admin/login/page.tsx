@@ -42,8 +42,9 @@ export default function AdminLogin() {
       if (result?.error) {
         setError('Ungültige Anmeldedaten');
         setIsLoading(false);
-      } else {
-        // Sofortige Weiterleitung
+      } else if (result?.ok) {
+        // Erfolgreiche Anmeldung - erzwinge komplette Seiten-Reload
+        console.log('Login erfolgreich, navigiere zu Dashboard...');
         window.location.href = '/admin/dashboard';
       }
     } catch (error) {

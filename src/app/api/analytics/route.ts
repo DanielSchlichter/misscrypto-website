@@ -26,13 +26,17 @@ export async function GET(request: NextRequest) {
     const start = startDate ? new Date(startDate) : undefined;
     const end = endDate ? new Date(endDate) : undefined;
 
+    // Query mit Index-Anforderung für bessere Performance
     let q: FirebaseFirestore.Query = db.collection('analytics');
+
     if (start) {
       q = q.where('timestamp', '>=', start);
     }
     if (end) {
       q = q.where('timestamp', '<=', end);
     }
+
+    // Diese Query wird einen Index-Fehler werfen, den du in der Firebase Console beheben musst
     q = q.orderBy('timestamp', 'desc');
 
     const snapshot = await q.get();

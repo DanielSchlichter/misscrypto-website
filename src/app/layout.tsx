@@ -3,6 +3,7 @@ import { Raleway } from 'next/font/google';
 import "./globals.css";
 import { Providers } from './providers';
 import LayoutWrapper from './components/LayoutWrapper';
+import ErrorLogger from './components/ErrorLogger';
 
 const raleway = Raleway({
   subsets: ['latin'],
@@ -25,6 +26,7 @@ export default function RootLayout({
   return (
     <html lang="de">
       <body className={`bg-black text-white antialiased ${raleway.variable}`}>
+        <ErrorLogger />
         <Providers>
           <LayoutWrapper>
             {children}

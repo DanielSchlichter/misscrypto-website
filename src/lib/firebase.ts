@@ -8,13 +8,13 @@ import { getAnalytics } from "firebase/analytics";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyA6NrfUZcQ7V2tFHq0BVfVBaBRTNT7Pw68",
-  authDomain: "misscrypto-bd419.firebaseapp.com",
-  projectId: "misscrypto-bd419",
-  storageBucket: "misscrypto-bd419.firebasestorage.app",
-  messagingSenderId: "316985351888",
-  appId: "1:316985351888:web:83ac3a6e4bb4743311c8d5",
-  measurementId: "G-DTS6G8HDTE"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyA6NrfUZcQ7V2tFHq0BVfVBaBRTNT7Pw68",
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "misscrypto-bd419.firebaseapp.com",
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "misscrypto-bd419",
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "misscrypto-bd419.firebasestorage.app",
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "316985351888",
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "1:316985351888:web:83ac3a6e4bb4743311c8d5",
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || "G-DTS6G8HDTE"
 };
 
 // Initialize Firebase

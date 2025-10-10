@@ -49,17 +49,38 @@ export default function AdminDashboard() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Optimierte Datenladung - nur einmal pro Session
   useEffect(() => {
+    let isMounted = true;
+
     const fetchDashboardData = async () => {
+      // Check if data is already cached in sessionStorage
+      const cachedData = sessionStorage.getItem('dashboardData');
+      const cacheTime = sessionStorage.getItem('dashboardCacheTime');
+
+      // Use cache if it's less than 5 minutes old
+      if (cachedData && cacheTime) {
+        const age = Date.now() - parseInt(cacheTime);
+        if (age < 300000) { // 5 minutes
+          console.log('📊 Using cached dashboard data');
+          setStats(JSON.parse(cachedData));
+          setIsLoading(false);
+          return;
+        }
+      }
+
       try {
         setIsLoading(true);
-        
+        console.log('📊 Loading fresh dashboard data...');
+
         // Parallele API-Aufrufe für echte Daten
         const [coinsResponse, analyticsResponse, newsletterStatsResponse] = await Promise.all([
           fetch('/api/coins'),
           fetch('/api/analytics'),
           fetch('/api/newsletter-stats')
         ]);
+
+        if (!isMounted) return;
 
         const coins = await coinsResponse.json();
         let websiteStats = {
@@ -74,7 +95,7 @@ export default function AdminDashboard() {
           newSubscribersToday: 0,
           lastNewsletterSent: null
         };
-        
+
         // Analytics-Daten laden
         if (analyticsResponse.ok) {
           const analytics = await analyticsResponse.json();
@@ -100,7 +121,7 @@ export default function AdminDashboard() {
           change24h: coin.price_changes?.['24h'] || 0
         }));
 
-        setStats({
+        const dashboardData = {
           totalSubscribers: newsletterStats.totalSubscribers,
           newSubscribersToday: newsletterStats.newSubscribersToday,
           lastNewsletterSent: newsletterStats.lastNewsletterSent,
@@ -108,35 +129,53 @@ export default function AdminDashboard() {
           websiteStats,
           pageViewsByPage,
           exchangeClicks
-        });
+        };
+
+        if (isMounted) {
+          setStats(dashboardData);
+
+          // Cache the data
+          sessionStorage.setItem('dashboardData', JSON.stringify(dashboardData));
+          sessionStorage.setItem('dashboardCacheTime', Date.now().toString());
+
+          console.log('✅ Dashboard data loaded and cached');
+        }
       } catch (error) {
         console.error('Fehler beim Laden der Dashboard-Daten:', error);
-        // Fallback zu minimalen Daten ohne Mock-Werte
-        setStats({
-          totalSubscribers: 0,
-          newSubscribersToday: 0,
-          lastNewsletterSent: null,
-          topCrypto: [
-            { name: 'Bitcoin', symbol: 'BTC', price: 0, change24h: 0 },
-            { name: 'Ethereum', symbol: 'ETH', price: 0, change24h: 0 },
-            { name: 'Solana', symbol: 'SOL', price: 0, change24h: 0 },
-            { name: 'Cardano', symbol: 'ADA', price: 0, change24h: 0 },
-            { name: 'Avalanche', symbol: 'AVAX', price: 0, change24h: 0 }
-          ],
-          websiteStats: {
-            pageViews: 0,
-            uniqueVisitors: 0,
-            exchangeClicks: 0
-          },
-          pageViewsByPage: [],
-          exchangeClicks: []
-        });
+        if (isMounted) {
+          // Fallback zu minimalen Daten
+          setStats({
+            totalSubscribers: 0,
+            newSubscribersToday: 0,
+            lastNewsletterSent: null,
+            topCrypto: [
+              { name: 'Bitcoin', symbol: 'BTC', price: 0, change24h: 0 },
+              { name: 'Ethereum', symbol: 'ETH', price: 0, change24h: 0 },
+              { name: 'Solana', symbol: 'SOL', price: 0, change24h: 0 },
+              { name: 'Cardano', symbol: 'ADA', price: 0, change24h: 0 },
+              { name: 'Avalanche', symbol: 'AVAX', price: 0, change24h: 0 }
+            ],
+            websiteStats: {
+              pageViews: 0,
+              uniqueVisitors: 0,
+              exchangeClicks: 0
+            },
+            pageViewsByPage: [],
+            exchangeClicks: []
+          });
+        }
       } finally {
-        setIsLoading(false);
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     };
 
     fetchDashboardData();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const triggerCryptoUpdate = async () => {
@@ -227,11 +266,15 @@ export default function AdminDashboard() {
       console.log('✅ Update erfolgreich:', result);
       
       setUpdateMessage(`✅ ${filteredCoins.length} Krypto-Daten erfolgreich aktualisiert!`);
-      
-      // Dashboard nach 2 Sekunden neu laden
+
+      // Clear cache and reload data
+      sessionStorage.removeItem('dashboardData');
+      sessionStorage.removeItem('dashboardCacheTime');
+
+      // Reload page to fetch fresh data
       setTimeout(() => {
         window.location.reload();
-      }, 2000);
+      }, 1000);
       
     } catch (error: any) {
       console.error('Fehler beim Update:', error);
@@ -244,46 +287,115 @@ export default function AdminDashboard() {
   const isMobile = screenWidth < 768;
   const isTablet = screenWidth >= 768 && screenWidth < 1024;
 
+  // Use loaded stats or fallback data while loading
+  const statsToUse = stats || {
+    totalSubscribers: 0,
+    newSubscribersToday: 0,
+    lastNewsletterSent: null,
+    topCrypto: [
+      { name: 'Bitcoin', symbol: 'BTC', price: 0, change24h: 0 },
+      { name: 'Ethereum', symbol: 'ETH', price: 0, change24h: 0 },
+      { name: 'Solana', symbol: 'SOL', price: 0, change24h: 0 },
+      { name: 'Cardano', symbol: 'ADA', price: 0, change24h: 0 },
+      { name: 'Avalanche', symbol: 'AVAX', price: 0, change24h: 0 }
+    ],
+    websiteStats: {
+      pageViews: 0,
+      uniqueVisitors: 0,
+      exchangeClicks: 0
+    },
+    pageViewsByPage: [],
+    exchangeClicks: []
+  };
+
+  console.log('📊 Dashboard rendering with stats:', stats ? 'loaded' : 'fallback');
+
+  // Show skeleton while loading
   if (isLoading) {
     return (
       <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '60vh'
+        padding: '2rem',
+        background: 'transparent'
       }}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '1rem',
-          color: '#f8dfa5'
-        }}>
-          <svg 
-            style={{ 
-              animation: 'spin 1s linear infinite',
-              width: '24px',
-              height: '24px'
-            }} 
-            viewBox="0 0 24 24"
-          >
-            <circle 
-              cx="12" 
-              cy="12" 
-              r="10" 
-              stroke="currentColor" 
-              strokeWidth="4" 
-              fill="none" 
-              strokeDasharray="32" 
-              strokeDashoffset="32"
-              style={{ animation: 'spin 1s linear infinite' }}
-            />
-          </svg>
-          <span>Lade Dashboard-Daten...</span>
+        {/* Header Skeleton */}
+        <div style={{ marginBottom: '2rem' }}>
+          <div style={{
+            height: '2.5rem',
+            width: '200px',
+            background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+            backgroundSize: '200% 100%',
+            animation: 'shimmer 1.5s infinite',
+            borderRadius: '0.5rem',
+            marginBottom: '0.5rem'
+          }} />
+          <div style={{
+            height: '1.5rem',
+            width: '300px',
+            background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+            backgroundSize: '200% 100%',
+            animation: 'shimmer 1.5s infinite',
+            borderRadius: '0.5rem',
+            marginBottom: '1rem'
+          }} />
+          <div style={{
+            height: '2.5rem',
+            width: '250px',
+            background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+            backgroundSize: '200% 100%',
+            animation: 'shimmer 1.5s infinite',
+            borderRadius: '0.5rem'
+          }} />
         </div>
+
+        {/* Stats Grid Skeleton */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+          gap: '1.5rem',
+          marginBottom: '2rem'
+        }}>
+          {[1, 2, 3, 4].map(i => (
+            <div key={i} style={{
+              background: 'rgba(0, 0, 0, 0.6)',
+              backdropFilter: 'blur(10px)',
+              borderRadius: '1rem',
+              border: '1px solid rgba(248, 223, 165, 0.3)',
+              padding: '1.5rem'
+            }}>
+              <div style={{
+                height: '1rem',
+                width: '60px',
+                background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+                backgroundSize: '200% 100%',
+                animation: 'shimmer 1.5s infinite',
+                borderRadius: '0.5rem',
+                marginBottom: '1rem'
+              }} />
+              <div style={{
+                height: '2rem',
+                width: '80px',
+                background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+                backgroundSize: '200% 100%',
+                animation: 'shimmer 1.5s infinite',
+                borderRadius: '0.5rem',
+                marginBottom: '0.5rem'
+              }} />
+              <div style={{
+                height: '1rem',
+                width: '120px',
+                background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+                backgroundSize: '200% 100%',
+                animation: 'shimmer 1.5s infinite',
+                borderRadius: '0.5rem'
+              }} />
+            </div>
+          ))}
+        </div>
+
         <style jsx>{`
-          @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+          @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
           }
         `}</style>
       </div>
@@ -367,9 +479,10 @@ export default function AdminDashboard() {
       {/* Stats Grid */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: isMobile ? '1fr' : isTablet ? '1fr 1fr' : '1fr 1fr 1fr 1fr',
+        gridTemplateColumns: isMobile ? '1fr' : isTablet ? '1fr 1fr' : 'repeat(4, 1fr)',
         gap: '1.5rem',
-        marginBottom: '2rem'
+        marginBottom: '2rem',
+        width: '100%'
       }}>
         {/* Newsletter Subscribers */}
         <div style={{
@@ -394,7 +507,7 @@ export default function AdminDashboard() {
               fontSize: '0.75rem',
               fontWeight: '500'
             }}>
-              +{stats?.newSubscribersToday || 0} heute
+              +{statsToUse?.newSubscribersToday || 0} heute
             </div>
           </div>
           <div style={{
@@ -403,7 +516,7 @@ export default function AdminDashboard() {
             color: '#f8dfa5',
             marginBottom: '0.5rem'
           }}>
-            {stats?.totalSubscribers?.toLocaleString() || '0'}
+            {statsToUse?.totalSubscribers?.toLocaleString() || '0'}
           </div>
           <div style={{
             color: '#d1d5db',
@@ -445,7 +558,7 @@ export default function AdminDashboard() {
             color: '#f8dfa5',
             marginBottom: '0.5rem'
           }}>
-            {stats?.websiteStats?.pageViews?.toLocaleString() || '0'}
+            {statsToUse?.websiteStats?.pageViews?.toLocaleString() || '0'}
           </div>
           <div style={{
             color: '#d1d5db',
@@ -487,7 +600,7 @@ export default function AdminDashboard() {
             color: '#f8dfa5',
             marginBottom: '0.5rem'
           }}>
-            {stats?.websiteStats?.uniqueVisitors?.toLocaleString() || '0'}
+            {statsToUse?.websiteStats?.uniqueVisitors?.toLocaleString() || '0'}
           </div>
           <div style={{
             color: '#d1d5db',
@@ -529,7 +642,7 @@ export default function AdminDashboard() {
             color: '#f8dfa5',
             marginBottom: '0.5rem'
           }}>
-            {stats?.websiteStats?.exchangeClicks?.toLocaleString() || '0'}
+            {statsToUse?.websiteStats?.exchangeClicks?.toLocaleString() || '0'}
           </div>
           <div style={{
             color: '#d1d5db',
@@ -545,7 +658,8 @@ export default function AdminDashboard() {
         display: 'grid',
         gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
         gap: '2rem',
-        marginBottom: '2rem'
+        marginBottom: '2rem',
+        width: '100%'
       }}>
         {/* Top Crypto */}
         <div style={{
@@ -572,7 +686,7 @@ export default function AdminDashboard() {
             flexDirection: 'column',
             gap: '1rem'
           }}>
-            {stats?.topCrypto?.map((crypto, index) => (
+            {statsToUse?.topCrypto?.map((crypto, index) => (
               <div key={crypto.symbol} style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -678,7 +792,7 @@ export default function AdminDashboard() {
               ];
 
               const mergedData = allExchanges.map(exchange => {
-                const realData = stats?.exchangeClicks?.find(e => e.exchange === exchange.name);
+                const realData = statsToUse?.exchangeClicks?.find(e => e.exchange === exchange.name);
                 return {
                   ...exchange,
                   clicks: realData?.clicks || 0,
@@ -739,7 +853,7 @@ export default function AdminDashboard() {
                     <span>{exchange.clicks.toLocaleString()}</span>
                     {exchange.clicks > 0 && (
                       <span style={{ fontSize: '0.7rem', color: '#22c55e' }}>
-                        {((exchange.clicks / Math.max(1, stats?.websiteStats?.exchangeClicks || 1)) * 100).toFixed(1)}%
+                        {((exchange.clicks / Math.max(1, statsToUse?.websiteStats?.exchangeClicks || 1)) * 100).toFixed(1)}%
                       </span>
                     )}
                   </div>
@@ -760,13 +874,13 @@ export default function AdminDashboard() {
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <span>Gesamt-Klicks:</span>
               <span style={{ color: '#f8dfa5', fontWeight: '600' }}>
-                {stats?.websiteStats?.exchangeClicks || 0}
+                {statsToUse?.websiteStats?.exchangeClicks || 0}
               </span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.25rem' }}>
               <span>Aktive Börsen:</span>
               <span style={{ color: '#f8dfa5', fontWeight: '600' }}>
-                {stats?.exchangeClicks?.length || 0} von 8
+                {statsToUse?.exchangeClicks?.length || 0} von 8
               </span>
             </div>
           </div>

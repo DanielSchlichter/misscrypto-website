@@ -180,7 +180,7 @@ export const FeaturesSection = ({ isMobile, onBisonClick }: FeaturesSectionProps
               <p style={{ marginBottom: '0.8rem' }}>• 1,25 % Spread beim Kauf und Verkauf von Kryptowährungen</p>
               <p style={{ marginBottom: '0.8rem' }}>• 1,99 € Orderprovision für Aktien und ETFs</p>
               <p style={{ marginBottom: '0.8rem' }}>• 0 € Ein- und Auszahlungsgebühren (SEPA kostenlos, Kreditkarte/Apple Pay/Google Pay 2,49 %)</p>
-              <p style={{ marginBottom: '0.8rem' }}>• 32 Kryptowährungen (Bitcoin, Ethereum, XRP, Litecoin, Cardano)</p>
+              <p style={{ marginBottom: '0.8rem' }}>• 40 Kryptowährungen (Bitcoin, Ethereum, XRP, Litecoin, Cardano)</p>
               <p style={{ marginBottom: '2rem' }}>• Deutscher Anbieter mit Sitz in Stuttgart</p>
             </div>
 

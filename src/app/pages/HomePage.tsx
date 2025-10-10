@@ -3,8 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import HeroSection from '../components/HeroSection';
-import CryptoTicker from '../components/CryptoTicker';
+import NewsfeedSlider from '../components/NewsfeedSlider';
 import FeaturesSection from '../components/FeaturesSection';
+import CryptoTicker from '../components/CryptoTicker';
 import SparplanCalculator from '../sparplanrechner/SparplanCalculator';
 import NewsletterForm from '../components/NewsletterForm';
 
@@ -29,11 +30,14 @@ const HomePage = () => {
       {/* Hero Section */}
       <HeroSection />
 
-      {/* Crypto Prices Ticker */}
-      <CryptoTicker />
+      {/* Newsfeed Slider */}
+      <NewsfeedSlider />
 
       {/* Features Section */}
       <FeaturesSection />
+
+      {/* Crypto Ticker */}
+      <CryptoTicker />
 
       {/* Sparplan Calculator */}
       <div style={{ 

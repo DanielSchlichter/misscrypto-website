@@ -18,7 +18,7 @@ export const FAQSection = ({ isMobile }: FAQSectionProps) => {
     },
     {
       question: "Welche Kryptowährungen gibt es bei BISON?",
-      answer: "BISON bietet eine bewusst übersichtliche Auswahl von derzeit über 32 Kryptowährungen, darunter Bitcoin (BTC), Ethereum (ETH), Ripple (XRP), Litecoin (LTC) und Cardano (ADA). Die Auswahl ist ideal für Einsteiger, die sich auf die größten und etabliertesten Coins konzentrieren möchten."
+      answer: "BISON bietet eine bewusst übersichtliche Auswahl von derzeit über 40 Kryptowährungen, darunter Bitcoin (BTC), Ethereum (ETH), Ripple (XRP), Litecoin (LTC) und Cardano (ADA). Die Auswahl ist ideal für Einsteiger, die sich auf die größten und etabliertesten Coins konzentrieren möchten."
     },
     {
       question: "Kann man bei BISON einen Sparplan einrichten?",

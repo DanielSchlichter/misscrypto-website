@@ -80,11 +80,16 @@ const CryptoTickerClient = ({ initialCoins }: CryptoTickerClientProps) => {
       const gap = 16;
       const scrollAmount = cardWidth + gap;
       const scrollLeft = scrollRef.current.scrollLeft;
-      
+
+      let newScrollLeft;
+      if (direction === 'left') {
+        newScrollLeft = Math.max(0, scrollLeft - scrollAmount);
+      } else {
+        newScrollLeft = scrollLeft + scrollAmount;
+      }
+
       scrollRef.current.scrollTo({
-        left: direction === 'left' 
-          ? scrollLeft - scrollAmount
-          : scrollLeft + scrollAmount,
+        left: newScrollLeft,
         behavior: 'smooth'
       });
     }
@@ -227,22 +232,113 @@ const CryptoTickerClient = ({ initialCoins }: CryptoTickerClientProps) => {
   useEffect(() => {
     // Überprüfe Scroll-Buttons beim initialen Laden
     checkScrollButtons();
+
+    // Setze initiale Scroll-Position auf 0 (ganz links)
+    if (scrollRef.current) {
+      scrollRef.current.scrollLeft = 0;
+    }
   }, [initialCoins, checkScrollButtons]);
 
-  return (
-    <div className="mc-crypto-ticker">
-      <div className="mc-container">
-        <div className="mc-ticker-carousel-container">
-          {canScrollLeft && (
-            <button
-              onClick={() => scrollCarousel('left')}
-              className="mc-carousel-nav mc-carousel-prev"
-            >
-              ←
-            </button>
-          )}
+  // Zusätzlicher useEffect um sicherzustellen, dass Scroll-Position stimmt
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (scrollRef.current) {
+        scrollRef.current.scrollLeft = 0;
+        checkScrollButtons();
+      }
+    }, 100);
 
-          <div className="mc-ticker-carousel" ref={scrollRef} onScroll={checkScrollButtons}>
+    return () => clearTimeout(timer);
+  }, [checkScrollButtons]);
+
+  return (
+    <section style={{
+      paddingTop: '2rem',
+      paddingBottom: '4rem',
+      position: 'relative'
+    }}>
+      <div style={{
+        maxWidth: '1280px',
+        margin: '0 auto',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        {/* Left Gradient Fade */}
+        <div style={{
+          position: 'absolute',
+          left: 0,
+          top: 0,
+          bottom: 0,
+          width: '80px',
+          background: 'linear-gradient(to right, #000000, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0))',
+          zIndex: 5,
+          pointerEvents: 'none'
+        }}></div>
+
+        {/* Right Gradient Fade */}
+        <div style={{
+          position: 'absolute',
+          right: 0,
+          top: 0,
+          bottom: 0,
+          width: '80px',
+          background: 'linear-gradient(to left, #000000, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0))',
+          zIndex: 5,
+          pointerEvents: 'none'
+        }}></div>
+
+        {canScrollLeft && (
+          <button
+            onClick={() => scrollCarousel('left')}
+            style={{
+              position: 'absolute',
+              left: '1rem',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              zIndex: 10,
+              background: 'rgba(0, 0, 0, 0.8)',
+              border: '1px solid rgba(248, 223, 165, 0.3)',
+              borderRadius: '50%',
+              width: '40px',
+              height: '40px',
+              color: '#f8dfa5',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '1.25rem',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.background = 'rgba(248, 223, 165, 0.2)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.background = 'rgba(0, 0, 0, 0.8)';
+            }}
+          >
+            ←
+          </button>
+        )}
+
+        <div
+          ref={scrollRef}
+          onScroll={checkScrollButtons}
+          style={{
+            display: 'flex',
+            gap: '1rem',
+            overflowX: 'auto',
+            scrollSnapType: 'x mandatory',
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none',
+            paddingLeft: '2rem',
+            paddingRight: '2rem',
+            paddingTop: '1rem',
+            paddingBottom: '1rem',
+            scrollBehavior: 'smooth',
+            WebkitOverflowScrolling: 'touch',
+            width: '100%'
+          }}
+        >
             {initialCoins.map((coin, index) => {
               const selectedRange = selectedTimeRanges[coin.id] || '24h';
               const chartData = getChartData(coin);
@@ -254,7 +350,22 @@ const CryptoTickerClient = ({ initialCoins }: CryptoTickerClientProps) => {
               const priceChange = coin.price_changes?.[selectedRange] || 0;
 
               return (
-                <div key={`ticker-${coin.id}-${index}`} className="mc-ticker-item">
+                <div
+                  key={`ticker-${coin.id}-${index}`}
+                  className="mc-ticker-item"
+                  style={{
+                    minWidth: '300px',
+                    maxWidth: '300px',
+                    flexShrink: 0,
+                    scrollSnapAlign: 'start',
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    backdropFilter: 'blur(8px)',
+                    borderRadius: '1rem',
+                    border: '1px solid rgba(248, 223, 165, 0.2)',
+                    padding: '1.5rem',
+                    transition: 'all 0.3s ease'
+                  }}
+                >
                   <div className="mc-ticker-header">
                     <img src={coin.image} alt={coin.name} className="mc-ticker-icon" />
                     <div className="mc-ticker-info">
@@ -289,7 +400,7 @@ const CryptoTickerClient = ({ initialCoins }: CryptoTickerClientProps) => {
 
                   {/* Kaufen Button */}
                   <div className="mc-ticker-actions">
-                    <Link 
+                    <Link
                       href={`/krypto-kaufen?currency=${coin.name.toLowerCase()}`}
                       className="mc-btn-small mc-btn-primary mc-btn-full mc-btn-with-icon"
                     >
@@ -302,17 +413,47 @@ const CryptoTickerClient = ({ initialCoins }: CryptoTickerClientProps) => {
             })}
           </div>
 
-          {canScrollRight && (
-            <button
-              onClick={() => scrollCarousel('right')}
-              className="mc-carousel-nav mc-carousel-next"
-            >
-              →
-            </button>
-          )}
-        </div>
+        {canScrollRight && (
+          <button
+            onClick={() => scrollCarousel('right')}
+            style={{
+              position: 'absolute',
+              right: '1rem',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              zIndex: 10,
+              background: 'rgba(0, 0, 0, 0.8)',
+              border: '1px solid rgba(248, 223, 165, 0.3)',
+              borderRadius: '50%',
+              width: '40px',
+              height: '40px',
+              color: '#f8dfa5',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '1.25rem',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.background = 'rgba(248, 223, 165, 0.2)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.background = 'rgba(0, 0, 0, 0.8)';
+            }}
+          >
+            →
+          </button>
+        )}
       </div>
-    </div>
+
+      {/* Scrollbar verstecken */}
+      <style jsx>{`
+        div::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
+    </section>
   );
 };
 

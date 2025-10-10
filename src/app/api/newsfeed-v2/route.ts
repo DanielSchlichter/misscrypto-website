@@ -14,6 +14,7 @@ interface NewsfeedPost {
   updatedAt: Date;
   publishedAt?: Date;
   author: string;
+  authorId?: string;
   views: number;
   likes: number;
   featuredImage?: string;
@@ -61,20 +62,23 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get('status');
     const limitCount = parseInt(searchParams.get('limit') || '50');
 
-    // Optimierte Firestore Abfrage
-    let query = db.collection('newsfeed').orderBy('createdAt', 'desc');
+    // Optimierte Firestore Abfrage mit Index
+    let query = db.collection('newsfeed');
 
+    // Jetzt mit Index: where und orderBy kombiniert
     if (status) {
       query = query.where('status', '==', status);
     }
+
+    query = query.orderBy('createdAt', 'desc');
 
     if (limitCount > 0) {
       query = query.limit(limitCount);
     }
 
-    console.log('🚀 Starte Newsfeed-Abfrage mit zentraler Firebase Admin...');
+    console.log('🚀 Starte Newsfeed-Abfrage mit Index-Optimierung...');
     const snapshot = await query.get();
-    
+
     const posts = snapshot.docs.map((doc: any) => ({
       id: doc.id,
       ...doc.data(),
@@ -84,7 +88,7 @@ export async function GET(request: NextRequest) {
       publishedAt: doc.data().publishedAt?.toDate?.() || null
     }));
 
-    console.log(`✅ ${posts.length} Newsfeed Posts geladen (optimiert)`);
+    console.log(`✅ ${posts.length} Newsfeed Posts geladen (mit Index optimiert)`);
 
     return NextResponse.json({
       success: true,
@@ -113,12 +117,14 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { 
-      title, 
-      content, 
-      category, 
-      status, 
-      metaTitle, 
+    const {
+      title,
+      content,
+      category,
+      status,
+      authorId,
+      featuredImage,
+      metaTitle,
       metaDescription
     } = body;
 
@@ -148,9 +154,10 @@ export async function POST(request: NextRequest) {
       category: category || 'Bitcoin',
       status: status || 'draft',
       author: session.user.name || session.user.email || 'Admin',
+      authorId: authorId || '',
       views: 0,
       likes: 0,
-      featuredImage: '',
+      featuredImage: featuredImage || '',
       seo: {
         metaTitle: metaTitle || title,
         metaDescription: metaDescription || excerpt,

@@ -3,6 +3,24 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import RichTextEditor from '../../../components/RichTextEditor/index';
+import MediaModal from '../../../components/RichTextEditor/components/MediaModal';
+
+interface Author {
+  id: string;
+  name: string;
+  email: string;
+  photo?: string;
+}
+
+interface MediaFile {
+  id: string;
+  name: string;
+  url: string;
+  type: 'image' | 'video';
+  size: number;
+  uploadedAt: string;
+  mimeType: string;
+}
 
 export default function CreateNewsfeedPost() {
   const router = useRouter();
@@ -18,9 +36,19 @@ export default function CreateNewsfeedPost() {
     content: '',
     category: 'Bitcoin',
     status: 'draft' as 'draft' | 'published' | 'archived',
+    authorId: '',
+    featuredImage: '',
     metaTitle: '',
     metaDescription: ''
   });
+
+  const [authors, setAuthors] = useState<Author[]>([]);
+  const [loadingAuthors, setLoadingAuthors] = useState(true);
+
+  // Media Modal State
+  const [showMediaModal, setShowMediaModal] = useState(false);
+  const [mediaFiles, setMediaFiles] = useState<MediaFile[]>([]);
+  const [loadingMedia, setLoadingMedia] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -31,6 +59,31 @@ export default function CreateNewsfeedPost() {
     window.addEventListener('resize', handleResize);
 
     return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Authoren laden
+  useEffect(() => {
+    const fetchAuthors = async () => {
+      try {
+        setLoadingAuthors(true);
+        const response = await fetch('/api/authors');
+        const data = await response.json();
+
+        if (data.success) {
+          setAuthors(data.authors.filter((author: Author) => author.isActive !== false));
+        } else {
+          console.error('Fehler beim Laden der Authoren:', data.error);
+          setAuthors([]);
+        }
+      } catch (error) {
+        console.error('Fehler beim Laden der Authoren:', error);
+        setAuthors([]);
+      } finally {
+        setLoadingAuthors(false);
+      }
+    };
+
+    fetchAuthors();
   }, []);
 
   // Post laden wenn im Bearbeitungsmodus
@@ -49,6 +102,8 @@ export default function CreateNewsfeedPost() {
               content: post.content || '',
               category: post.category || 'Bitcoin',
               status: post.status || 'draft',
+              authorId: post.authorId || '',
+              featuredImage: post.featuredImage || '',
               metaTitle: post.seo?.metaTitle || post.title || '',
               metaDescription: post.seo?.metaDescription || post.excerpt || ''
             });
@@ -90,6 +145,8 @@ export default function CreateNewsfeedPost() {
             content: formData.content,
             category: formData.category,
             status: formData.status,
+            authorId: formData.authorId,
+            featuredImage: formData.featuredImage,
             metaTitle: formData.metaTitle || formData.title,
             metaDescription: formData.metaDescription
           }),
@@ -106,6 +163,8 @@ export default function CreateNewsfeedPost() {
             content: formData.content,
             category: formData.category,
             status: formData.status,
+            authorId: formData.authorId,
+            featuredImage: formData.featuredImage,
             metaTitle: formData.metaTitle || formData.title,
             metaDescription: formData.metaDescription
           }),
@@ -134,6 +193,45 @@ export default function CreateNewsfeedPost() {
       ...prev,
       [field]: value
     }));
+  };
+
+  // Media Modal Functions
+  const fetchMedia = async () => {
+    try {
+      setLoadingMedia(true);
+      const response = await fetch('/api/media');
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
+        setMediaFiles(data.files || []);
+      } else {
+        console.error('Fehler beim Laden der Medien:', data.error);
+        setMediaFiles([]);
+      }
+    } catch (error) {
+      console.error('Fehler beim Laden der Medien:', error);
+      setMediaFiles([]);
+    } finally {
+      setLoadingMedia(false);
+    }
+  };
+
+  const openMediaModal = () => {
+    setShowMediaModal(true);
+    fetchMedia();
+  };
+
+  const handleMediaSelect = (file: MediaFile) => {
+    setFormData(prev => ({
+      ...prev,
+      featuredImage: file.url
+    }));
+    setShowMediaModal(false);
   };
 
   const categories = [
@@ -309,6 +407,213 @@ export default function CreateNewsfeedPost() {
                 <option value="published" style={{ background: '#1a1a1a' }}>🌐 Veröffentlicht</option>
                 <option value="archived" style={{ background: '#1a1a1a' }}>📦 Archiviert</option>
               </select>
+            </div>
+          </div>
+
+          {/* Beitragsbild und Autor */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+            gap: '1rem',
+            marginBottom: '1.5rem'
+          }}>
+            <div>
+              <label style={{
+                display: 'block',
+                color: '#f8dfa5',
+                fontSize: '0.875rem',
+                fontWeight: '600',
+                marginBottom: '0.5rem'
+              }}>
+                Beitragsbild (Thumbnail)
+              </label>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1rem'
+              }}>
+                {formData.featuredImage ? (
+                  <div style={{
+                    position: 'relative',
+                    width: '120px',
+                    height: '80px',
+                    borderRadius: '8px',
+                    overflow: 'hidden',
+                    border: '2px solid rgba(248, 223, 165, 0.3)'
+                  }}>
+                    <img
+                      src={formData.featuredImage}
+                      alt="Beitragsbild"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover'
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setFormData(prev => ({ ...prev, featuredImage: '' }))}
+                      style={{
+                        position: 'absolute',
+                        top: '4px',
+                        right: '4px',
+                        background: '#ef4444',
+                        border: 'none',
+                        borderRadius: '50%',
+                        width: '20px',
+                        height: '20px',
+                        color: 'white',
+                        cursor: 'pointer',
+                        fontSize: '0.7rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ) : (
+                  <div style={{
+                    width: '120px',
+                    height: '80px',
+                    borderRadius: '8px',
+                    border: '2px dashed rgba(248, 223, 165, 0.3)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#9ca3af',
+                    fontSize: '0.75rem',
+                    textAlign: 'center'
+                  }}>
+                    <span style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>🖼️</span>
+                    <span>Kein Bild</span>
+                  </div>
+                )}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                  <button
+                    type="button"
+                    onClick={openMediaModal}
+                    style={{
+                      background: 'linear-gradient(135deg, #f8dfa5 0%, #e4b15e 100%)',
+                      color: '#000000',
+                      border: 'none',
+                      borderRadius: '8px',
+                      padding: '0.5rem 1rem',
+                      fontSize: '0.875rem',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      fontFamily: 'Raleway, sans-serif'
+                    }}
+                  >
+                    {formData.featuredImage ? '🖼️ Bild ändern' : '🖼️ Bild auswählen'}
+                  </button>
+                  <span style={{
+                    color: '#9ca3af',
+                    fontSize: '0.75rem',
+                    textAlign: 'center'
+                  }}>
+                    Optional - wird als Thumbnail verwendet
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Autor Auswahl */}
+            <div>
+              <label style={{
+                display: 'block',
+                color: '#f8dfa5',
+                fontSize: '0.875rem',
+                fontWeight: '600',
+                marginBottom: '0.5rem'
+              }}>
+                Autor auswählen
+              </label>
+              <select
+                value={formData.authorId}
+                onChange={(e) => handleInputChange('authorId', e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  background: 'rgba(0, 0, 0, 0.3)',
+                  border: '1px solid rgba(248, 223, 165, 0.3)',
+                  borderRadius: '0.5rem',
+                  color: '#ffffff',
+                  fontSize: '1rem',
+                  marginBottom: '0.75rem'
+                }}
+              >
+                <option value="" style={{ background: '#1a1a1a' }}>
+                  {loadingAuthors ? 'Lade Authoren...' : 'Autor auswählen (optional)'}
+                </option>
+                {authors.map(author => (
+                  <option key={author.id} value={author.id} style={{ background: '#1a1a1a' }}>
+                    ✍️ {author.name}
+                  </option>
+                ))}
+              </select>
+
+              {/* Ausgewählter Autor anzeigen */}
+              {formData.authorId && (
+                <div style={{
+                  background: 'rgba(0, 0, 0, 0.3)',
+                  border: '1px solid rgba(248, 223, 165, 0.3)',
+                  borderRadius: '8px',
+                  padding: '0.75rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.75rem'
+                }}>
+                  {(() => {
+                    const selectedAuthor = authors.find(a => a.id === formData.authorId);
+                    return selectedAuthor ? (
+                      <>
+                        {selectedAuthor.photo ? (
+                          <img
+                            src={selectedAuthor.photo}
+                            alt={selectedAuthor.name}
+                            style={{
+                              width: '32px',
+                              height: '32px',
+                              borderRadius: '50%',
+                              objectFit: 'cover',
+                              border: '2px solid rgba(248, 223, 165, 0.3)'
+                            }}
+                          />
+                        ) : (
+                          <div style={{
+                            width: '32px',
+                            height: '32px',
+                            borderRadius: '50%',
+                            background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '1rem',
+                            color: '#000'
+                          }}>
+                            ✍️
+                          </div>
+                        )}
+                        <div>
+                          <div style={{ color: '#f8dfa5', fontWeight: '500' }}>
+                            {selectedAuthor.name}
+                          </div>
+                          <div style={{ color: '#9ca3af', fontSize: '0.75rem' }}>
+                            {selectedAuthor.email}
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <span style={{ color: '#9ca3af', fontStyle: 'italic' }}>
+                        Autor nicht gefunden
+                      </span>
+                    );
+                  })()}
+                </div>
+              )}
             </div>
           </div>
 
@@ -497,6 +802,17 @@ export default function CreateNewsfeedPost() {
             </button>
           </div>
         </form>
+
+        {/* Media Modal */}
+        {showMediaModal && (
+          <MediaModal
+            mediaFiles={mediaFiles}
+            loadingMedia={loadingMedia}
+            onSelectFile={handleMediaSelect}
+            onClose={() => setShowMediaModal(false)}
+            onRefreshMedia={fetchMedia}
+          />
+        )}
 
         <style jsx>{`
           @keyframes spin {

@@ -80,12 +80,14 @@ export async function PUT(request: NextRequest) {
     const { admin, db } = await getFirebaseAdmin();
 
     const body = await request.json();
-    const { 
-      title, 
-      content, 
-      category, 
-      status, 
-      metaTitle, 
+    const {
+      title,
+      content,
+      category,
+      status,
+      authorId,
+      featuredImage,
+      metaTitle,
       metaDescription
     } = body;
 
@@ -153,6 +155,8 @@ export async function PUT(request: NextRequest) {
       slug,
       category: category || currentPost?.category || 'Bitcoin',
       status: status || currentPost?.status || 'draft',
+      authorId: authorId !== undefined ? authorId : currentPost?.authorId || '',
+      featuredImage: featuredImage !== undefined ? featuredImage : currentPost?.featuredImage || '',
       seo: {
         metaTitle: metaTitle || finalTitle,
         metaDescription: metaDescription || excerpt,

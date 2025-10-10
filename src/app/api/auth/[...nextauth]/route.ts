@@ -2,6 +2,7 @@ import NextAuth, { AuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '@/lib/firebase'
+import { logger } from '@/lib/logger'
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -86,7 +87,7 @@ export const authOptions: AuthOptions = {
     maxAge: 24 * 60 * 60, // 24 Stunden
   },
   secret: process.env.NEXTAUTH_SECRET || 'your-fallback-secret-key-for-development',
-  debug: process.env.NODE_ENV === 'development', // Debug-Mode für Development
+  debug: false, // Debug-Mode deaktiviert um Redirect-Loops zu vermeiden
 }
 
 const handler = NextAuth(authOptions)

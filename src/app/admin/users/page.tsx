@@ -75,39 +75,58 @@ export default function AdminUsersPage() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Benutzer laden
+  // Benutzer laden mit Caching
   useEffect(() => {
     let isMounted = true;
-    
+
     const fetchUsers = async () => {
       try {
+        // Check if data is already cached in sessionStorage
+        const cachedData = sessionStorage.getItem('usersData');
+        const cacheTime = sessionStorage.getItem('usersCacheTime');
+
+        // Use cache if it's less than 5 minutes old
+        if (cachedData && cacheTime) {
+          const age = Date.now() - parseInt(cacheTime);
+          if (age < 300000) { // 5 minutes
+            console.log('👥 Using cached users data');
+            setUsers(JSON.parse(cachedData));
+            setIsLoading(false);
+            return;
+          }
+        }
+
         setIsLoading(true);
-        console.log('🚀 Lade Benutzer... (Versuch 1)');
-        
+        console.log('🚀 Loading fresh users data...');
+
         const response = await fetch('/api/users-v2', {
           headers: {
             'Cache-Control': 'no-cache',
             'Pragma': 'no-cache'
           }
         });
-        
+
         if (!isMounted) return;
-        
+
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
-        
+
         const data = await response.json();
-        
+
         if (data.success) {
-          console.log(`✅ ${data.users?.length || 0} Benutzer geladen`);
+          console.log(`✅ ${data.users?.length || 0} Benutzer geladen und gecacht`);
           setUsers(data.users || []);
+
+          // Cache the data
+          sessionStorage.setItem('usersData', JSON.stringify(data.users || []));
+          sessionStorage.setItem('usersCacheTime', Date.now().toString());
         } else {
           console.error('Fehler beim Laden der Benutzer:', data.error);
         }
       } catch (error: any) {
         if (!isMounted) return;
-        
+
         console.error('Fehler beim Laden der Benutzer:', error);
         setUsers([]);
       } finally {
@@ -197,6 +216,9 @@ export default function AdminUsersPage() {
         setMessage({ type: 'success', text: `Benutzer ${newUser.email} erfolgreich erstellt!` });
         setNewUser({ email: '', password: '', displayName: '' });
         setShowCreateForm(false);
+        // Cache invalidieren und neu laden
+        sessionStorage.removeItem('usersData');
+        sessionStorage.removeItem('usersCacheTime');
         loadUsers(); // Reload users list
       } else {
         setMessage({ type: 'error', text: data.error || 'Fehler beim Erstellen des Benutzers' });
@@ -296,33 +318,153 @@ export default function AdminUsersPage() {
   if (isLoading) {
     return (
       <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '60vh',
         color: '#ffffff',
-        fontFamily: 'Raleway, sans-serif'
+        fontFamily: 'Raleway, sans-serif',
+        padding: isMobile ? '1rem' : '2rem'
       }}>
-        <div style={{
-          flexDirection: 'column',
-          gap: '1rem',
-          textAlign: 'center'
-        }}>
+        {/* Header Skeleton */}
+        <div style={{ marginBottom: '2rem' }}>
           <div style={{
-            width: '40px',
-            height: '40px',
-            border: '4px solid rgba(248, 223, 165, 0.3)',
-            borderTop: '4px solid #f8dfa5',
-            borderRadius: '50%',
-            animation: 'spin 1s linear infinite',
-            margin: '0 auto'
+            height: '2.5rem',
+            width: '200px',
+            background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+            backgroundSize: '200% 100%',
+            animation: 'shimmer 1.5s infinite',
+            borderRadius: '0.5rem',
+            marginBottom: '0.5rem'
           }} />
-          <p style={{ color: '#d1d5db' }}>Lade Benutzer...</p>
+          <div style={{
+            height: '1.1rem',
+            width: '300px',
+            background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+            backgroundSize: '200% 100%',
+            animation: 'shimmer 1.5s infinite',
+            borderRadius: '0.5rem',
+            marginBottom: '1rem'
+          }} />
+          <div style={{
+            height: '2.5rem',
+            width: '150px',
+            background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+            backgroundSize: '200% 100%',
+            animation: 'shimmer 1.5s infinite',
+            borderRadius: '0.5rem'
+          }} />
         </div>
+
+        {/* Users Table Skeleton */}
+        <div style={{
+          background: 'rgba(0, 0, 0, 0.6)',
+          backdropFilter: 'blur(10px)',
+          borderRadius: '1rem',
+          border: '1px solid rgba(248, 223, 165, 0.3)',
+          overflow: 'hidden'
+        }}>
+          {/* Table Header */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: isMobile ? '1fr 100px' : '2fr 2fr 1fr 1fr 150px',
+            gap: '1rem',
+            padding: '1rem',
+            borderBottom: '1px solid rgba(248, 223, 165, 0.2)',
+            background: 'rgba(248, 223, 165, 0.05)'
+          }}>
+            {['Benutzer', 'Status', 'Erstellt', 'Letzter Login', 'Aktionen'].slice(0, isMobile ? 2 : 5).map((_, i) => (
+              <div key={i} style={{
+                height: '1rem',
+                background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+                backgroundSize: '200% 100%',
+                animation: 'shimmer 1.5s infinite',
+                borderRadius: '0.5rem'
+              }} />
+            ))}
+          </div>
+
+          {/* Table Rows */}
+          {[1, 2, 3, 4, 5].map(i => (
+            <div key={i} style={{
+              display: 'grid',
+              gridTemplateColumns: isMobile ? '1fr 100px' : '2fr 2fr 1fr 1fr 150px',
+              gap: '1rem',
+              padding: '1rem',
+              borderBottom: i < 5 ? '1px solid rgba(248, 223, 165, 0.1)' : 'none'
+            }}>
+              {/* User Info */}
+              <div>
+                <div style={{
+                  height: '1rem',
+                  width: '80%',
+                  background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+                  backgroundSize: '200% 100%',
+                  animation: 'shimmer 1.5s infinite',
+                  borderRadius: '0.5rem',
+                  marginBottom: '0.5rem'
+                }} />
+                <div style={{
+                  height: '0.875rem',
+                  width: '60%',
+                  background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+                  backgroundSize: '200% 100%',
+                  animation: 'shimmer 1.5s infinite',
+                  borderRadius: '0.5rem'
+                }} />
+              </div>
+
+              {!isMobile && (
+                <>
+                  {/* Status */}
+                  <div style={{
+                    height: '1.5rem',
+                    width: '80px',
+                    background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+                    backgroundSize: '200% 100%',
+                    animation: 'shimmer 1.5s infinite',
+                    borderRadius: '12px'
+                  }} />
+
+                  {/* Created */}
+                  <div style={{
+                    height: '0.875rem',
+                    width: '70%',
+                    background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+                    backgroundSize: '200% 100%',
+                    animation: 'shimmer 1.5s infinite',
+                    borderRadius: '0.5rem'
+                  }} />
+
+                  {/* Last Login */}
+                  <div style={{
+                    height: '0.875rem',
+                    width: '70%',
+                    background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+                    backgroundSize: '200% 100%',
+                    animation: 'shimmer 1.5s infinite',
+                    borderRadius: '0.5rem'
+                  }} />
+                </>
+              )}
+
+              {/* Actions */}
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                {[1, 2].map(j => (
+                  <div key={j} style={{
+                    height: '2rem',
+                    width: '2rem',
+                    background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+                    backgroundSize: '200% 100%',
+                    animation: 'shimmer 1.5s infinite',
+                    borderRadius: '0.5rem'
+                  }} />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
         <style jsx>{`
-          @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+          @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
           }
         `}</style>
       </div>

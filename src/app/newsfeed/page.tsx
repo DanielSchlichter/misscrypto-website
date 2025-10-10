@@ -20,7 +20,8 @@ interface NewsfeedPost {
 }
 
 export default function NewsfeedPage() {
-  const [screenWidth, setScreenWidth] = useState(0);
+  // Initialisiere mit Desktop-Breite für SSR/erste Render
+  const [screenWidth, setScreenWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
   const [posts, setPosts] = useState<NewsfeedPost[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -29,23 +30,26 @@ export default function NewsfeedPage() {
       setScreenWidth(window.innerWidth);
     };
 
+    // Setze initiale Breite nach Mount (falls SSR)
     setScreenWidth(window.innerWidth);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Fetch published posts
+  // Fetch published posts - optimized with query params
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch('/api/newsfeed-v2');
+        // Nur published posts direkt von der API anfordern
+        const response = await fetch('/api/newsfeed-v2?status=published&limit=20', {
+          // Cache für 5 Minuten
+          next: { revalidate: 300 }
+        });
         if (response.ok) {
           const data = await response.json();
           if (data.success) {
-            // Only show published posts
-            const publishedPosts = data.posts.filter((post: NewsfeedPost) => post.status === 'published');
-            setPosts(publishedPosts);
+            setPosts(data.posts);
           }
         }
       } catch (error) {
@@ -55,6 +59,7 @@ export default function NewsfeedPage() {
       }
     };
 
+    // Sofort laden ohne Verzögerung
     fetchPosts();
   }, []);
 
@@ -117,12 +122,28 @@ export default function NewsfeedPage() {
   const isTablet = screenWidth >= 768 && screenWidth < 1024;
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: 'linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #111111 100%)',
-      color: '#ffffff',
-      fontFamily: 'Raleway, sans-serif'
-    }}>
+    <>
+      {/* Global Styles for Animations */}
+      <style jsx global>{`
+        @keyframes shimmer {
+          0% {
+            left: -100%;
+          }
+          50% {
+            left: 100%;
+          }
+          100% {
+            left: 100%;
+          }
+        }
+      `}</style>
+
+      <div style={{
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #111111 100%)',
+        color: '#ffffff',
+        fontFamily: 'Raleway, sans-serif'
+      }}>
       {/* Hero Section */}
       <section style={{
         padding: isMobile ? '6rem 1rem 4rem' : isTablet ? '8rem 2rem 6rem' : '10rem 2rem 8rem',
@@ -142,18 +163,11 @@ export default function NewsfeedPage() {
         }}></div>
 
         <div style={{
-          maxWidth: '1000px',
+          maxWidth: '1200px',
           margin: '0 auto',
           position: 'relative',
           zIndex: 1
         }}>
-          <div style={{
-            fontSize: isMobile ? '3rem' : '4rem',
-            marginBottom: '1rem'
-          }}>
-            📰
-          </div>
-          
           <h1 style={{
             fontSize: isMobile ? '2.5rem' : '3.5rem',
             fontWeight: '700',
@@ -172,39 +186,115 @@ export default function NewsfeedPage() {
             color: '#d1d5db',
             lineHeight: '1.6',
             maxWidth: '600px',
-            margin: '0 auto'
+            margin: '0 auto 3rem'
           }}>
-            Aktuelle News, Analysen und Insights aus der Welt der Kryptowährungen. 
+            Aktuelle News, Analysen und Insights aus der Welt der Kryptowährungen.
             Verständlich erklärt für Einsteiger und Profis.
           </p>
-        </div>
-      </section>
 
-      {/* Articles Section */}
-      <section style={{
-        padding: isMobile ? '2rem 1rem' : isTablet ? '3rem 2rem' : '4rem 2rem',
-        position: 'relative'
-      }}>
-        <div style={{
-          maxWidth: '1200px',
-          margin: '0 auto'
-        }}>
-
-
-          {/* Loading State */}
+          {/* Loading State - Skeleton Loader */}
           {isLoading && (
             <div style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              minHeight: '300px',
-              fontSize: '1.2rem',
-              color: '#d1d5db'
+              display: 'grid',
+              gridTemplateColumns: isMobile ? '1fr' : isTablet ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
+              gap: isMobile ? '2rem' : '2.5rem'
             }}>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>⏳</div>
-                Artikel werden geladen...
-              </div>
+              {/* Skeleton Cards */}
+              {[1, 2, 3, 4, 5, 6].map((index) => (
+                <div key={index} style={{
+                  background: 'linear-gradient(135deg, rgba(248, 223, 165, 0.05), rgba(248, 223, 165, 0.02))',
+                  backdropFilter: 'blur(15px)',
+                  borderRadius: '1.5rem',
+                  padding: '2rem',
+                  border: '1px solid rgba(248, 223, 165, 0.1)',
+                  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}>
+                  {/* Animated Shimmer Effect */}
+                  <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: '-100%',
+                    width: '100%',
+                    height: '100%',
+                    background: 'linear-gradient(90deg, transparent 0%, rgba(248, 223, 165, 0.1) 50%, transparent 100%)',
+                    animation: `shimmer 1.5s infinite ease-in-out ${index * 0.1}s`
+                  }} />
+
+                  {/* Category Badge Skeleton */}
+                  <div style={{
+                    position: 'absolute',
+                    top: '1rem',
+                    right: '1rem',
+                    width: '80px',
+                    height: '28px',
+                    background: 'rgba(248, 223, 165, 0.1)',
+                    borderRadius: '1rem'
+                  }} />
+
+                  {/* Title Skeleton */}
+                  <div style={{ marginTop: '1rem' }}>
+                    <div style={{
+                      height: '24px',
+                      background: 'rgba(248, 223, 165, 0.15)',
+                      borderRadius: '0.5rem',
+                      marginBottom: '0.5rem',
+                      width: '80%'
+                    }} />
+                    <div style={{
+                      height: '24px',
+                      background: 'rgba(248, 223, 165, 0.15)',
+                      borderRadius: '0.5rem',
+                      marginBottom: '1rem',
+                      width: '60%'
+                    }} />
+                  </div>
+
+                  {/* Content Skeleton */}
+                  <div>
+                    <div style={{
+                      height: '16px',
+                      background: 'rgba(209, 213, 219, 0.1)',
+                      borderRadius: '0.25rem',
+                      marginBottom: '0.5rem'
+                    }} />
+                    <div style={{
+                      height: '16px',
+                      background: 'rgba(209, 213, 219, 0.1)',
+                      borderRadius: '0.25rem',
+                      marginBottom: '0.5rem'
+                    }} />
+                    <div style={{
+                      height: '16px',
+                      background: 'rgba(209, 213, 219, 0.1)',
+                      borderRadius: '0.25rem',
+                      width: '70%',
+                      marginBottom: '1.5rem'
+                    }} />
+                  </div>
+
+                  {/* Footer Skeleton */}
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                  }}>
+                    <div style={{
+                      height: '14px',
+                      width: '100px',
+                      background: 'rgba(156, 163, 175, 0.1)',
+                      borderRadius: '0.25rem'
+                    }} />
+                    <div style={{
+                      height: '14px',
+                      width: '60px',
+                      background: 'rgba(248, 223, 165, 0.1)',
+                      borderRadius: '0.25rem'
+                    }} />
+                  </div>
+                </div>
+              ))}
             </div>
           )}
 
@@ -459,6 +549,7 @@ export default function NewsfeedPage() {
           ← Zurück zur Startseite
         </Link>
       </section>
-    </div>
+      </div>
+    </>
   );
 } 

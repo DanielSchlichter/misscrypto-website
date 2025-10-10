@@ -58,7 +58,7 @@ export const ConclusionSection = ({ isMobile, onBisonClick }: ConclusionSectionP
           gap: '1rem',
           marginBottom: '2.5rem'
         }}>
-          {['BaFin-reguliert', '32 Kryptowährungen', '1,25% Spread', 'Deutsche App'].map((feature, index) => (
+          {['BaFin-reguliert', '40 Kryptowährungen', '1,25% Spread', 'Deutsche App'].map((feature, index) => (
             <div key={index} style={{
               display: 'flex',
               alignItems: 'center',
@@ -102,7 +102,7 @@ export const ConclusionSection = ({ isMobile, onBisonClick }: ConclusionSectionP
           marginTop: '1rem',
           margin: '1rem 0 0 0'
         }}>
-          BaFin-reguliert • Börse Stuttgart • 32 Kryptowährungen verfügbar
+          BaFin-reguliert • Börse Stuttgart • 40 Kryptowährungen verfügbar
         </p>
       </div>
     </section>

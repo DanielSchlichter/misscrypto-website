@@ -50,26 +50,40 @@ export default function NewsfeedOverview() {
 
   const fetchPosts = async () => {
     try {
+      // Check if data is already cached in sessionStorage
+      const cachedData = sessionStorage.getItem('newsfeedData');
+      const cacheTime = sessionStorage.getItem('newsfeedCacheTime');
+
+      // Use cache if it's less than 5 minutes old
+      if (cachedData && cacheTime) {
+        const age = Date.now() - parseInt(cacheTime);
+        if (age < 300000) { // 5 minutes
+          console.log('📰 Using cached newsfeed data');
+          setPosts(JSON.parse(cachedData));
+          setIsLoading(false);
+          return;
+        }
+      }
+
       setIsLoading(true);
-      
-      console.log('🚀 Lade Newsfeed Posts...');
-      
+      console.log('🚀 Loading fresh newsfeed posts...');
+
       // Echte Posts von der API laden (mit Timeout)
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s Timeout
-      
+
       const response = await fetch('/api/newsfeed-v2?limit=50', {
         signal: controller.signal
       });
-      
+
       clearTimeout(timeoutId);
-      
+
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
-      
+
       const data = await response.json();
-      
+
       if (data.posts) {
         // Firebase-Posts in das erwartete Format konvertieren
         const convertedPosts = data.posts.map((post: any) => ({
@@ -90,9 +104,13 @@ export default function NewsfeedOverview() {
           featuredImage: post.featuredImage,
           seo: post.seo
         }));
-        
-        console.log(`✅ ${convertedPosts.length} Posts geladen`);
+
+        console.log(`✅ ${convertedPosts.length} Posts geladen und gecacht`);
         setPosts(convertedPosts);
+
+        // Cache the data
+        sessionStorage.setItem('newsfeedData', JSON.stringify(convertedPosts));
+        sessionStorage.setItem('newsfeedCacheTime', Date.now().toString());
       } else {
         console.error('Fehler beim Laden der Posts:', data.error);
         setPosts([]);
@@ -149,9 +167,11 @@ export default function NewsfeedOverview() {
       if (result.success) {
         console.log('✅ Post erfolgreich veröffentlicht');
         alert('Post erfolgreich veröffentlicht!');
-        // Modal schließen und Posts neu laden
+        // Modal schließen und Cache invalidieren
         setIsPreviewOpen(false);
         setPreviewPost(null);
+        sessionStorage.removeItem('newsfeedData');
+        sessionStorage.removeItem('newsfeedCacheTime');
         await fetchPosts();
       } else {
         console.error('Fehler beim Veröffentlichen:', result.error);
@@ -182,8 +202,10 @@ export default function NewsfeedOverview() {
       const result = await response.json();
 
       if (result.success) {
-        // Post aus der Liste entfernen
+        // Post aus der Liste entfernen und Cache invalidieren
         setPosts(posts.filter(p => p.id !== post.id));
+        sessionStorage.removeItem('newsfeedData');
+        sessionStorage.removeItem('newsfeedCacheTime');
         alert('Post erfolgreich gelöscht!');
       } else {
         console.error('Fehler beim Löschen:', result.error);
@@ -204,28 +226,139 @@ export default function NewsfeedOverview() {
       <div style={{
         minHeight: '100vh',
         background: 'linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #111111 100%)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
         color: '#ffffff',
-        fontFamily: 'Raleway, sans-serif'
+        fontFamily: 'Raleway, sans-serif',
+        padding: isMobile ? '20px' : '40px'
       }}>
-        <div style={{ textAlign: 'center' }}>
+        <div style={{
+          maxWidth: '1400px',
+          margin: '0 auto'
+        }}>
+          {/* Header Skeleton */}
           <div style={{
-            width: '50px',
-            height: '50px',
-            border: '3px solid rgba(248, 223, 165, 0.3)',
-            borderTop: '3px solid #f8dfa5',
-            borderRadius: '50%',
-            animation: 'spin 1s linear infinite',
-            margin: '0 auto 20px'
-          }}></div>
-          <span>Lade Newsfeed...</span>
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '40px',
+            flexDirection: isMobile ? 'column' : 'row',
+            gap: isMobile ? '20px' : '0'
+          }}>
+            <div>
+              <div style={{
+                height: '36px',
+                width: '280px',
+                background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+                backgroundSize: '200% 100%',
+                animation: 'shimmer 1.5s infinite',
+                borderRadius: '0.5rem',
+                marginBottom: '10px'
+              }} />
+              <div style={{
+                height: '16px',
+                width: '200px',
+                background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+                backgroundSize: '200% 100%',
+                animation: 'shimmer 1.5s infinite',
+                borderRadius: '0.5rem'
+              }} />
+            </div>
+            <div style={{
+              height: '48px',
+              width: '200px',
+              background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+              backgroundSize: '200% 100%',
+              animation: 'shimmer 1.5s infinite',
+              borderRadius: '12px'
+            }} />
+          </div>
+
+          {/* Posts Grid Skeleton */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill, minmax(400px, 1fr))',
+            gap: '20px'
+          }}>
+            {[1, 2, 3, 4, 5, 6].map(i => (
+              <div key={i} style={{
+                background: 'rgba(0, 0, 0, 0.8)',
+                backdropFilter: 'blur(20px)',
+                border: '1px solid rgba(248, 223, 165, 0.2)',
+                borderRadius: '16px',
+                padding: '24px'
+              }}>
+                {/* Status badges skeleton */}
+                <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+                  <div style={{
+                    height: '20px',
+                    width: '80px',
+                    background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+                    backgroundSize: '200% 100%',
+                    animation: 'shimmer 1.5s infinite',
+                    borderRadius: '20px'
+                  }} />
+                  <div style={{
+                    height: '20px',
+                    width: '60px',
+                    background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+                    backgroundSize: '200% 100%',
+                    animation: 'shimmer 1.5s infinite',
+                    borderRadius: '20px'
+                  }} />
+                </div>
+
+                {/* Title skeleton */}
+                <div style={{
+                  height: '22px',
+                  width: '90%',
+                  background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+                  backgroundSize: '200% 100%',
+                  animation: 'shimmer 1.5s infinite',
+                  borderRadius: '0.5rem',
+                  marginBottom: '12px'
+                }} />
+
+                {/* Content skeleton */}
+                <div style={{
+                  height: '14px',
+                  width: '100%',
+                  background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+                  backgroundSize: '200% 100%',
+                  animation: 'shimmer 1.5s infinite',
+                  borderRadius: '0.5rem',
+                  marginBottom: '8px'
+                }} />
+                <div style={{
+                  height: '14px',
+                  width: '80%',
+                  background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+                  backgroundSize: '200% 100%',
+                  animation: 'shimmer 1.5s infinite',
+                  borderRadius: '0.5rem',
+                  marginBottom: '16px'
+                }} />
+
+                {/* Action buttons skeleton */}
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  {[1, 2, 3].map(j => (
+                    <div key={j} style={{
+                      height: '32px',
+                      width: '80px',
+                      background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.1) 0%, rgba(248, 223, 165, 0.2) 50%, rgba(248, 223, 165, 0.1) 100%)',
+                      backgroundSize: '200% 100%',
+                      animation: 'shimmer 1.5s infinite',
+                      borderRadius: '8px'
+                    }} />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
+
         <style jsx>{`
-          @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+          @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
           }
         `}</style>
       </div>
