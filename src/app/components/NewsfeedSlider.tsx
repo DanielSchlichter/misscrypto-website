@@ -50,10 +50,16 @@ const NewsfeedSlider = () => {
       try {
         setIsLoading(true);
 
-        // Lade Posts und Autoren parallel
+        // Lade Posts und Autoren parallel mit optimierten Queries
         const [postsResponse, authorsResponse] = await Promise.all([
-          fetch('/api/newsfeed-v2?status=published&limit=9'),
-          fetch('/api/authors')
+          fetch('/api/newsfeed-v2?status=published&limit=9&orderBy=publishedAt&order=desc', {
+            // Cache für 5 Minuten
+            next: { revalidate: 300 }
+          }),
+          fetch('/api/authors?limit=20', {
+            // Cache für 10 Minuten (Autoren ändern sich seltener)
+            next: { revalidate: 600 }
+          })
         ]);
 
         if (postsResponse.ok) {
@@ -76,6 +82,7 @@ const NewsfeedSlider = () => {
       }
     };
 
+    // Sofort laden ohne Verzögerung
     fetchData();
   }, []);
 
@@ -124,36 +131,204 @@ const NewsfeedSlider = () => {
           margin: '0 auto',
           padding: isMobile ? '0 1rem' : '0 2rem'
         }}>
+          {/* Header */}
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '3rem'
+          }}>
+            <div>
+              <h2 style={{
+                fontSize: isMobile ? '1.75rem' : '2.25rem',
+                fontWeight: '500',
+                marginBottom: '0.5rem',
+                color: '#ffffff'
+              }}>
+                Neueste Artikel
+              </h2>
+              <p style={{
+                color: '#9ca3af',
+                fontSize: isMobile ? '0.875rem' : '1rem'
+              }}>
+                Aktuelle Insights und Analysen aus der Krypto-Welt
+              </p>
+            </div>
+
+            {/* Navigation Skeleton */}
+            <div style={{
+              display: 'flex',
+              gap: '0.5rem'
+            }}>
+              <div style={{
+                background: 'rgba(248, 223, 165, 0.1)',
+                border: '1px solid rgba(248, 223, 165, 0.3)',
+                borderRadius: '50%',
+                width: '40px',
+                height: '40px'
+              }}></div>
+              <div style={{
+                background: 'rgba(248, 223, 165, 0.1)',
+                border: '1px solid rgba(248, 223, 165, 0.3)',
+                borderRadius: '50%',
+                width: '40px',
+                height: '40px'
+              }}></div>
+            </div>
+          </div>
+
+          {/* Skeleton Cards */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: isMobile ? '1fr' : isTablet ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
+            gap: '2rem',
+            marginBottom: '2rem'
+          }}>
+            {[1, 2, 3].map((index) => (
+              <div key={index} style={{
+                background: 'rgba(0, 0, 0, 0.6)',
+                backdropFilter: 'blur(10px)',
+                borderRadius: '1rem',
+                border: '1px solid rgba(248, 223, 165, 0.2)',
+                overflow: 'hidden',
+                position: 'relative'
+              }}>
+                {/* Featured Image Skeleton */}
+                <div style={{
+                  width: '100%',
+                  height: '200px',
+                  background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.05) 0%, rgba(248, 223, 165, 0.1) 50%, rgba(248, 223, 165, 0.05) 100%)',
+                  backgroundSize: '200% 100%',
+                  animation: 'shimmer 1.5s infinite ease-in-out'
+                }}></div>
+
+                <div style={{ padding: '1.5rem' }}>
+                  {/* Category Skeleton */}
+                  <div style={{
+                    display: 'inline-block',
+                    width: '80px',
+                    height: '28px',
+                    background: 'rgba(248, 223, 165, 0.1)',
+                    borderRadius: '1rem',
+                    marginBottom: '1rem'
+                  }}></div>
+
+                  {/* Title Skeleton */}
+                  <div style={{ marginBottom: '0.75rem' }}>
+                    <div style={{
+                      height: '20px',
+                      background: 'rgba(248, 223, 165, 0.15)',
+                      borderRadius: '0.5rem',
+                      marginBottom: '0.5rem',
+                      width: '90%'
+                    }}></div>
+                    <div style={{
+                      height: '20px',
+                      background: 'rgba(248, 223, 165, 0.15)',
+                      borderRadius: '0.5rem',
+                      width: '70%'
+                    }}></div>
+                  </div>
+
+                  {/* Excerpt Skeleton */}
+                  <div style={{ marginBottom: '1rem' }}>
+                    <div style={{
+                      height: '14px',
+                      background: 'rgba(209, 213, 219, 0.1)',
+                      borderRadius: '0.25rem',
+                      marginBottom: '0.5rem'
+                    }}></div>
+                    <div style={{
+                      height: '14px',
+                      background: 'rgba(209, 213, 219, 0.1)',
+                      borderRadius: '0.25rem',
+                      marginBottom: '0.5rem'
+                    }}></div>
+                    <div style={{
+                      height: '14px',
+                      background: 'rgba(209, 213, 219, 0.1)',
+                      borderRadius: '0.25rem',
+                      width: '60%'
+                    }}></div>
+                  </div>
+
+                  {/* Footer Skeleton */}
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    paddingTop: '1rem',
+                    borderTop: '1px solid rgba(248, 223, 165, 0.1)'
+                  }}>
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem'
+                    }}>
+                      <div style={{
+                        width: '24px',
+                        height: '24px',
+                        borderRadius: '50%',
+                        background: 'rgba(248, 223, 165, 0.1)'
+                      }}></div>
+                      <div style={{
+                        height: '12px',
+                        width: '60px',
+                        background: 'rgba(156, 163, 175, 0.1)',
+                        borderRadius: '0.25rem'
+                      }}></div>
+                    </div>
+                    <div style={{
+                      height: '12px',
+                      width: '80px',
+                      background: 'rgba(156, 163, 175, 0.1)',
+                      borderRadius: '0.25rem'
+                    }}></div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Dots Skeleton */}
           <div style={{
             display: 'flex',
             justifyContent: 'center',
-            alignItems: 'center',
-            height: '300px',
-            color: '#d1d5db'
+            gap: '0.5rem',
+            marginBottom: '3rem'
           }}>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '1rem'
-            }}>
-              <div style={{
-                width: '24px',
-                height: '24px',
-                border: '2px solid rgba(248, 223, 165, 0.3)',
-                borderTop: '2px solid #f8dfa5',
+            {[1, 2, 3].map((index) => (
+              <div key={index} style={{
+                width: '8px',
+                height: '8px',
                 borderRadius: '50%',
-                animation: 'spin 1s linear infinite'
+                background: 'rgba(248, 223, 165, 0.3)'
               }}></div>
-              Lade neueste Artikel...
-            </div>
+            ))}
           </div>
-          <style jsx>{`
-            @keyframes spin {
-              from { transform: rotate(0deg); }
-              to { transform: rotate(360deg); }
-            }
-          `}</style>
+
+          {/* Link Skeleton */}
+          <div style={{ textAlign: 'center' }}>
+            <div style={{
+              display: 'inline-block',
+              width: '150px',
+              height: '20px',
+              background: 'rgba(248, 223, 165, 0.1)',
+              borderRadius: '0.5rem'
+            }}></div>
+          </div>
         </div>
+
+        <style jsx>{`
+          @keyframes shimmer {
+            0% {
+              background-position: -200% 0;
+            }
+            100% {
+              background-position: 200% 0;
+            }
+          }
+        `}</style>
       </section>
     );
   }
