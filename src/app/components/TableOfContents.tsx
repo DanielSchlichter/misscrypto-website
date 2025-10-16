@@ -42,10 +42,27 @@ export default function TableOfContents({ content, isMobile = false }: TableOfCo
   }, [content]);
 
   useEffect(() => {
+    // Warte kurz und setze dann IDs für Überschriften im gerenderten DOM
+    const timer = setTimeout(() => {
+      const allHeadings = document.querySelectorAll('.blog-content-wrapper h1, .blog-content-wrapper h2, .blog-content-wrapper h3, .blog-content-wrapper h4, .blog-content-wrapper h5, .blog-content-wrapper h6');
+      allHeadings.forEach((heading, index) => {
+        if (!heading.id) {
+          heading.id = `heading-${index}`;
+        }
+      });
+
+      // Debug: Zeige alle gefundenen IDs
+      console.log('TOC Debug - Found headings:', Array.from(allHeadings).map(h => ({ id: h.id, text: h.textContent })));
+    }, 500); // Mehr Zeit geben
+
+    return () => clearTimeout(timer);
+  }, [tocItems]);
+
+  useEffect(() => {
     // Scroll-Tracking für aktive Sektion
     const handleScroll = () => {
       const headings = tocItems.map(item => document.getElementById(item.id)).filter(Boolean);
-      
+
       let current = '';
       for (const heading of headings) {
         if (heading) {
@@ -55,14 +72,16 @@ export default function TableOfContents({ content, isMobile = false }: TableOfCo
           }
         }
       }
-      
+
       setActiveSection(current);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initial call
-    
-    return () => window.removeEventListener('scroll', handleScroll);
+    if (tocItems.length > 0) {
+      window.addEventListener('scroll', handleScroll);
+      handleScroll(); // Initial call
+
+      return () => window.removeEventListener('scroll', handleScroll);
+    }
   }, [tocItems]);
 
   if (tocItems.length === 0) {
@@ -139,13 +158,14 @@ export default function TableOfContents({ content, isMobile = false }: TableOfCo
 
   return (
     <div style={{
-      position: 'fixed',
-      top: '8rem',
-      right: 'max(2rem, calc((100vw - 1200px) / 2))',
+      position: 'sticky',
+      top: '8rem', // Mehr Abstand für Header-Clearance
+      right: '0',
       width: '280px',
+      maxHeight: 'calc(100vh - 12rem)', // Mehr Abstand zu Header und Footer
       zIndex: 1000,
-      maxHeight: 'calc(100vh - 10rem)',
-      overflowY: 'auto'
+      overflowY: 'auto',
+      alignSelf: 'flex-start' // Wichtig für sticky in flex container
     }}>
       <div style={{
         background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f172a 50%, #1e293b 75%, #334155 100%)',
@@ -206,9 +226,27 @@ export default function TableOfContents({ content, isMobile = false }: TableOfCo
                   }}
                   onClick={(e) => {
                     e.preventDefault();
+                    console.log('TOC Click Debug - Looking for ID:', item.id);
                     const target = document.getElementById(item.id);
+                    console.log('TOC Click Debug - Found target:', target);
+
                     if (target) {
-                      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      // Scroll mit Offset für Fixed Header
+                      const yOffset = -120; // Offset für Header
+                      const y = target.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                      console.log('TOC Click Debug - Scrolling to Y:', y);
+                      window.scrollTo({ top: y, behavior: 'smooth' });
+                    } else {
+                      // Fallback: Suche nach Text-Content
+                      const allHeadings = document.querySelectorAll('.blog-content-wrapper h1, .blog-content-wrapper h2, .blog-content-wrapper h3, .blog-content-wrapper h4, .blog-content-wrapper h5, .blog-content-wrapper h6');
+                      const headingByText = Array.from(allHeadings).find(h => h.textContent?.trim() === item.text.trim());
+                      console.log('TOC Click Debug - Fallback found:', headingByText);
+
+                      if (headingByText) {
+                        const yOffset = -120;
+                        const y = headingByText.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                        window.scrollTo({ top: y, behavior: 'smooth' });
+                      }
                     }
                   }}
                 >

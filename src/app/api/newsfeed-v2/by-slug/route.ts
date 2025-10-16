@@ -72,15 +72,33 @@ export async function GET(request: Request) {
       views: admin.firestore.FieldValue.increment(1)
     });
 
+    // Autoren-Daten laden falls authorId vorhanden
+    let authorData = null;
+    if (postData.authorId) {
+      try {
+        const authorDoc = await db.collection('authors').doc(postData.authorId).get();
+        if (authorDoc.exists) {
+          authorData = {
+            id: authorDoc.id,
+            ...authorDoc.data()
+          };
+          console.log('✅ Autor geladen:', authorData.name);
+        }
+      } catch (authorError) {
+        console.warn('⚠️ Fehler beim Laden des Autors:', authorError);
+      }
+    }
+
     const post = {
       id: doc.id,
       ...postData,
+      authorData, // Hinzufügen der aufgelösten Autor-Daten
       createdAt: postData.createdAt?.toDate?.()?.toISOString() || postData.createdAt,
       publishedAt: postData.publishedAt?.toDate?.()?.toISOString() || postData.publishedAt,
       views: (postData.views || 0) + 1
     };
 
-    console.log('✅ Post geladen:', doc.id);
+    console.log('✅ Post geladen:', doc.id, 'mit Autor:', authorData?.name || 'kein Autor');
 
     return NextResponse.json({
       success: true,

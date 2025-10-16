@@ -56,26 +56,33 @@ export const applyTextFormat = (format: string, value?: string, editorRef?: Reac
 // Apply text formatting for toolbar buttons (works with or without selection)
 export const applyTextFormatToSelection = (format: string, value?: string, editorRef?: React.RefObject<HTMLDivElement | null>) => {
   const selection = window.getSelection();
-  
+
   // Focus editor if not focused
   if (editorRef?.current && document.activeElement !== editorRef.current) {
     editorRef.current.focus();
   }
-  
+
   if (!selection || selection.rangeCount === 0) {
-    // No selection - just focus and return
+    console.log('No selection found');
     return;
   }
 
   const range = selection.getRangeAt(0);
-  
+
   // If no text selected, do nothing
   if (range.collapsed) {
+    console.log('Range is collapsed');
     return;
   }
 
   // Ensure we're within the editor
-  if (!editorRef?.current || !editorRef.current.contains(range.commonAncestorContainer)) return;
+  if (!editorRef?.current || !editorRef.current.contains(range.commonAncestorContainer)) {
+    console.log('Range not within editor');
+    return;
+  }
+
+  console.log('Creating link with URL:', value);
+  console.log('Selected text:', range.toString());
 
   const selectedContent = range.extractContents();
   let wrapper: HTMLElement;
@@ -108,15 +115,40 @@ export const applyTextFormatToSelection = (format: string, value?: string, edito
       wrapper = document.createElement('span');
       wrapper.style.color = value || '#f8dfa5';
       break;
+    case 'link':
+      wrapper = document.createElement('a');
+      wrapper.setAttribute('href', value || '#');
+      wrapper.setAttribute('target', '_blank');
+      wrapper.setAttribute('rel', 'noopener noreferrer');
+      console.log('Created link element:', wrapper);
+      break;
     default:
       wrapper = document.createElement('span');
   }
 
   wrapper.appendChild(selectedContent);
   range.insertNode(wrapper);
-  
-  // Clear selection
+
+  console.log('Link inserted into range');
+
+  // Move cursor after the inserted element
+  range.setStartAfter(wrapper);
+  range.collapse(true);
   selection.removeAllRanges();
+  selection.addRange(range);
+};
+
+// Helper function to get the selected text
+export const getSelectedText = (): string => {
+  const selection = window.getSelection();
+  if (!selection || selection.rangeCount === 0) return '';
+  return selection.toString().trim();
+};
+
+// Helper function to check if we have a text selection
+export const hasTextSelection = (): boolean => {
+  const selection = window.getSelection();
+  return !!(selection && selection.rangeCount > 0 && !selection.getRangeAt(0).collapsed);
 };
 
 // Extract data from existing module elements

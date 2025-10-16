@@ -64,18 +64,17 @@ export const generateCleanModuleHtml = (type: string, data: any): string => {
     case 'image':
       return `
 <figure class="mc-image" itemScope itemType="https://schema.org/ImageObject">
-  <img 
-    src="${data.url}" 
-    alt="${data.alt || ''}" 
-    class="mc-image-element" 
-    style="height: ${data.height || 300}px; width: 100%; object-fit: cover;" 
+  <img
+    src="${data.url}"
+    alt="${data.alt || ''}"
+    class="mc-image-element"
+    style="width: 100%; height: auto;"
     itemProp="contentUrl"
     loading="lazy"
     decoding="async"
   />
   ${data.caption ? `<figcaption class="mc-image-caption">${data.caption}</figcaption>` : ''}
   <meta itemProp="width" content="100%" />
-  <meta itemProp="height" content="${data.height || 300}" />
   <meta itemProp="encodingFormat" content="${data.url ? data.url.split('.').pop()?.toLowerCase() : 'jpg'}" />
 </figure>`;
 
@@ -128,18 +127,17 @@ export const generateModuleHtml = (type: string, data: any, editingModuleId?: st
       return `
 <figure class="image-box editable-module mc-image" data-module-id="${moduleId}" data-module-type="${type}" itemScope itemType="https://schema.org/ImageObject">
   <button type="button" class="delete-module-btn" aria-label="Bild löschen">×</button>
-  <img 
-    src="${data.url}" 
-    alt="${data.alt || ''}" 
-    class="mc-image-element" 
-    style="height: ${data.height || 300}px; width: 100%; object-fit: cover;" 
+  <img
+    src="${data.url}"
+    alt="${data.alt || ''}"
+    class="mc-image-element"
+    style="width: 100%; height: auto;"
     itemProp="contentUrl"
     loading="lazy"
     decoding="async"
   />
   ${data.caption ? `<figcaption class="mc-image-caption">${data.caption}</figcaption>` : ''}
   <meta itemProp="width" content="100%" />
-  <meta itemProp="height" content="${data.height || 300}" />
   <meta itemProp="encodingFormat" content="${data.url ? data.url.split('.').pop()?.toLowerCase() : 'jpg'}" />
 </figure>`;
 

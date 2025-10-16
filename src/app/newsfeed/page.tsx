@@ -4,6 +4,12 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import NewsletterForm from '../components/NewsletterForm';
 
+interface Author {
+  id: string;
+  name: string;
+  photo?: string;
+}
+
 interface NewsfeedPost {
   id: string;
   title: string;
@@ -14,6 +20,8 @@ interface NewsfeedPost {
   slug: string;
   metaTitle: string;
   metaDescription: string;
+  authorId?: string;
+  featuredImage?: string;
   createdAt: string;
   publishedAt: string;
   views: number;
@@ -23,6 +31,7 @@ export default function NewsfeedPage() {
   // Initialisiere mit Desktop-Breite für SSR/erste Render
   const [screenWidth, setScreenWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
   const [posts, setPosts] = useState<NewsfeedPost[]>([]);
+  const [authors, setAuthors] = useState<Author[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -36,40 +45,64 @@ export default function NewsfeedPage() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Fetch published posts - optimized with query params
+  // Fetch published posts and authors - optimized with query params
   useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchData = async () => {
       try {
         setIsLoading(true);
-        // Nur published posts direkt von der API anfordern
-        const response = await fetch('/api/newsfeed-v2?status=published&limit=20', {
-          // Cache für 5 Minuten
-          next: { revalidate: 300 }
-        });
-        if (response.ok) {
-          const data = await response.json();
-          if (data.success) {
-            setPosts(data.posts);
+
+        // Lade Posts und Autoren parallel mit optimierten Queries
+        const [postsResponse, authorsResponse] = await Promise.all([
+          fetch('/api/newsfeed-v2?status=published&limit=20', {
+            // Cache für 5 Minuten
+            next: { revalidate: 300 }
+          }),
+          fetch('/api/authors?limit=20', {
+            // Cache für 10 Minuten (Autoren ändern sich seltener)
+            next: { revalidate: 600 }
+          })
+        ]);
+
+        if (postsResponse.ok) {
+          const postsData = await postsResponse.json();
+          if (postsData.success) {
+            setPosts(postsData.posts || []);
+          }
+        }
+
+        if (authorsResponse.ok) {
+          const authorsData = await authorsResponse.json();
+          if (authorsData.success) {
+            setAuthors(authorsData.authors || []);
           }
         }
       } catch (error) {
-        console.error('Fehler beim Laden der Posts:', error);
+        console.error('Fehler beim Laden der Daten:', error);
       } finally {
         setIsLoading(false);
       }
     };
 
     // Sofort laden ohne Verzögerung
-    fetchPosts();
+    fetchData();
   }, []);
 
+  const getAuthor = (authorId?: string) => {
+    if (!authorId) return null;
+    return authors.find(author => author.id === authorId);
+  };
+
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('de-DE', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('de-DE', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+    } catch {
+      return 'Heute';
+    }
   };
 
   // Function to extract clean text from HTML content for preview
@@ -202,96 +235,110 @@ export default function NewsfeedPage() {
               {/* Skeleton Cards */}
               {[1, 2, 3, 4, 5, 6].map((index) => (
                 <div key={index} style={{
-                  background: 'linear-gradient(135deg, rgba(248, 223, 165, 0.05), rgba(248, 223, 165, 0.02))',
-                  backdropFilter: 'blur(15px)',
-                  borderRadius: '1.5rem',
-                  padding: '2rem',
-                  border: '1px solid rgba(248, 223, 165, 0.1)',
-                  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
-                  position: 'relative',
-                  overflow: 'hidden'
+                  background: 'rgba(0, 0, 0, 0.6)',
+                  backdropFilter: 'blur(10px)',
+                  borderRadius: '1rem',
+                  border: '1px solid rgba(248, 223, 165, 0.2)',
+                  overflow: 'hidden',
+                  position: 'relative'
                 }}>
-                  {/* Animated Shimmer Effect */}
+                  {/* Featured Image Skeleton */}
                   <div style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: '-100%',
                     width: '100%',
-                    height: '100%',
-                    background: 'linear-gradient(90deg, transparent 0%, rgba(248, 223, 165, 0.1) 50%, transparent 100%)',
-                    animation: `shimmer 1.5s infinite ease-in-out ${index * 0.1}s`
-                  }} />
+                    height: '200px',
+                    background: 'linear-gradient(90deg, rgba(248, 223, 165, 0.05) 0%, rgba(248, 223, 165, 0.1) 50%, rgba(248, 223, 165, 0.05) 100%)',
+                    backgroundSize: '200% 100%',
+                    animation: 'shimmer 1.5s infinite ease-in-out'
+                  }}></div>
 
-                  {/* Category Badge Skeleton */}
-                  <div style={{
-                    position: 'absolute',
-                    top: '1rem',
-                    right: '1rem',
-                    width: '80px',
-                    height: '28px',
-                    background: 'rgba(248, 223, 165, 0.1)',
-                    borderRadius: '1rem'
-                  }} />
+                  <div style={{ padding: '1.5rem' }}>
+                    {/* Title Skeleton */}
+                    <div style={{ marginBottom: '0.75rem' }}>
+                      <div style={{
+                        height: '20px',
+                        background: 'rgba(248, 223, 165, 0.15)',
+                        borderRadius: '0.5rem',
+                        marginBottom: '0.5rem',
+                        width: '90%'
+                      }}></div>
+                      <div style={{
+                        height: '20px',
+                        background: 'rgba(248, 223, 165, 0.15)',
+                        borderRadius: '0.5rem',
+                        width: '70%'
+                      }}></div>
+                    </div>
 
-                  {/* Title Skeleton */}
-                  <div style={{ marginTop: '1rem' }}>
-                    <div style={{
-                      height: '24px',
-                      background: 'rgba(248, 223, 165, 0.15)',
-                      borderRadius: '0.5rem',
-                      marginBottom: '0.5rem',
-                      width: '80%'
-                    }} />
-                    <div style={{
-                      height: '24px',
-                      background: 'rgba(248, 223, 165, 0.15)',
-                      borderRadius: '0.5rem',
-                      marginBottom: '1rem',
-                      width: '60%'
-                    }} />
-                  </div>
+                    {/* Excerpt Skeleton */}
+                    <div style={{ marginBottom: '1rem' }}>
+                      <div style={{
+                        height: '14px',
+                        background: 'rgba(209, 213, 219, 0.1)',
+                        borderRadius: '0.25rem',
+                        marginBottom: '0.5rem'
+                      }}></div>
+                      <div style={{
+                        height: '14px',
+                        background: 'rgba(209, 213, 219, 0.1)',
+                        borderRadius: '0.25rem',
+                        marginBottom: '0.5rem'
+                      }}></div>
+                      <div style={{
+                        height: '14px',
+                        background: 'rgba(209, 213, 219, 0.1)',
+                        borderRadius: '0.25rem',
+                        width: '60%'
+                      }}></div>
+                    </div>
 
-                  {/* Content Skeleton */}
-                  <div>
+                    {/* Footer Skeleton */}
                     <div style={{
-                      height: '16px',
-                      background: 'rgba(209, 213, 219, 0.1)',
-                      borderRadius: '0.25rem',
-                      marginBottom: '0.5rem'
-                    }} />
-                    <div style={{
-                      height: '16px',
-                      background: 'rgba(209, 213, 219, 0.1)',
-                      borderRadius: '0.25rem',
-                      marginBottom: '0.5rem'
-                    }} />
-                    <div style={{
-                      height: '16px',
-                      background: 'rgba(209, 213, 219, 0.1)',
-                      borderRadius: '0.25rem',
-                      width: '70%',
-                      marginBottom: '1.5rem'
-                    }} />
-                  </div>
-
-                  {/* Footer Skeleton */}
-                  <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
-                  }}>
-                    <div style={{
-                      height: '14px',
-                      width: '100px',
-                      background: 'rgba(156, 163, 175, 0.1)',
-                      borderRadius: '0.25rem'
-                    }} />
-                    <div style={{
-                      height: '14px',
-                      width: '60px',
-                      background: 'rgba(248, 223, 165, 0.1)',
-                      borderRadius: '0.25rem'
-                    }} />
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      paddingTop: '1rem',
+                      borderTop: '1px solid rgba(248, 223, 165, 0.1)',
+                      flexWrap: 'wrap',
+                      gap: '0.5rem'
+                    }}>
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.75rem',
+                        flexWrap: 'wrap'
+                      }}>
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem'
+                        }}>
+                          <div style={{
+                            width: '24px',
+                            height: '24px',
+                            borderRadius: '50%',
+                            background: 'rgba(248, 223, 165, 0.1)'
+                          }}></div>
+                          <div style={{
+                            height: '12px',
+                            width: '60px',
+                            background: 'rgba(156, 163, 175, 0.1)',
+                            borderRadius: '0.25rem'
+                          }}></div>
+                        </div>
+                        <div style={{
+                          width: '80px',
+                          height: '24px',
+                          background: 'rgba(248, 223, 165, 0.1)',
+                          borderRadius: '1rem'
+                        }}></div>
+                      </div>
+                      <div style={{
+                        height: '12px',
+                        width: '80px',
+                        background: 'rgba(156, 163, 175, 0.1)',
+                        borderRadius: '0.25rem'
+                      }}></div>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -335,101 +382,171 @@ export default function NewsfeedPage() {
             <div style={{
               display: 'grid',
               gridTemplateColumns: isMobile ? '1fr' : isTablet ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
-              gap: isMobile ? '2rem' : '2.5rem'
+              gap: '2rem'
             }}>
-              {posts.map((post) => (
-                <article key={post.id} style={{
-                  background: 'linear-gradient(135deg, rgba(248, 223, 165, 0.08), rgba(248, 223, 165, 0.04))',
-                  backdropFilter: 'blur(15px)',
-                  borderRadius: '1.5rem',
-                  padding: '2rem',
-                  border: '1px solid rgba(248, 223, 165, 0.2)',
-                  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
-                  transition: 'all 0.3s ease',
-                  cursor: 'pointer',
-                  position: 'relative',
-                  overflow: 'hidden'
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-5px)';
-                  e.currentTarget.style.boxShadow = '0 8px 30px rgba(0, 0, 0, 0.4)';
-                  e.currentTarget.style.borderColor = 'rgba(248, 223, 165, 0.4)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.3)';
-                  e.currentTarget.style.borderColor = 'rgba(248, 223, 165, 0.2)';
-                }}
-                onClick={() => {
-                  window.location.href = `/newsfeed/${post.slug}`;
-                }}>
-                  {/* Category Badge */}
-                  <div style={{
-                    position: 'absolute',
-                    top: '1rem',
-                    right: '1rem',
-                    background: 'rgba(248, 223, 165, 0.2)',
-                    color: '#f8dfa5',
-                    padding: '0.5rem 1rem',
-                    borderRadius: '1rem',
-                    fontSize: '0.8rem',
-                    fontWeight: '600'
-                  }}>
-                    {post.category}
-                  </div>
+              {posts.map((post) => {
+                const author = getAuthor(post.authorId);
 
-                  {/* Content */}
-                  <div style={{ marginTop: '1rem' }}>
-                    <h3 style={{
-                      color: '#f8dfa5',
-                      fontSize: isMobile ? '1.3rem' : '1.5rem',
-                      fontWeight: '600',
-                      marginBottom: '1rem',
-                      lineHeight: '1.3',
-                      paddingRight: '3rem' // Space for category badge
-                    }}>
-                      {post.title}
-                    </h3>
-                    
-                    <p style={{
-                      color: '#d1d5db',
-                      fontSize: '1rem',
-                      lineHeight: '1.6',
-                      marginBottom: '1.5rem',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 3,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden'
-                    }}>
-                      {getCleanPreviewText(post.content) || post.metaDescription || 'Keine Vorschau verfügbar.'}
-                    </p>
+                return (
+                  <Link
+                    key={post.id}
+                    href={`/newsfeed/${post.slug}`}
+                    style={{
+                      background: 'rgba(0, 0, 0, 0.6)',
+                      backdropFilter: 'blur(10px)',
+                      borderRadius: '1rem',
+                      border: '1px solid rgba(248, 223, 165, 0.2)',
+                      overflow: 'hidden',
+                      textDecoration: 'none',
+                      transition: 'all 0.3s ease',
+                      display: 'block'
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.transform = 'translateY(-5px)';
+                      e.currentTarget.style.borderColor = 'rgba(248, 223, 165, 0.4)';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.borderColor = 'rgba(248, 223, 165, 0.2)';
+                    }}
+                  >
+                    {/* Featured Image */}
+                    {post.featuredImage && (
+                      <div style={{
+                        width: '100%',
+                        height: '200px',
+                        overflow: 'hidden',
+                        background: '#1a1a1a'
+                      }}>
+                        <img
+                          src={post.featuredImage}
+                          alt={post.title}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover'
+                          }}
+                        />
+                      </div>
+                    )}
 
-                    {/* Meta Info */}
-                    <div style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      color: '#9ca3af',
-                      fontSize: '0.875rem'
-                    }}>
-                      <span>{formatDate(post.publishedAt)}</span>
+                    <div style={{ padding: '1.5rem' }}>
+                      {/* Title */}
+                      <h3 style={{
+                        fontSize: isMobile ? '1.125rem' : '1.25rem',
+                        fontWeight: '600',
+                        color: '#ffffff',
+                        marginBottom: '0.75rem',
+                        lineHeight: '1.4',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden'
+                      }}>
+                        {post.title}
+                      </h3>
+
+                      {/* Excerpt */}
+                      {(post.excerpt || getCleanPreviewText(post.content) || post.metaDescription) && (
+                        <p style={{
+                          color: '#d1d5db',
+                          fontSize: '0.875rem',
+                          lineHeight: '1.5',
+                          marginBottom: '1rem',
+                          display: '-webkit-box',
+                          WebkitLineClamp: 3,
+                          WebkitBoxOrient: 'vertical',
+                          overflow: 'hidden'
+                        }}>
+                          {post.excerpt || getCleanPreviewText(post.content) || post.metaDescription || 'Keine Vorschau verfügbar.'}
+                        </p>
+                      )}
+
+                      {/* Footer */}
                       <div style={{
                         display: 'flex',
+                        justifyContent: 'space-between',
                         alignItems: 'center',
+                        paddingTop: '1rem',
+                        borderTop: '1px solid rgba(248, 223, 165, 0.1)',
+                        flexWrap: 'wrap',
                         gap: '0.5rem'
                       }}>
-                        <span>👁️ {post.views || 0}</span>
-                        <span style={{
-                          color: '#f8dfa5',
-                          fontWeight: '500'
+                        {/* Left side - Author and Category */}
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.75rem',
+                          flexWrap: 'wrap'
                         }}>
-                          Lesen →
+                          {/* Author */}
+                          {author && (
+                            <div style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '0.5rem'
+                            }}>
+                              {author.photo ? (
+                                <img
+                                  src={author.photo}
+                                  alt={author.name}
+                                  style={{
+                                    width: '24px',
+                                    height: '24px',
+                                    borderRadius: '50%',
+                                    objectFit: 'cover'
+                                  }}
+                                />
+                              ) : (
+                                <div style={{
+                                  width: '24px',
+                                  height: '24px',
+                                  borderRadius: '50%',
+                                  background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  fontSize: '0.75rem',
+                                  color: '#000'
+                                }}>
+                                  ✍️
+                                </div>
+                              )}
+                              <span style={{
+                                color: '#9ca3af',
+                                fontSize: '0.75rem'
+                              }}>
+                                {author.name}
+                              </span>
+                            </div>
+                          )}
+
+                          {/* Category */}
+                          <div style={{
+                            display: 'inline-block',
+                            background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
+                            color: '#000000',
+                            padding: '0.25rem 0.75rem',
+                            borderRadius: '1rem',
+                            fontSize: '0.75rem',
+                            fontWeight: '600'
+                          }}>
+                            {post.category}
+                          </div>
+                        </div>
+
+                        {/* Right side - Date */}
+                        <span style={{
+                          color: '#9ca3af',
+                          fontSize: '0.75rem'
+                        }}>
+                          {formatDate(post.publishedAt)}
                         </span>
                       </div>
                     </div>
-                  </div>
-                </article>
-              ))}
+                  </Link>
+                );
+              })}
             </div>
           )}
         </div>

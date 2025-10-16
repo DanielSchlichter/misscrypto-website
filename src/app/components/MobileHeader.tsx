@@ -86,8 +86,44 @@ const MobileHeader = () => {
           <Logo />
         </div>
 
-        {/* Mobile Menu Button */}
-        <button
+        {/* Right side: CTA Button + Mobile Menu Button */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.5rem'
+        }}>
+          {/* CTA Button */}
+          <Link
+            href="/krypto-kaufen"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.375rem',
+              background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
+              color: '#000000',
+              padding: '0.375rem 0.75rem',
+              borderRadius: '0.75rem',
+              fontWeight: '600',
+              fontSize: '0.75rem',
+              textDecoration: 'none',
+              transition: 'all 0.3s ease',
+              boxShadow: '0 4px 15px rgba(248, 223, 165, 0.3)'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 6px 20px rgba(248, 223, 165, 0.4)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 4px 15px rgba(248, 223, 165, 0.3)';
+            }}
+          >
+            <span style={{ fontSize: '1rem' }}>🏅</span>
+            Krypto kaufen
+          </Link>
+
+          {/* Mobile Menu Button */}
+          <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           style={{
             background: 'transparent',
@@ -113,23 +149,25 @@ const MobileHeader = () => {
             )}
           </svg>
         </button>
+        </div>
       </div>
 
       {/* Mobile Navigation Menu */}
       {isMobileMenuOpen && (
         <div style={{
           position: 'absolute',
-          top: '100%',
+          top: 'calc(100% + 0.5rem)',
           left: '1rem',
           right: '1rem',
-          background: 'rgba(0, 0, 0, 0.95)',
-          backdropFilter: 'blur(10px)',
-          border: '1px solid rgba(248, 223, 165, 0.2)',
-          borderRadius: '0 0 1rem 1rem',
-          padding: '1.5rem',
+          background: 'linear-gradient(135deg, rgba(26, 26, 46, 0.98) 0%, rgba(22, 33, 62, 0.95) 25%, rgba(15, 23, 42, 0.98) 50%, rgba(30, 41, 59, 0.95) 75%, rgba(51, 65, 85, 0.98) 100%)',
+          backdropFilter: 'blur(20px)',
+          border: '2px solid rgba(248, 223, 165, 0.4)',
+          borderRadius: '16px',
+          padding: '2rem',
           zIndex: 1000,
-          boxShadow: '0 10px 25px rgba(0, 0, 0, 0.5)',
-          maxWidth: 'calc(100vw - 2rem)'
+          boxShadow: '0 25px 50px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 0 0 1px rgba(248, 223, 165, 0.1)',
+          maxWidth: 'calc(100vw - 2rem)',
+          animation: 'slideIn 0.3s ease-out'
         }}>
           {/* Mobile Navigation Links */}
           <nav style={{
@@ -299,20 +337,28 @@ const MobileHeader = () => {
                   textDecoration: 'none',
                   fontSize: '1.125rem',
                   fontWeight: '500',
-                  padding: '0.75rem 1rem',
-                  borderRadius: '0.5rem',
+                  padding: '1rem 1.25rem',
+                  borderRadius: '12px',
                   transition: 'all 0.3s ease',
-                  border: '1px solid transparent'
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  background: 'rgba(255, 255, 255, 0.03)',
+                  marginBottom: '0.5rem',
+                  display: 'block',
+                  backdropFilter: 'blur(10px)'
                 }}
                 onMouseOver={(e) => {
-                  e.currentTarget.style.background = 'rgba(248, 223, 165, 0.1)';
-                  e.currentTarget.style.borderColor = 'rgba(248, 223, 165, 0.3)';
+                  e.currentTarget.style.background = 'linear-gradient(135deg, rgba(248, 223, 165, 0.15), rgba(228, 177, 94, 0.1))';
+                  e.currentTarget.style.borderColor = 'rgba(248, 223, 165, 0.4)';
                   e.currentTarget.style.color = '#f8dfa5';
+                  e.currentTarget.style.transform = 'translateX(8px)';
+                  e.currentTarget.style.boxShadow = '0 8px 25px rgba(248, 223, 165, 0.2)';
                 }}
                 onMouseOut={(e) => {
-                  e.currentTarget.style.background = 'transparent';
-                  e.currentTarget.style.borderColor = 'transparent';
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
                   e.currentTarget.style.color = '#ffffff';
+                  e.currentTarget.style.transform = 'translateX(0)';
+                  e.currentTarget.style.boxShadow = 'none';
                 }}
               >
                 {item.name}
@@ -320,31 +366,22 @@ const MobileHeader = () => {
             ))}
           </nav>
 
-          {/* Mobile CTA Button */}
-          <Link
-            href="/krypto-kaufen"
-            onClick={() => setIsMobileMenuOpen(false)}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.5rem',
-              background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
-              color: '#000000',
-              padding: '1rem 2rem',
-              borderRadius: '0.75rem',
-              fontWeight: '600',
-              fontSize: '1rem',
-              textDecoration: 'none',
-              transition: 'all 0.3s ease',
-              boxShadow: '0 4px 15px rgba(248, 223, 165, 0.3)'
-            }}
-          >
-            <span style={{ fontSize: '1.25rem' }}>🏅</span>
-            Krypto kaufen
-          </Link>
         </div>
       )}
+
+      {/* CSS Animation für das Dropdown */}
+      <style jsx>{`
+        @keyframes slideIn {
+          from {
+            opacity: 0;
+            transform: translateY(-10px) scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+      `}</style>
     </header>
   );
 };

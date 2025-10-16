@@ -92,6 +92,51 @@ const ImageModal: React.FC<ImageModalProps> = ({ src, alt, isOpen, onClose }) =>
         </svg>
       </button>
 
+      {/* Zoom-out Button */}
+      <button
+        onClick={onClose}
+        style={{
+          position: 'absolute',
+          top: '2rem',
+          right: '6rem',
+          background: 'rgba(255, 255, 255, 0.1)',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          borderRadius: '50%',
+          width: '3rem',
+          height: '3rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          transition: 'all 0.3s ease',
+          zIndex: 100000
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
+          e.currentTarget.style.transform = 'scale(0.9)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+          e.currentTarget.style.transform = 'scale(1)';
+        }}
+        title="Zoom schließen (Minus)"
+      >
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="white"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+          <line x1="8" y1="11" x2="14" y2="11"></line>
+        </svg>
+      </button>
+
       {/* Image */}
       <img
         src={src}

@@ -19,7 +19,7 @@ const TransparentHeader = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const isMobile = isClient ? screenWidth < 768 : false;
+  const isMobile = isClient ? screenWidth < 1190 : false;
   const isTablet = isClient ? (screenWidth >= 768 && screenWidth < 1024) : false;
 
   // Direktes Rendern basierend auf Bildschirmgröße

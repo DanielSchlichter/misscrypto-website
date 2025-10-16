@@ -8,7 +8,7 @@ import { RichTextEditorProps, ModuleData, ViewType, MediaFile } from './types';
 
 // Import utilities
 import { getCleanContentForPublishing } from './utils/htmlGenerators';
-import { generateMetaData, applyTextFormatToSelection } from './utils/contentUtils';
+import { generateMetaData, applyTextFormatToSelection, getSelectedText, hasTextSelection } from './utils/contentUtils';
 
 // Import hooks
 import { useModuleManagement } from './hooks/useModuleManagement';
@@ -17,6 +17,7 @@ import { useMediaLibrary } from './hooks/useMediaLibrary';
 // Import components
 import ModuleSidebar from './components/ModuleSidebar';
 import MediaModal from './components/MediaModal';
+import LinkToolbar from './components/LinkToolbar';
 
 export { getCleanContentForPublishing };
 
@@ -32,6 +33,11 @@ export default function RichTextEditor({
   const [mounted, setMounted] = useState(false);
   const [isInteractingWithSidebar, setIsInteractingWithSidebar] = useState(false);
   const [showHtmlView, setShowHtmlView] = useState(false);
+
+  // Link toolbar state
+  const [showLinkToolbar, setShowLinkToolbar] = useState(false);
+  const [selectedTextForLink, setSelectedTextForLink] = useState('');
+  const [hasSelection, setHasSelection] = useState(false);
 
   // Refs
   const editorRef = useRef<HTMLDivElement>(null);
@@ -95,25 +101,49 @@ export default function RichTextEditor({
     const handleEditorClick = (event: MouseEvent) => {
       // First, let module click handler run
       moduleManagement.handleModuleClick(event);
-      
+
       // If no module was clicked, open sidebar for general editing
       const target = event.target as HTMLElement;
       const moduleElement = target.closest('.editable-module');
-      
+
       if (!moduleElement) {
         setSidebarOpen(true);
       }
     };
 
+    // Selection change handler
+    const handleSelectionChange = () => {
+      setHasSelection(hasTextSelection());
+    };
+
+    // Link click handler - prevent navigation in editor
+    const handleLinkClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (target.tagName === 'A' && target.closest('.wysiwyg-editor')) {
+        event.preventDefault();
+        event.stopPropagation();
+        // Show link URL in a tooltip or similar
+        const href = (target as HTMLAnchorElement).href;
+        console.log('Link clicked in editor:', href);
+        // Could show a tooltip or edit dialog here
+      }
+    };
+
     // Add click listener
     editor.addEventListener('click', handleEditorClick);
+    editor.addEventListener('click', handleLinkClick);
 
     // Add input listener for content changes
     editor.addEventListener('input', handleContentChange);
 
+    // Add selection change listeners
+    document.addEventListener('selectionchange', handleSelectionChange);
+
     return () => {
       editor.removeEventListener('click', handleEditorClick);
+      editor.removeEventListener('click', handleLinkClick);
       editor.removeEventListener('input', handleContentChange);
+      document.removeEventListener('selectionchange', handleSelectionChange);
     };
   }, [mounted, moduleManagement.handleModuleClick, handleContentChange]);
 
@@ -160,6 +190,59 @@ export default function RichTextEditor({
     setShowHtmlView(!showHtmlView);
   }, [showHtmlView, onChange]);
 
+  // Store the current selection range
+  const [savedRange, setSavedRange] = useState<Range | null>(null);
+
+  // Link functions
+  const handleLinkButtonClick = useCallback(() => {
+    if (!hasTextSelection()) {
+      // No text selected - just focus editor
+      if (editorRef.current) {
+        editorRef.current.focus();
+      }
+      return;
+    }
+
+    const selectedText = getSelectedText();
+    const selection = window.getSelection();
+
+    // Save the current range so we can restore it later
+    if (selection && selection.rangeCount > 0) {
+      const range = selection.getRangeAt(0);
+      setSavedRange(range.cloneRange());
+    }
+
+    setSelectedTextForLink(selectedText);
+    setShowLinkToolbar(true);
+  }, []);
+
+  const handleCreateLink = useCallback((url: string) => {
+    if (selectedTextForLink && url && savedRange && editorRef.current) {
+      // Restore the saved selection
+      const selection = window.getSelection();
+      if (selection) {
+        selection.removeAllRanges();
+        selection.addRange(savedRange);
+
+        // Focus the editor
+        editorRef.current.focus();
+
+        // Now apply the link formatting
+        applyTextFormatToSelection('link', url, editorRef);
+        handleContentChange();
+      }
+    }
+    setShowLinkToolbar(false);
+    setSelectedTextForLink('');
+    setSavedRange(null);
+  }, [selectedTextForLink, savedRange, handleContentChange]);
+
+  const handleCancelLink = useCallback(() => {
+    setShowLinkToolbar(false);
+    setSelectedTextForLink('');
+    setSavedRange(null);
+  }, []);
+
   if (!mounted) {
     return null;
   }
@@ -200,6 +283,27 @@ export default function RichTextEditor({
           }}>
             💡 Module werden an der Cursor-Position eingefügt
           </div>
+
+          <div style={{ width: '1px', height: '24px', background: '#333', margin: '0 0.5rem' }} />
+
+          <button
+            type="button"
+            onClick={handleLinkButtonClick}
+            style={{
+              background: 'rgba(248, 223, 165, 0.1)',
+              border: '1px solid rgba(248, 223, 165, 0.3)',
+              borderRadius: '4px',
+              color: '#f8dfa5',
+              padding: '0.375rem 0.75rem',
+              cursor: 'pointer',
+              fontSize: '0.875rem',
+              opacity: hasSelection ? 1 : 0.6,
+              transition: 'opacity 0.2s ease'
+            }}
+            title={hasSelection ? 'Ausgewählten Text verlinken' : 'Text markieren, um Links zu erstellen'}
+          >
+            🔗 Link
+          </button>
 
           <div style={{ width: '1px', height: '24px', background: '#333', margin: '0 0.5rem' }} />
 
@@ -262,6 +366,7 @@ export default function RichTextEditor({
         >
           {/* Initial content placeholder - will be replaced by useEffect */}
         </div>
+
 
         {/* HTML View */}
         {showHtmlView && (
@@ -337,6 +442,16 @@ export default function RichTextEditor({
           }}
           onClose={mediaLibrary.closeMediaModal}
           onRefreshMedia={mediaLibrary.fetchMedia}
+        />
+      )}
+
+      {/* Link Toolbar */}
+      {mounted && (
+        <LinkToolbar
+          isVisible={showLinkToolbar}
+          selectedText={selectedTextForLink}
+          onCreateLink={handleCreateLink}
+          onCancel={handleCancelLink}
         />
       )}
     </>

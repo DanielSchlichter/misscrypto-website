@@ -6,11 +6,6 @@ interface ImageModuleProps {
   onCancel: () => void;
   onOpenMediaModal: () => void;
   onContentChange: () => void;
-  heightInputRef?: React.RefObject<HTMLInputElement>;
-  startIncrement?: () => void;
-  startDecrement?: () => void;
-  stopIncrement?: () => void;
-  stopDecrement?: () => void;
 }
 
 export default function ImageModule({
@@ -20,12 +15,7 @@ export default function ImageModule({
   onSave,
   onCancel,
   onOpenMediaModal,
-  onContentChange,
-  heightInputRef,
-  startIncrement,
-  startDecrement,
-  stopIncrement,
-  stopDecrement
+  onContentChange
 }: ImageModuleProps) {
 
   return (
@@ -104,16 +94,6 @@ export default function ImageModule({
               </div>
             )}
           </div>
-          {data.url && (
-            <div style={{
-              fontSize: '0.8rem',
-              color: 'rgba(248, 223, 165, 0.6)',
-              marginTop: '0.5rem',
-              textAlign: 'center'
-            }}>
-              Finale Höhe: {data.height || 300}px
-            </div>
-          )}
         </div>
 
         {/* Buttons für Medienauswahl */}
@@ -218,123 +198,6 @@ export default function ImageModule({
           </div>
         </div>
 
-        {/* Höhe */}
-        <div className="form-group">
-          <label style={{
-            display: 'block',
-            color: '#f8dfa5',
-            fontSize: '0.875rem',
-            fontWeight: '600',
-            marginBottom: '0.5rem'
-          }}>
-            Höhe (px)
-          </label>
-          <div style={{
-            position: 'relative',
-            display: 'flex',
-            alignItems: 'center'
-          }}>
-            <input 
-              ref={heightInputRef}
-              type="number" 
-              defaultValue={data.height || 300}
-              onChange={(e) => {
-                const value = parseInt(e.target.value);
-                if (!isNaN(value) && value >= 100 && value <= 800) {
-                  onChange({...data, height: value});
-                  onContentChange();
-                }
-              }}
-              onBlur={(e) => {
-                const value = parseInt(e.target.value);
-                let finalValue = value;
-                if (isNaN(value) || value < 100) {
-                  finalValue = 100;
-                } else if (value > 800) {
-                  finalValue = 800;
-                }
-                            if (heightInputRef?.current) {
-              heightInputRef.current.value = finalValue.toString();
-                }
-                onChange({...data, height: finalValue});
-                onContentChange();
-              }}
-              placeholder="300"
-              min="100"
-              max="800"
-              autoComplete="off"
-              style={{
-                paddingRight: '3rem',
-                flex: 1,
-                padding: '0.75rem',
-                background: '#0a0a0a',
-                border: '1px solid #333',
-                borderRadius: '6px',
-                color: '#f8dfa5',
-                fontSize: '0.875rem'
-              }}
-              className="height-number-input"
-            />
-            <div style={{
-              position: 'absolute',
-              right: '0.5rem',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '2px'
-            }}>
-              <button
-                type="button"
-                              onMouseDown={startIncrement}
-              onMouseUp={stopIncrement}
-              onMouseLeave={stopIncrement}
-              onTouchStart={startIncrement}
-              onTouchEnd={stopIncrement}
-                style={{
-                  width: '20px',
-                  height: '12px',
-                  background: 'rgba(248, 223, 165, 0.1)',
-                  border: '1px solid rgba(248, 223, 165, 0.3)',
-                  borderRadius: '2px',
-                  color: '#f8dfa5',
-                  cursor: 'pointer',
-                  fontSize: '8px',
-                  lineHeight: '10px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  userSelect: 'none'
-                }}
-              >
-                ▲
-              </button>
-              <button
-                type="button"
-                              onMouseDown={startDecrement}
-              onMouseUp={stopDecrement}
-              onMouseLeave={stopDecrement}
-              onTouchStart={startDecrement}
-              onTouchEnd={stopDecrement}
-                style={{
-                  width: '20px',
-                  height: '12px',
-                  background: 'rgba(248, 223, 165, 0.1)',
-                  border: '1px solid rgba(248, 223, 165, 0.3)',
-                  borderRadius: '2px',
-                  color: '#f8dfa5',
-                  cursor: 'pointer',
-                  fontSize: '8px',
-                  lineHeight: '10px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  userSelect: 'none'
-                }}
-              >
-                ▼
-              </button>
-            </div>
-          </div>
-        </div>
 
         {/* Action Buttons */}
         <div style={{

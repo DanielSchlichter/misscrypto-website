@@ -170,10 +170,10 @@ const DesktopHeader = ({ isTablet }: DesktopHeaderProps) => {
             gap: '0.5rem',
             background: 'linear-gradient(135deg, #f8dfa5, #e4b15e)',
             color: '#000000',
-            padding: isTablet ? '0.75rem 1.5rem' : '1rem 2rem',
+            padding: isTablet ? '0.5rem 1rem' : '0.75rem 1.5rem',
             borderRadius: '0.75rem',
             fontWeight: '600',
-            fontSize: isTablet ? '0.875rem' : '1rem',
+            fontSize: isTablet ? '0.75rem' : '0.875rem',
             textDecoration: 'none',
             transition: 'all 0.3s ease',
             boxShadow: '0 4px 15px rgba(248, 223, 165, 0.3)'
