@@ -63,7 +63,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     rlusd: 'Was ist RLUSD? Ripples Stablecoin erklärt | MissCrypto Lexikon',
     'layer-2': 'Was ist Layer 2? Blockchain-Skalierung einfach erklärt | MissCrypto Lexikon',
     'meme-coin': 'Was ist ein Meme Coin? Spaß, Hype & Risiko erklärt | MissCrypto Lexikon',
-    'krypto-sicher-aufbewahren': 'Krypto sicher aufbewahren – Wallet-Typen & Tipps | MissCrypto'
+    'krypto-sicher-aufbewahren': 'Krypto sicher aufbewahren – Wallet-Typen & Tipps | MissCrypto',
+    cbdc: 'Was ist eine CBDC? Digitale Zentralbankwährungen erklärt | MissCrypto Lexikon',
+    'public-key': 'Was ist ein Public Key? Öffentlicher Schlüssel in Krypto erklärt | MissCrypto Lexikon',
+    hashrate: 'Was ist die Hashrate? Rechenpower im Bitcoin-Netzwerk | MissCrypto Lexikon',
+    'proof-of-work': 'Was ist Proof of Work? Konsens bei Bitcoin erklärt | MissCrypto Lexikon'
   };
 
   const title = titleMap[term.id] || `Was ist ${term.title}? Einfach erklärt | MissCrypto Lexikon`;

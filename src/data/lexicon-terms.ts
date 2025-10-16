@@ -490,6 +490,141 @@ export const lexiconTerms: LexiconTerm[] = [
       'Vorsicht vor Phishing-Links (besonders bei Wallet-Apps)',
       'Nur offizielle Quellen für Software & Hardware nutzen'
     ]
+  },
+  {
+    id: 'cbdc',
+    title: 'CBDC (Digitale Zentralbankwährung)',
+    slug: 'cbdc',
+    definition: 'CBDCs (Central Bank Digital Currencies) sind digitale Währungen, die direkt von Zentralbanken herausgegeben werden – als offizielles, staatliches Zahlungsmittel.',
+    extendedExplanation: 'Während Bitcoin, Ethereum & Co dezentral und unabhängig sind, ist eine CBDC eine digitale Form des Fiatgeldes, z. B. ein digitaler Euro oder digitaler US-Dollar – herausgegeben von staatlicher Hand.\n\nZiel ist es, den Zahlungsverkehr schneller, sicherer und günstiger zu machen – aber unter zentraler Kontrolle. Nutzer könnten CBDCs direkt in digitalen Wallets halten – teils sogar ohne Bankkonto.\n\nCBDCs stehen aktuell weltweit im Fokus:\n\n🇪🇺 EZB arbeitet am digitalen Euro\n\n🇺🇸 USA forschen an einem digitalen Dollar\n\n🇨🇳 China hat den digitalen Yuan bereits in der Praxis getestet\n\n🌍 Über 130 Länder untersuchen aktiv CBDC-Modelle\n\nCBDCs könnten das Finanzsystem grundlegend verändern – sie kombinieren die Effizienz digitaler Zahlungen mit der Stabilität und rechtlichen Sicherheit staatlicher Währungen.',
+    category: 'Grundlagen',
+    relatedTerms: ['fiat', 'bitcoin', 'stablecoin', 'wallet'],
+    icon: '🏛️',
+    lastUpdated: '2025-10-16',
+    funFact: 'Die Bahamas waren das erste Land der Welt, das eine nationale CBDC einführte: den Sand Dollar – benannt nach einer tropischen Muschel.',
+    comparisons: {
+      title: 'Unterschiede zu Kryptowährungen',
+      items: [
+        {
+          name: 'CBDC',
+          description: 'Herausgeber: Zentralbank | Kontrolle: Staatlich | Angebot: Beliebig erweiterbar | Anonymität: Eingeschränkt/kontrolliert'
+        },
+        {
+          name: 'Bitcoin / XRP etc.',
+          description: 'Herausgeber: Dezentral (Netzwerk) | Kontrolle: Nutzerbasiert | Angebot: Begrenzt (z.B. BTC: 21 Mio) | Anonymität: Pseudonym/öffentlich'
+        }
+      ]
+    },
+    prosAndCons: {
+      pros: [
+        'Offizielles, rechtlich sicheres Zahlungsmittel',
+        'Schnelle Abwicklung, kein Bargeld nötig',
+        'Potenzial für finanzielle Inklusion',
+        'Geringere Kosten im Zahlungsverkehr',
+        'Bessere Kontrolle über Geldpolitik'
+      ],
+      cons: [
+        'Datenschutz- und Überwachungsbedenken',
+        'Gefahr der Negativzinsen oder Sperrung',
+        'Kontrolle über das Geld vollständig beim Staat',
+        'Mögliche Verdrängung von Bargeld',
+        'Technische Abhängigkeit und Cyber-Risiken'
+      ],
+      prosTitle: 'Vorteile',
+      consTitle: 'Kritikpunkte'
+    }
+  },
+  {
+    id: 'public-key',
+    title: 'Public Key',
+    slug: 'public-key',
+    definition: 'Ein Public Key ist ein kryptografischer Schlüssel, der als öffentliche Empfangsadresse für Kryptowährungen dient – vergleichbar mit deiner Kontonummer.',
+    extendedExplanation: 'Im Hintergrund jeder Wallet stehen zwei Schlüssel:\n\n🔐 der Private Key – geheim, für den Zugriff auf deine Coins\n\n🌐 der Public Key – öffentlich, um Coins zu empfangen\n\nAus dem Private Key wird der Public Key mathematisch abgeleitet. Der Public Key wiederum wird oft in eine Krypto-Adresse umgewandelt (z. B. bc1q… bei Bitcoin oder 0x… bei Ethereum).\n\n**Beispiel:**\nDu willst Bitcoin empfangen →\nDu gibst deinem Kontakt deine Wallet-Adresse, die aus deinem Public Key generiert wurde →\nNur du kannst die empfangenen Coins später mit deinem Private Key ausgeben\n\n**Wichtig:** Der Public Key kann öffentlich geteilt werden – aber nicht der Private Key!\n\nDiese asymmetrische Kryptografie ist das Fundament aller Blockchain-Transaktionen und macht sicheren, dezentralen Werttransfer ohne Mittelsmann möglich.',
+    category: 'Sicherheit',
+    relatedTerms: ['private-key', 'wallet', 'seed-phrase', 'krypto-sicher-aufbewahren'],
+    icon: '🌐',
+    lastUpdated: '2025-10-16',
+    funFact: 'Aus einem einzigen Private Key lassen sich über 1 Milliarde verschiedene Public Keys erzeugen – was Multisig, Adresswechsel und Privatsphäre im Krypto-Space möglich macht.',
+    walletComparison: {
+      headers: ['Merkmal', 'Public Key', 'Private Key'],
+      rows: [
+        {
+          type: 'Sichtbarkeit',
+          values: ['Öffentlich', 'Geheim']
+        },
+        {
+          type: 'Nutzung',
+          values: ['Empfangen von Coins', 'Zugriff & Versenden']
+        },
+        {
+          type: 'Sicherheit',
+          values: ['Darf geteilt werden', 'Darf niemals geteilt werden']
+        },
+        {
+          type: 'Vergleich',
+          values: ['Wie eine IBAN', 'Wie eine PIN']
+        }
+      ]
+    }
+  },
+  {
+    id: 'hashrate',
+    title: 'Hashrate',
+    slug: 'hashrate',
+    definition: 'Die Hashrate misst, wie viele Rechenoperationen pro Sekunde im Netzwerk durchgeführt werden – ein Indikator für Sicherheit, Aktivität und Mining-Leistung.',
+    extendedExplanation: '„Hashrate" bezeichnet die Gesamtleistung aller Computer, die an einem Proof-of-Work-Netzwerk wie Bitcoin mitarbeiten.\n\nSie gibt an, wie viele Hashes (mathematische Rätsel) pro Sekunde berechnet werden – in Einheiten wie TH/s (Terahashes) oder EH/s (Exahashes).\n\n**Je höher die Hashrate:**\n\n• desto schwerer ist es, das Netzwerk anzugreifen (z. B. durch eine 51%-Attacke)\n\n• desto stärker ist der Wettbewerb unter Minern\n\n• desto höher ist tendenziell der Energieverbrauch\n\n**Zusammenhang mit Mining:**\n\nMiner lösen Rechenaufgaben, um neue Blöcke zu finden → Wer mehr Hashpower hat, hat bessere Chancen auf die Belohnung.\n\nDie Hashrate kann durch neue Hardware, Strompreise oder Marktpreise stark schwanken.\n\n**Beobachtung der Hashrate:**\n\nDie Hashrate ist ein wichtiger Indikator für das Vertrauen in ein Netzwerk – und wird häufig in Charts (z. B. auf CoinWarz, Glassnode oder Blockchain.com) beobachtet.',
+    category: 'Technologie',
+    relatedTerms: ['mining', 'bitcoin', 'blockchain'],
+    icon: '⚡',
+    lastUpdated: '2025-10-16',
+    funFact: 'Die Bitcoin-Hashrate ist 2025 so hoch, dass das Netzwerk mehr Rechenoperationen pro Sekunde ausführt als alle Supercomputer der Welt zusammen – aber mit spezialisierter Hardware.',
+    comparisons: {
+      title: 'Typische Hashrate-Werte (2025)',
+      items: [
+        {
+          name: 'Bitcoin',
+          description: 'Über 600 EH/s (Exahashes pro Sekunde) – extrem sicher durch massive Rechenleistung'
+        },
+        {
+          name: 'Litecoin',
+          description: 'Einige hundert TH/s (Terahashes pro Sekunde) – deutlich geringer als Bitcoin'
+        },
+        {
+          name: 'Kleine Altcoins',
+          description: 'Oft unter 1 TH/s – anfälliger für 51%-Attacken durch geringe Hashrate'
+        }
+      ]
+    }
+  },
+  {
+    id: 'proof-of-work',
+    title: 'Proof of Work',
+    slug: 'proof-of-work',
+    definition: 'Proof of Work (PoW) ist ein Konsensverfahren, bei dem Computer komplexe Rechenaufgaben lösen müssen, um neue Blöcke zur Blockchain hinzuzufügen.',
+    extendedExplanation: 'In dezentralen Netzwerken wie Bitcoin gibt es keine zentrale Instanz, die Transaktionen freigibt. Stattdessen braucht es einen Konsensmechanismus, der sicherstellt:\n\n✅ Nur gültige Transaktionen werden übernommen\n✅ Das Netzwerk bleibt vertrauenswürdig – auch ohne Mittelsmann\n\n**Proof of Work löst das Problem über Rechenleistung:**\n\nMiner müssen eine mathematische Aufgabe lösen – wer das zuerst schafft, darf den nächsten Block schreiben und erhält eine Belohnung (Block Reward + Fees).\n\n**Das braucht:**\n\n• Zeit\n• Energie\n• Spezialisierte Hardware (ASICs)\n\n**Die „Arbeit", die dabei geleistet wird, schützt die Blockchain:**\n\nJe höher die Rechenleistung im Netzwerk (Hashrate), desto schwerer ist es, es anzugreifen.\n\nProof of Work ist der bewährteste Konsensmechanismus im Krypto-Space – verwendet von Bitcoin, Litecoin und vielen anderen Netzwerken. Moderne Alternativen wie Proof of Stake sind energieeffizienter, aber PoW gilt weiterhin als der sicherste und dezentralste Ansatz.',
+    category: 'Technologie',
+    relatedTerms: ['bitcoin', 'hashrate', 'mining', 'blockchain'],
+    icon: '⚙️',
+    lastUpdated: '2025-10-16',
+    funFact: 'Das Prinzip Proof of Work wurde lange vor Bitcoin erfunden – ursprünglich zur Spam-Bekämpfung bei E-Mails (Hashcash-System, 1997).',
+    prosAndCons: {
+      pros: [
+        'Hohe Sicherheit und Dezentralität',
+        'Bewährt seit über einem Jahrzehnt (Bitcoin, Litecoin)',
+        'Unabhängig von Vertrauen in zentrale Instanzen',
+        'Schwer zu manipulieren bei hoher Hashrate',
+        'Transparenter und nachvollziehbarer Konsensprozess'
+      ],
+      cons: [
+        'Hoher Energieverbrauch',
+        'Konzentration durch Mining-Farmen',
+        'Nicht ideal für Blockchains mit komplexen Smart Contracts',
+        'Langsame Transaktionsbestätigung',
+        'Hardware-Wettrüsten bei Minern'
+      ],
+      prosTitle: 'Vorteile',
+      consTitle: 'Kritik'
+    }
   }
 ];
 
